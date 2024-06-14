@@ -59,7 +59,7 @@ Before starting the Minishell project, ensure you have a solid understanding of 
 In this project we used a lot of functions, the one that I want to talk about is readline.
 The readline function in C is used to read a line of input from the user, typically from the standard input (stdin). It provides an easy way to handle user input in a command-line interface by reading an entire line of text and returning it as a dynamically allocated string.
 
-It should be installed in case you're using in OS other than linux. For MacOS people, you will found a file <a href="https://github.com/">'readline_script.sh'</a> that if you run it, it will work directly.
+If you are using an operating system other than Linux, you need to install it. For macOS users, you can find a file named <a href="https://github.com/lassachraf/42_minishell/blob/lass-main/readline_script.sh">'readline_script.sh'</a>. Running this script will set everything up correctly.
 
 ### Note: The readline function cause memory leaks, but don't worry about them.
 
