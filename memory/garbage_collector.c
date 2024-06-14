@@ -6,12 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:22:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 09:27:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/14 20:33:53 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdlib.h>
 
 void	gc_add(t_minishell *mini, void *ptr)
 {
@@ -20,9 +19,8 @@ void	gc_add(t_minishell *mini, void *ptr)
 	new_node = malloc(sizeof(t_gc));
 	if (!new_node)
 	{
-		// Handle allocation failure
 		perror("malloc");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	new_node->ptr = ptr;
 	new_node->next = mini->gc;
