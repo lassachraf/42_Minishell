@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/06/14 22:24:00 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/06/16 21:16:29 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,17 @@ LIBFT_PATH		:= libft/
 LIBFT			:= libft/libft.a
 
 CC				:= cc
-CFLAGS			:= -Wall -Werror -Wextra #-fsanitize=address -g3
+CFLAGS			:= -Wall -Werror -Wextra -fsanitize=address -g3
 RM				:= rm -f
 
 BUILTINS		:=	builtins/ft_env.c 					\
-# 					builtins/ft_cd.c 					\
-# 					builtins/ft_echo.c 					\
-# 					builtins/ft_env_utils.c 			\
-# 					builtins/ft_exit.c 					\
-# 					builtins/ft_export.c 				\
-# 					builtins/ft_pwd.c 					\
-# 					builtins/ft_unset.c
+					builtins/ft_cd.c 					\
+					builtins/ft_echo.c 					\
+					builtins/builtins_utils.c 			\
+					builtins/ft_exit.c 					\
+					builtins/ft_export.c 				\
+					builtins/ft_pwd.c 					\
+					builtins/ft_unset.c
 
 CLEANING		:=	cleaning/clean.c
 
@@ -35,9 +35,10 @@ ENVIRONMENT		:=	environment/env_utils.c				\
 
 EXPANDING		:=	expanding/expander.c				\
 					expanding/word_helper.c				\
-					expanding/post_expand.c				\
+					expanding/expand_utils.c			\
 					expanding/dollar_expand.c			\
-					expanding/quotes_expand.c
+					expanding/quotes_expand.c			\
+					expanding/wildcard_expand.c
 
 MEMORY			:=	memory/memory.c						\
 					memory/garbage_collector.c

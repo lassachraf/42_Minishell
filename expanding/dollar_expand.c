@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 15:06:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:35:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void	handle_dollar(char *s, int *i, int *len)
 {
-	char	*expand = s + *i;
+	char	*expand;
 	char	*var;
 	int		env_len;
 	int		j;
 
+	expand = s + *i;
 	j = 0;
 	expand++;
 	if (!ft_strncmp(expand, "\0", 1))

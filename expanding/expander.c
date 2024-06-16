@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 15:05:13 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:32:53 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,42 @@
 
 void	fill_dollar(char *s, int *i, char *new, int *j)
 {
-	char    *expand = s + *i;
+	char	*expand;
 	char	*expanded;
-    char    *var;
+	char	*var;
 	int		k;
 	int		a;
 
+	expand = s + *i;
 	k = 0;
 	a = 0;
-    if (!ft_strncmp(&expand[1], "\0", 1))
-    {
+	if (!ft_strncmp(&expand[1], "\0", 1))
+	{
 		(*i) += 1;
-        new[*j] = expand[0];
+		new[*j] = expand[0];
 		(*j)++;
-        return ;
-    }
+		return ;
+	}
 	if (!ft_strncmp(&expand[1], "$", 1))
-    {
+	{
 		(*i) += 2;
 		new[(*j)++] = expand[0];
 		new[(*j)++] = expand[1];
-        return ;
-    }
+		return ;
+	}
 	expand++;
 	if (!ft_strncmp(expand, "?", 1))
-        k = 1;
-    else
-    {
-        while (expand[k])
-        {
-            if (ft_isalnum(expand[k]) || !ft_strncmp(&expand[k], "_", 1))
-                k++;
-            else
-                break ;
-        }
-    }
+		k = 1;
+	else
+	{
+		while (expand[k])
+		{
+			if (ft_isalnum(expand[k]) || !ft_strncmp(&expand[k], "_", 1))
+				k++;
+			else
+				break ;
+		}
+	}
 	var = ft_substr(expand, 0, k);
 	expanded = get_env_var(g_minishell->our_env, var);
 	free(var);
@@ -149,6 +150,8 @@ void	expanding(void)
 			while (tokens && tokens->type != S_QUOTE)
 				tokens = tokens->next;
 		}
+		else if (tokens->type == ASTERISK)
+			asterisk_expand(tokens);
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
 			helper(tokens);
 		tokens = tokens->next;
@@ -157,7 +160,6 @@ void	expanding(void)
 
 void	expander(void)
 {
-	pre_expander();
 	expanding();
 	post_expander();
 }

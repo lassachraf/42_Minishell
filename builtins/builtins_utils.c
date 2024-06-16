@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/05/07 19:16:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:16:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_builtins(t_minishell *mini, char **args)
+void	execute_builtins(t_minishell *mini, char **args)
 {
 	if (ft_strcmp(args[0], "echo") == 0)
 		ft_echo(args);

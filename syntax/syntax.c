@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:13:52 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 15:20:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 22:21:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	syntax_first_phase(t_token *token)
 
 int	count_nb_here_doc(t_token *tokens)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (tokens)
@@ -76,24 +76,23 @@ int	general_check(void)
 int	syntax(void)
 {
 	t_token	*token;
-	t_token	*temp;
 
-	token = custome_tokens();
-	temp = token;
+	remove_whitespace(&g_minishell->tokens);
+	token = g_minishell->tokens;
 	while (token)
 	{
 		if (syntax_first_phase(token) || syntax_second_phase(token)
 			|| syntax_third_phase(token))
 		{
 			set_env_var(g_minishell->our_env, "?", "2");
-			return (clear_token(&temp), -1);
+			return (clear_token(&g_minishell->tokens), -1);
 		}
 		token = token->next;
 	}
 	if (general_check() == -1)
 	{
 		set_env_var(g_minishell->our_env, "?", "2");
-		return (clear_token(&temp), -1);
+		return (clear_token(&g_minishell->tokens), -1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 22:45:48 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:36:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 
 # include "../libft/libft.h"
 # include "builtins.h"
+# include "memory.h"
 # include "parsing.h"
 # include "tokenization.h"
-# include "memory.h"
+# include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <string.h>
 # include <unistd.h>
-# include <dirent.h>
-# include <stdio.h>
 
 typedef struct s_env
 {
@@ -52,6 +52,8 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
+
+void				asterisk_expand(t_token *token);
 
 /* Builtins */
 
@@ -79,7 +81,7 @@ void				ft_unset(void);
 /* Builtins utils */
 
 // Function that execute the builtins.
-int					execute_builtins(t_minishell *mini, char **args);
+void				execute_builtins(t_minishell *mini, char **args);
 
 // Function that checks if the command is a builtin or not.
 bool				ft_is_builtin(char *arg);
@@ -87,7 +89,7 @@ bool				ft_is_builtin(char *arg);
 /* Cleaning */
 
 // Function that cleanup minishell for each prompt.
-void				cleanup();
+void				cleanup(void);
 
 // Function that cleanup minishell.
 void				cleanup_minishell(void);
@@ -118,23 +120,14 @@ void				delete_env_var(t_env **env, char *key);
 // Main function to do expand.
 void				expander(void);
 
-// Function that skip single quote.
-int					skip_quote(char *s, int *i);
-
 // Function that get the variable and search for it in the environment.
 char				*get_var(char *s, int *i);
 
 // Function that return the length of the variable after expanding.
 int					check_env(char *var);
 
-// Function that process special cases while filling the new value.
-void				process_special_cases(char *s, char *value, int *i, int *j);
-
-// Function that allocate and fill the new value.
-char				*fill_value(char *s, int size);
-
-// FUnction that prepare tokens to be expanded.
-void				pre_expander(void);
+// Function that remove the whitespaces tokens from the list of tokens.
+void				remove_whitespace(t_token **tokens);
 
 // Funtion that prepare the commands "tokens" to be executed.
 void				post_expander(void);
