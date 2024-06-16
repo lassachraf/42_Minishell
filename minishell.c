@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 15:22:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/14 21:51:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +171,10 @@ int	main(int ac, char **av, char **env)
 			continue ;
         printAST(g_minishell->ast, 1000 , 99);
 		clear_token(&g_minishell->tokens);
-		free(g_minishell->line);
+		cleanup();
 	}
 	clear_env();
-    gc_free_all(g_minishell);
     // free the g_mininshell :
-    // clear_minishell();
+	cleanup_minishell();
 	return (0);
 }

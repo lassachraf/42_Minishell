@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 12:59:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:45:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ typedef struct s_minishell
 	t_token			*tokens;
 	t_env			*our_env;
 	t_node			*ast;
+	t_gc			*gc;
 	int				nb_tokens;
 	int				dq_flag;
-	t_gc			*gc;
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
@@ -85,6 +85,9 @@ int					execute_builtins(t_minishell *mini, char **args);
 bool				ft_is_builtin(char *arg);
 
 /* Cleaning */
+
+// Function that cleanup minishell for each prompt.
+void				cleanup();
 
 // Function that cleanup minishell.
 void				cleanup_minishell(void);

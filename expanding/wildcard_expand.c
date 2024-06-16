@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/13 23:21:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/16 19:55:42 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,48 +58,4 @@ char	*expand_wildcard(void)
 	}
 	closedir(dir);
 	return (expanded);
-}
-
-bool	match(char *pattern, char *candidate, int p, int c)
-{
-	if (pattern[p] == '\0')
-		return (candidate[c] == '\0');
-	else if (pattern[p] == '*')
-	{
-		while (candidate[c] != '\0')
-		{
-			if (match(pattern, candidate, p + 1, c))
-				return (true);
-			c++;
-		}
-		return (match(pattern, candidate, p + 1, c));
-	}
-	else if (pattern[p] != '?' && pattern[p] != candidate[c])
-		return (false);
-	else
-		return (match(pattern, candidate, p + 1, c + 1));
-}
-
-char	*expand_wildcard(char *wd)
-{
-	DIR *dir;
-	struct dirent *entry;
-	char **all_dirs;
-	int i;
-
-	dir = opendir(".");
-	if (!dir)
-		return (error("opendir() failed", NULL), NULL);
-	all_dirs = NULL;
-	i = 0;
-	entry = readdir(dir);
-	while (entry)
-	{
-		if (entry->d_name[0] != '.' && match(wd, entry->d_name, 0, 0))
-			add_filename(&all_dirs, &i, ft_strdup(entry->d_name));
-		entry = readdir(dir);
-	}
-	bubble_sort(all_dirs, i);
-	closedir(dir);
-	return (all_dirs);
 }
