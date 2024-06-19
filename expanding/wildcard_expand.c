@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/16 21:35:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:08:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,5 +147,6 @@ void	asterisk_expand(t_token *token)
 	{
 		free(token->value);
 		token->value = result;
+		// token->type = WORD; should be asterisk as a default.
 	}
 }

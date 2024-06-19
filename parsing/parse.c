@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/06/16 22:20:35 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:05:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ t_node	*parsing(t_token *tokens)
 {
 	t_node *res;
 
+	expander();
 	res = parse_and(&tokens);
 	return (res);
 }

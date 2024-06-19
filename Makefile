@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/06/16 21:16:29 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/06/19 15:58:55 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,12 +56,10 @@ SYNTAXING		:=	syntax/syntax.c						\
 
 SIGNALS			:=	signals/handle_signals.c
 
-
-TOKENIZATION	:=	tokenization/tokenizer.c			\
-					tokenization/tokenizer_utils.c		\
-					tokenization/tokenizer_helpers.c	\
-					tokenization/tokenizer_free.c
-
+TOKENIZING		:=	tokenizing/tokenizer.c				\
+					tokenizing/tokenizer_utils.c		\
+					tokenizing/tokenizer_helpers.c		\
+					tokenizing/tokenizer_free.c
 
 SRCS			:=	$(BUILTINS)							\
 					$(CLEANING)							\
@@ -72,7 +70,7 @@ SRCS			:=	$(BUILTINS)							\
 					$(PARSING)							\
 					$(SIGNALS)							\
 					$(SYNTAXING)						\
-					$(TOKENIZATION)						\
+					$(TOKENIZING)						\
 					minishell.c
 
 OBJS			:=	$(SRCS:.c=.o)
@@ -87,7 +85,6 @@ $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -lreadline -o $(NAME) 
 
 clean:
-	@make clean -C $(LIBFT_PATH)
 	@make clean -C $(LIBFT_PATH)
 	@rm -f $(OBJS)
 

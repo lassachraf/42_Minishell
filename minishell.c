@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/16 22:21:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:05:15 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,18 @@ int	init_minishell(char **env)
 	return (1);
 }
 
+void	ft_readline()
+{
+	g_minishell->line = readline(ORANGE PROMPT RESET);
+	if (!g_minishell->line)
+	{
+		ft_putstr_fd("exit\n", 1);
+		exit(0);
+	}
+	if (g_minishell->line[0])
+		add_history(g_minishell->line);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	(void)ac, (void)av;
@@ -156,28 +168,21 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	while (1)
 	{
-		g_minishell->line = readline(ORANGE PROMPT RESET);
-		if (!g_minishell->line)
-		{
-			ft_putstr_fd("exit\n", 1);
-			exit(0);
-		}
-		if (g_minishell->line[0])
-			add_history(g_minishell->line);
+		ft_readline();
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
-		expander();
 		g_minishell->ast = parsing(g_minishell->tokens);
 		if (!g_minishell->ast)
 			continue ;
 		printAST(g_minishell->ast, 1000, 99);
+		// executer();
+		// cleanup(); will be called to free AST, TOKENS, LINE.
+		// clear_ast(&g_minishell->ast);
 		clear_token(&g_minishell->tokens);
 		free(g_minishell->line);
-		// cleanup();
 	}
 	clear_env();
-	// free the g_mininshell :
 	cleanup_minishell();
 	return (0);
 }
