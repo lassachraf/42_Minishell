@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 11:17:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 13:42:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,13 +178,10 @@ t_node				*parse_block(t_token **tokens);
 // Function that parse a command.
 t_node				*parse_cmd(t_token **tokens);
 
-// Main function that parse and return an **ABSTRACT SYNTAX TREE**.
-t_node				*parsing(t_token *tokens);
-
 /* Parsing */
 
 // The main function for parsing the input and return our AST structure.
-t_node				*parsing(t_token *tokens);
+t_node				*parsing(void);
 
 /* Signals */
 

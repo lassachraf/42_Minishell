@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/21 15:38:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 13:48:34 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	print_tokens(t_token *tokens)
 	while (token)
 	{
 		printf("value => '%s'\n", token->value);
-		printf("type => '%u'\n", token->type);
+		// printf("type => '%u'\n", token->type);
 		token = token->next;
 	}
 }
@@ -172,7 +172,7 @@ int	main(int ac, char **av, char **env)
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
-		g_minishell->ast = parsing(g_minishell->tokens);
+		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
 		printAST(g_minishell->ast, 1000, 99);

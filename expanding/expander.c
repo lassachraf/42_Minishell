@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 11:37:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 12:03:40 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,7 @@ void	expanding(void)
 void	expander(void)
 {
 	expanding();
+	// printf("Expanding done !\n\n");
+	// exit(100);
 	post_expander();
 }

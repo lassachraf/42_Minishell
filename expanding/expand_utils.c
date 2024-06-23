@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   post_expand.c                                      :+:      :+:    :+:   */
+/*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/13 11:51:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 13:42:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	remove_token(t_token **head, t_token *token)
 {
 	if (!token->prev)
 	{
-		*head = token->next;
+		*head = (*head)->next;
 		if (*head)
 			(*head)->prev = NULL;
 	}

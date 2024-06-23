@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 19:09:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 13:48:00 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	append_identifier(t_token **tokens, char **line)
 		*line += 1;
 		return (add_token_back(tokens, new), 1);
 	}
-	while (tmp[i] && !is_separator(tmp + i) && !is_special(*(tmp + i)))
+	while (tmp[i] && !is_separator(tmp + i) && !is_quote(*(tmp + i)))
 		i++;
 	value = ft_substr(tmp, 0, i);
 	if (!value)

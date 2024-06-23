@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/06/19 16:05:01 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 13:43:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,11 @@ t_node	*parse_and(t_token **tokens)
 		return (left);
 }
 
-t_node	*parsing(t_token *tokens)
+t_node	*parsing(void)
 {
-	t_node *res;
+	t_node	*res;
 
 	expander();
-	res = parse_and(&tokens);
+	res = parse_and(&g_minishell->tokens);
 	return (res);
 }
