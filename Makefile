@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/06/21 21:22:42 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/06/23 10:00:38 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,9 @@ EXPANDING		:=	expanding/expander.c				\
 					expanding/expand_utils.c			\
 					expanding/dollar_expand.c			\
 					expanding/quotes_expand.c			\
-					expanding/wildcard_expand.c
+					expanding/wildcard_expand.c			\
+					expanding/processing_files.c		\
+					expanding/processing_dirs.c
 
 MEMORY			:=	memory/memory.c						\
 					memory/garbage_collector.c

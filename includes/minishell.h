@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/16 21:36:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 10:01:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ typedef struct s_minishell
 extern t_minishell	*g_minishell;
 
 void				asterisk_expand(t_token *token);
+void	process_files(DIR *dir, char **result, const char *pattern);
+void	process_dirs(DIR *dir, char **result, const char *pattern);
+void	sort_strings(char **strings, size_t count);
+int	match_pattern(const char *pattern, const char *filename);
+void append_to_result(char **result, const char *str, int newline);
 
 /* Builtins */
 
