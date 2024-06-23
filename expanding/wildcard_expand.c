@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 09:59:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:24:36 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,59 +117,68 @@ char	*ft_strcpy(char *dest, const char *src)
 	return (dest);
 }
 
-void append_to_result(char **result, const char *str, int newline)
+void	append_to_result(char **result, const char *str, int newline)
 {
-    size_t len = 0;
-    size_t str_len = ft_strlen(str);
-    char *new_result;
+	size_t	len;
+	size_t	str_len;
+	char	*new_result;
 
-    if (*result)
-        len = ft_strlen(*result);
-    new_result = malloc(len + str_len + (newline ? 2 : 3));
-    if (!new_result)
-        return;
-    if (*result) {
-        ft_strcpy(new_result, *result);
-        free(*result);
-    }
-    ft_strcpy(new_result + len, str);
-    if (newline == 1) {
-        new_result[len + str_len] = '\n';
-        new_result[len + str_len + 1] = '\0';
-    }
+	len = 0;
+	str_len = ft_strlen(str);
+	if (*result)
+		len = ft_strlen(*result);
+	new_result = malloc(len + str_len + (newline ? 2 : 3));
+	if (!new_result)
+		return ;
+	if (*result)
+	{
+		ft_strcpy(new_result, *result);
+		free(*result);
+	}
+	ft_strcpy(new_result + len, str);
+	if (newline == 1)
+	{
+		new_result[len + str_len] = '\n';
+		new_result[len + str_len + 1] = '\0';
+	}
 	else if (newline == 2)
 	{
 		new_result[len + str_len] = ':';
-        new_result[len + str_len + 1] = '\0';
+		new_result[len + str_len + 1] = '\0';
 	}
-	else {
-        new_result[len + str_len] = ' ';
-        new_result[len + str_len + 1] = ' ';
-        new_result[len + str_len + 2] = '\0';
-    }
-    *result = new_result;
+	else
+	{
+		new_result[len + str_len] = ' ';
+		new_result[len + str_len + 1] = ' ';
+		new_result[len + str_len + 2] = '\0';
+	}
+	*result = new_result;
 }
 
 int	match_pattern(const char *pattern, const char *filename)
 {
 	while (*pattern && *filename)
 	{
-		if (*pattern == '*') 
+		if (*pattern == '*')
 		{
 			if (*(pattern + 1) == '\0')
 				return (1);
-			while (*filename) {
+			while (*filename)
+			{
 				if (match_pattern(pattern + 1, filename++))
 					return (1);
 			}
 			return (0);
-		} else if (*pattern != *filename) {
+		}
+		else if (*pattern != *filename)
+		{
 			return (0);
 		}
 		pattern++;
 		filename++;
 	}
-	return ((*pattern == '*' && *(pattern + 1) == '\0') || (*pattern == *filename));
+	return ((*pattern == '*' && *(pattern + 1) == '\0')
+		|| (*pattern == *filename));
 }
 
 void	sort_strings(char **strings, size_t count)
@@ -196,22 +205,24 @@ void	sort_strings(char **strings, size_t count)
 	}
 }
 
-void asterisk_expand(t_token *token) {
-    DIR *dir;
-    char *result = NULL;
+void	asterisk_expand(t_token *token)
+{
+	DIR		*dir;
+	char	*result;
 
-    dir = opendir(".");
-    if (!dir)
-        return;
-    process_files(dir, &result, token->value);
+	result = NULL;
 	dir = opendir(".");
-    if (!dir)
-        return;
-    process_dirs(dir, &result, token->value);
-    if (result)
+	if (!dir)
+		return ;
+	process_files(dir, &result, token->value);
+	dir = opendir(".");
+	if (!dir)
+		return ;
+	process_dirs(dir, &result, token->value);
+	if (result)
 	{
-        free(token->value);
-        token->value = result;
-        token->type = WORD;
-    }
+		free(token->value);
+		token->value = result;
+		token->type = WORD;
+	}
 }

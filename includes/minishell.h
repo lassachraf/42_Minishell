@@ -6,18 +6,20 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 10:01:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:17:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define MAX_FILES_PER_LINE 6
+
 # define READLINE_LIBRARY
 # define RED "\033[1;31m"
 # define ORANGE "\033[1;33m"
 # define RESET "\033[0m"
-# define PROMPT "✨ badashell$ "
+# define PROMPT "✨ badashell$> "
 
 # include "../libft/libft.h"
 # include "builtins.h"

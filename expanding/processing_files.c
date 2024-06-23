@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 09:37:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 10:04:09 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:23:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ size_t	count_files(DIR *dir, const char *pattern)
 {
 	DIR				*subdir;
 	struct dirent	*entry;
-	size_t 			count;	
+	size_t			count;
 
 	count = 0;
 	entry = readdir(dir);
@@ -36,7 +36,8 @@ size_t	count_files(DIR *dir, const char *pattern)
 	return (count);
 }
 
-void	get_files(DIR *dir, struct dirent *entry, char **file_list, const char *pattern)
+void	get_files(DIR *dir, struct dirent *entry, char **file_list,
+		const char *pattern)
 {
 	DIR		*subdir;
 	size_t	i;
@@ -51,7 +52,7 @@ void	get_files(DIR *dir, struct dirent *entry, char **file_list, const char *pat
 			{
 				file_list[i] = strdup(entry->d_name);
 				i++;
-			} 
+			}
 			else
 				closedir(subdir);
 		}
@@ -59,19 +60,27 @@ void	get_files(DIR *dir, struct dirent *entry, char **file_list, const char *pat
 	}
 }
 
-void	append_files(char **result, char **file_list ,int file_count)
+void	append_files(char **result, char **file_list, int file_count)
 {
+	int	file_per_line_count;
 	int	i;
 
+	file_per_line_count = 0;
 	i = 0;
 	while (i < file_count)
 	{
-        append_to_result(result, file_list[i], 0);
-        free(file_list[i]);
+		append_to_result(result, file_list[i], 0);
+		file_per_line_count++;
+		if (i + 1 < file_count && file_per_line_count >= MAX_FILES_PER_LINE)
+		{
+			append_to_result(result, "", 1);
+			file_per_line_count = 0;
+		}
+		free(file_list[i]);
 		i++;
-    }
-    append_to_result(result, "", 1);
-    free(file_list);
+	}
+	append_to_result(result, "", 1);
+	free(file_list);
 }
 
 void	process_files(DIR *dir, char **result, const char *pattern)
