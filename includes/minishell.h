@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 13:42:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 16:20:05 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,6 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
-
-void				asterisk_expand(t_token *token);
-void	process_files(DIR *dir, char **result, const char *pattern);
-void	process_dirs(DIR *dir, char **result, const char *pattern);
-void	sort_strings(char **strings, size_t count);
-int	match_pattern(const char *pattern, const char *filename);
-void append_to_result(char **result, const char *str, int newline);
 
 /* Builtins */
 
@@ -142,6 +135,25 @@ void				post_expander(void);
 // Function that count the length of the whole command after expanding.
 void				handle_dollar(char *s, int *i, int *len);
 
+// Function that expand the asterisk.
+void				asterisk_expand(t_token *token);
+
+// Function that help processing the files from directory stream.
+void				process_files(DIR *dir, char **result, const char *pattern);
+
+// Function that help processing the directories.
+void				process_dirs(DIR *dir, char **result, const char *pattern);
+
+// Function that sort the files or the directories.
+void				sort_strings(char **strings, size_t count);
+
+// Function that match the pattern.
+int					match_pattern(const char *pattern, const char *filename);
+
+// Function that append result to the value.
+void				append_to_result(char **result, const char *str, int newline);
+
+
 /* Memory */
 
 // Function to allocate and put the address on a garbage collector.
@@ -172,16 +184,16 @@ t_node				*error_node_new(const char *msg);
 // Function that create a new redirection node.
 t_node				*redir_node_new(t_list *red_list);
 
+/* Parsing */
+
+// The main function for parsing the input and return our AST structure.
+t_node				*parsing(void);
+
 // Function that parse a block or a sequence.
 t_node				*parse_block(t_token **tokens);
 
 // Function that parse a command.
 t_node				*parse_cmd(t_token **tokens);
-
-/* Parsing */
-
-// The main function for parsing the input and return our AST structure.
-t_node				*parsing(void);
 
 /* Signals */
 

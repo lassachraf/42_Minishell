@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 13:48:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 19:23:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	print_tokens(t_token *tokens)
 	while (token)
 	{
 		printf("value => '%s'\n", token->value);
-		// printf("type => '%u'\n", token->type);
+		printf("type => '%u'\n", token->type);
 		token = token->next;
 	}
 }
@@ -155,6 +155,7 @@ void	ft_readline()
 	if (!g_minishell->line)
 	{
 		ft_putstr_fd("exit\n", 1);
+		// set exit status function
 		exit(0);
 	}
 	if (g_minishell->line[0])

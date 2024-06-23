@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 12:03:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/23 18:57:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,13 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 	a = 0;
 	if (!ft_strncmp(&expand[1], "\0", 1))
 	{
-		(*i) += 1;
-		new[*j] = expand[0];
-		(*j)++;
+		new[(*j)++] = s[(*i)++];
 		return ;
 	}
-	if (!ft_strncmp(&expand[1], "$", 1))
+	if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1]) || !ft_isalnum(expand[1]) || (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1)))
 	{
-		(*i) += 2;
-		new[(*j)++] = expand[0];
-		new[(*j)++] = expand[1];
+		new[(*j)++] = s[(*i)++];
+		new[(*j)++] = s[(*i)++];
 		return ;
 	}
 	expand++;
