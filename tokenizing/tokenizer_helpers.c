@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 13:48:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 19:53:09 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ t_token	*new_token(char *value, t_type type)
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
+	gc_add(g_minishell, new_token);
 	new_token->value = value;
+	// gc_add(g_minishell, new_token->value);
 	new_token->type = type;
 	new_token->prev = NULL;
 	new_token->next = NULL;
@@ -107,7 +109,7 @@ int	append_space(t_token **tokens, char **line)
 		return (0);
 	token = new_token(value, WHITESPACE);
 	if (!token)
-		return (0);
+		return (free(value), 0);
 	add_token_back(tokens, token);
 	(*line) += i;
 	return (1);

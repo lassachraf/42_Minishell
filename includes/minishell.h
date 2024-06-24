@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 16:20:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:14:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ void				cleanup(void);
 
 // Function that cleanup minishell.
 void				cleanup_minishell(void);
+
+// 
+void	clear_ast(t_node *tree);
 
 /* Environments */
 
@@ -194,6 +197,8 @@ t_node				*parse_block(t_token **tokens);
 
 // Function that parse a command.
 t_node				*parse_cmd(t_token **tokens);
+
+void				remove_token(t_token **head, t_token *token);
 
 /* Signals */
 

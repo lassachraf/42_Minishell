@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 13:03:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 19:03:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	set_env_var(t_env *env, char *var, char *new)
 		return ;
 	free(env->value);
 	env->value = ft_strdup(new);
+	
 }
 
 char	*get_env_var(t_env *env, char *var)

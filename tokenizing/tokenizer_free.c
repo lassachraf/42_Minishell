@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 15:38:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:28:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void	clear_token(t_token **tokens)
 		return ;
 	while (curr_node)
 	{
-		free(curr_node->value);
 		next = curr_node->next;
+		free(curr_node->value);
 		free(curr_node);
 		curr_node = next;
 	}

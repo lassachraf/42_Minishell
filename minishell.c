@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 19:23:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 19:59:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	init_minishell(char **env)
 	if (!g_minishell)
 		return (0);
 	g_minishell->dq_flag = 0;
+	g_minishell->gc = NULL;
 	g_minishell->our_env = dup_env(env);
 	if (!g_minishell->our_env)
 	{
@@ -149,14 +150,29 @@ int	init_minishell(char **env)
 	return (1);
 }
 
+int	get_exit_status()
+{
+	char	*value;
+	int		exit_status;
+
+	value = get_env_var(g_minishell->our_env, "?");
+	exit_status = ft_atoi(value);
+	return (exit_status);
+}
+
 void	ft_readline()
 {
 	g_minishell->line = readline(ORANGE PROMPT RESET);
+	set_env_var(g_minishell->our_env, "?", "0");
 	if (!g_minishell->line)
 	{
 		ft_putstr_fd("exit\n", 1);
-		// set exit status function
-		exit(0);
+		if (!ft_strncmp(get_env_var(g_minishell->our_env, "SHLVL"), "1", 1))
+		{
+			gc_free_all(g_minishell);
+			cleanup_minishell();
+		}
+		exit(get_exit_status());
 	}
 	if (g_minishell->line[0])
 		add_history(g_minishell->line);
@@ -176,14 +192,13 @@ int	main(int ac, char **av, char **env)
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		printAST(g_minishell->ast, 1000, 99);
+		// printAST(g_minishell->ast, 1000, 99);
 		// executer();
-		// cleanup(); will be called to free AST, TOKENS, LINE.
-		// clear_ast(&g_minishell->ast);
-		clear_token(&g_minishell->tokens);
+		clear_ast(g_minishell->ast);
+		// clear_token(&g_minishell->tokens);
+		gc_free_all(g_minishell);
 		free(g_minishell->line);
 	}
-	clear_env();
 	cleanup_minishell();
 	return (0);
 }

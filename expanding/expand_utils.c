@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 13:42:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:09:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ void	remove_token(t_token **head, t_token *token)
 	free(token);
 }
 
+void	replace(t_token *current)
+{
+	free(current->value);
+	current->value = ft_strdup("\0");
+	current->type = WORD;
+}
+
 void	remove_quotes(t_token **tokens)
 {
 	t_token	*current;
@@ -38,7 +45,15 @@ void	remove_quotes(t_token **tokens)
 	current = *tokens;
 	while (current)
 	{
-		if (current->type == S_QUOTE || current->type == D_QUOTE)
+		if (current->next && (current->type == S_QUOTE || current->type == D_QUOTE) && current->type == current->next->type)
+		{
+			tmp = current->next;
+			remove_token(tokens, current);
+			current = tmp;
+			replace(current);
+			current = current->next;
+		}
+		else if (current->type == S_QUOTE || current->type == D_QUOTE)
 		{
 			tmp = current->next;
 			remove_token(tokens, current);
@@ -66,11 +81,6 @@ void	remove_whitespace(t_token **tokens)
 		else
 			current = current->next;
 	}
-}
-
-void	pre_expander(void)
-{
-	remove_whitespace(&g_minishell->tokens);
 }
 
 void	post_expander(void)

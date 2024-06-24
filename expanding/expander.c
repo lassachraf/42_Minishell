@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 18:57:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:45:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,20 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 		new[(*j)++] = s[(*i)++];
 		return ;
 	}
-	if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1]) || !ft_isalnum(expand[1]) || (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1)))
+	else if (!ft_strncmp(&expand[1], "?", 1))
+	{
+		k = 1;	
+		expand++;
+	}
+	else if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1]) || (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1) && ft_strncmp(&expand[1], "?", 1)) || !ft_isalnum(expand[1]))
 	{
 		new[(*j)++] = s[(*i)++];
 		new[(*j)++] = s[(*i)++];
 		return ;
 	}
-	expand++;
-	if (!ft_strncmp(expand, "?", 1))
-		k = 1;
 	else
 	{
+		expand++;
 		while (expand[k])
 		{
 			if (ft_isalnum(expand[k]) || !ft_strncmp(&expand[k], "_", 1))
@@ -73,7 +76,7 @@ char	*new_value(char *s, int size)
 	j = 0;
 	new = ft_malloc(g_minishell, size);
 	if (!new)
-		exit(1);
+		return (NULL);
 	while (s[i])
 	{
 		if (s[i] == '$')
@@ -82,6 +85,8 @@ char	*new_value(char *s, int size)
 			new[j++] = s[i++];
 	}
 	new[j] = '\0';
+	if (!new[0])
+		return (NULL);	
 	return (new);
 }
 
@@ -107,8 +112,9 @@ char	*helper_expander(char *s)
 	return (new);
 }
 
-void	helper(t_token *tokens)
+t_token	*helper(t_token *tokens)
 {
+	t_token	*tmp;
 	char	*new_value;
 
 	new_value = NULL;
@@ -121,6 +127,12 @@ void	helper(t_token *tokens)
 			free(tokens->value);
 			tokens->value = new_value;
 		}
+		else
+		{
+			tmp = tokens->next;
+			remove_token(&g_minishell->tokens, tokens);
+			return (tmp);
+		}
 	}
 	else
 	{
@@ -130,7 +142,14 @@ void	helper(t_token *tokens)
 			free(tokens->value);
 			tokens->value = new_value;
 		}
+		else
+		{
+			tmp = tokens->next;
+			remove_token(&g_minishell->tokens, tokens);
+			return (tmp);
+		}
 	}
+	return (tokens->next);
 }
 
 void	expanding(void)
@@ -150,15 +169,14 @@ void	expanding(void)
 		else if (tokens->type == ASTERISK)
 			asterisk_expand(tokens);
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
-			helper(tokens);
-		tokens = tokens->next;
+		    tokens = helper(tokens);
+        else
+            tokens = tokens->next;
 	}
 }
 
 void	expander(void)
 {
 	expanding();
-	// printf("Expanding done !\n\n");
-	// exit(100);
 	post_expander();
 }
