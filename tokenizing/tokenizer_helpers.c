@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 19:53:09 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:03:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_token	*new_token(char *value, t_type type)
 	if (!new_token)
 		return (NULL);
 	gc_add(g_minishell, new_token);
+	printf("**gc** :: token => '%p'\n", new_token);
 	new_token->value = value;
-	// gc_add(g_minishell, new_token->value);
 	new_token->type = type;
 	new_token->prev = NULL;
 	new_token->next = NULL;
@@ -55,9 +55,11 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 		value = ft_substr(*line, 0, 2);
 	else
 		value = ft_substr(*line, 0, 1);
+	gc_add(g_minishell, value);
+	printf("**gc** :: value(sep) => '%p'\n", value);
 	token = new_token(value, type);
 	if (!token)
-		return (free(value), 0);
+		return (0);
 	add_token_back(tokens, token);
 	(*line)++;
 	if (type == RR_REDIR || type == LL_REDIR || type == AND || type == OR)
@@ -77,18 +79,21 @@ int	append_identifier(t_token **tokens, char **line)
 	if (is_special(*tmp))
 	{
 		value = ft_substr(tmp, 0, 1);
+		gc_add(g_minishell, value);
+		printf("**gc** :: value(special) => '%p'\n", value);
 		new = choose_token(value, *tmp);
-		*line += 1;
-		return (add_token_back(tokens, new), 1);
+		return ((*line += 1), add_token_back(tokens, new), 1);
 	}
 	while (tmp[i] && !is_separator(tmp + i) && !is_quote(*(tmp + i)))
 		i++;
 	value = ft_substr(tmp, 0, i);
 	if (!value)
 		return (0);
+	gc_add(g_minishell, value);
+	printf("**gc** :: value(id) => '%p'\n", value);
 	new = new_token(value, WORD);
 	if (!new)
-		return (free(value), 0);
+		return (0);
 	*line += i;
 	return (add_token_back(tokens, new), 1);
 }
@@ -107,9 +112,11 @@ int	append_space(t_token **tokens, char **line)
 	value = ft_substr(*line, 0, i);
 	if (!value)
 		return (0);
+	gc_add(g_minishell, value);
+	printf("**gc** :: value(spc) => '%p'\n", value);
 	token = new_token(value, WHITESPACE);
 	if (!token)
-		return (free(value), 0);
+		return (0);
 	add_token_back(tokens, token);
 	(*line) += i;
 	return (1);

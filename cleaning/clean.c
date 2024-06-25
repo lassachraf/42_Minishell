@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:30:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 19:22:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 09:49:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ void	cleanup(void)
 void	cleanup_minishell(void)
 {
 	clear_env();
-	// free(g_minishell);
+	free(g_minishell);
 }

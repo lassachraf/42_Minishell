@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:41:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 19:23:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:44:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_token	*tokenizer_handler(char *line)
 	while (*line)
 	{
 		if (error)
-			return (clear_token(&tokens), NULL);
+			return (gc_free_all(g_minishell), NULL);
 		if (ft_isspace(*line))
 			error = (!append_space(&tokens, &line) && 1);
 		else if (!ft_strncmp(line, "<", 1) || !ft_strncmp(line, ">", 1)
@@ -67,7 +67,10 @@ t_token	*tokenizer(void)
 
 	g_minishell->nb_tokens = 0;
 	line = ft_strtrim(g_minishell->line, " \t\n\v\f\r");
+	gc_add(g_minishell, line);
+	printf("**gc** :: line(tok) => '%p'\n", line);
 	tokens = tokenizer_handler(line);
-	free(line);
+	if (!tokens)
+		gc_free_all(g_minishell);
 	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:22:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 19:50:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:57:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ void	small_add_back(t_gc **gc, t_gc *new_node)
         curr->next = new_node;
     }
     else
-    {
         *gc = new_node;
-    }
 }
 
 void	gc_add(t_minishell *mini, void *ptr)

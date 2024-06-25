@@ -6,32 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:13:52 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/16 22:21:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:45:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_token	*custome_tokens(void)
-{
-	t_token	*curr;
-	t_token	*new_list;
-	t_token	*new;
-
-	curr = g_minishell->tokens;
-	new_list = NULL;
-	while (curr != NULL && curr->value != NULL)
-	{
-		if (curr->type != WHITESPACE)
-		{
-			new = new_token(curr->value, curr->type);
-			add_token_back(&new_list, new);
-		}
-		curr = curr->next;
-	}
-	add_token_back(&new_list, new_token(NULL, END));
-	return (new_list);
-}
 
 int	syntax_first_phase(t_token *token)
 {
@@ -85,14 +64,16 @@ int	syntax(void)
 			|| syntax_third_phase(token))
 		{
 			set_env_var(g_minishell->our_env, "?", "2");
-			return (clear_token(&g_minishell->tokens), -1);
+			gc_free_all(g_minishell);
+			return (-1);
 		}
 		token = token->next;
 	}
 	if (general_check() == -1)
 	{
 		set_env_var(g_minishell->our_env, "?", "2");
-		return (clear_token(&g_minishell->tokens), -1);
+		gc_free_all(g_minishell);
+		return (-1);
 	}
 	return (0);
 }

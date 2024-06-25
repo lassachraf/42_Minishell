@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/06/24 16:17:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:49:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,12 +273,12 @@ t_node *parsing(void) // cat || (ls && ps)
 {
     t_node *res;
 
-    // printf("first cur token value :'%u'\n",tokens->type);
 	expander();
     res = parse_block(&g_minishell->tokens);
     // if((*tokens))
     // printf("last cur token value :'%u'\n",tokens->type);
     // printf("( ,cur token value :'%u'\n",L_PAREN);
-
+    if (!res)
+        gc_free_all(g_minishell);
     return(res);
 }

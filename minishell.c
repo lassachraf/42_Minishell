@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 19:59:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:45:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,34 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+void	increment_shlvl()
+{
+	char	*shlvl;
+	char	*new_shlvl;
+	int		tmp;
+
+	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
+	tmp = ft_atoi(shlvl) + 1;
+	new_shlvl = ft_itoa(tmp);
+	gc_add(g_minishell, new_shlvl);
+	printf("**gc** :: new_shlvl(inc) => '%p'\n", new_shlvl);
+	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
+}
+
+void	decrement_shlvl()
+{
+	char	*shlvl;
+	char	*new_shlvl;
+	int		tmp;
+
+	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
+	tmp = ft_atoi(shlvl) - 1;
+	new_shlvl = ft_itoa(tmp);
+	gc_add(g_minishell, new_shlvl);
+	printf("**gc** :: new_shlvl(dec) => '%p'\n", new_shlvl);
+	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
+}
+
 int	init_minishell(char **env)
 {
 	g_minishell = malloc(sizeof(t_minishell));
@@ -142,9 +170,8 @@ int	init_minishell(char **env)
 	g_minishell->gc = NULL;
 	g_minishell->our_env = dup_env(env);
 	if (!g_minishell->our_env)
-	{
 		return (print_errors("dup_env failed !"), 0);
-	}
+	increment_shlvl();
 	add_env_var(g_minishell->our_env, "?", "0", false);
 	signals();
 	return (1);
@@ -163,16 +190,20 @@ int	get_exit_status()
 void	ft_readline()
 {
 	g_minishell->line = readline(ORANGE PROMPT RESET);
+	gc_add(g_minishell, g_minishell->line);
+	printf("**gc** :: line => '%p'\n", g_minishell->line);
 	set_env_var(g_minishell->our_env, "?", "0");
 	if (!g_minishell->line)
 	{
 		ft_putstr_fd("exit\n", 1);
-		if (!ft_strncmp(get_env_var(g_minishell->our_env, "SHLVL"), "1", 1))
-		{
-			gc_free_all(g_minishell);
-			cleanup_minishell();
-		}
-		exit(get_exit_status());
+		// ila kan SHLVL = 1, free minishell, w set exit status fchi tmp.
+		// else decrement w free ki l3ada
+		clear_env();
+		gc_free_all(g_minishell);
+		free(g_minishell);
+		// decrement_shlvl();
+		// exit(get_exit_status());
+		exit(1);
 	}
 	if (g_minishell->line[0])
 		add_history(g_minishell->line);
@@ -192,13 +223,18 @@ int	main(int ac, char **av, char **env)
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
+		t_gc *tmp = g_minishell->gc;
+		while (tmp)
+		{
+			printf("gc_add => '%p'\n", tmp->ptr);
+			tmp = tmp->next;
+		}
 		// printAST(g_minishell->ast, 1000, 99);
 		// executer();
-		clear_ast(g_minishell->ast);
-		// clear_token(&g_minishell->tokens);
 		gc_free_all(g_minishell);
-		free(g_minishell->line);
 	}
-	cleanup_minishell();
+	// free env, free g_minishell.
+	clear_env();
+	free(g_minishell);
 	return (0);
 }
