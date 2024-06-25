@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:41:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 11:44:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 21:43:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_token	*tokenizer(void)
 	g_minishell->nb_tokens = 0;
 	line = ft_strtrim(g_minishell->line, " \t\n\v\f\r");
 	gc_add(g_minishell, line);
-	printf("**gc** :: line(tok) => '%p'\n", line);
+	// printf("**gc** :: line(tok) => '%p'\n", line);
 	tokens = tokenizer_handler(line);
 	if (!tokens)
 		gc_free_all(g_minishell);

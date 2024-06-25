@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 18:14:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 21:38:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/wait.h>
 
 typedef struct s_env
 {
@@ -54,6 +55,8 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
+
+void    executer(void);
 
 /* Builtins */
 

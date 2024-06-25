@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 11:03:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 21:44:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*new_token(char *value, t_type type)
 	if (!new_token)
 		return (NULL);
 	gc_add(g_minishell, new_token);
-	printf("**gc** :: token => '%p'\n", new_token);
+	// printf("**gc** :: token => '%p'\n", new_token);
 	new_token->value = value;
 	new_token->type = type;
 	new_token->prev = NULL;
@@ -56,7 +56,7 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 	else
 		value = ft_substr(*line, 0, 1);
 	gc_add(g_minishell, value);
-	printf("**gc** :: value(sep) => '%p'\n", value);
+	// printf("**gc** :: value(sep) => '%p'\n", value);
 	token = new_token(value, type);
 	if (!token)
 		return (0);
@@ -80,7 +80,7 @@ int	append_identifier(t_token **tokens, char **line)
 	{
 		value = ft_substr(tmp, 0, 1);
 		gc_add(g_minishell, value);
-		printf("**gc** :: value(special) => '%p'\n", value);
+		// printf("**gc** :: value(special) => '%p'\n", value);
 		new = choose_token(value, *tmp);
 		return ((*line += 1), add_token_back(tokens, new), 1);
 	}
@@ -90,7 +90,7 @@ int	append_identifier(t_token **tokens, char **line)
 	if (!value)
 		return (0);
 	gc_add(g_minishell, value);
-	printf("**gc** :: value(id) => '%p'\n", value);
+	// printf("**gc** :: value(id) => '%p'\n", value);
 	new = new_token(value, WORD);
 	if (!new)
 		return (0);
@@ -113,7 +113,7 @@ int	append_space(t_token **tokens, char **line)
 	if (!value)
 		return (0);
 	gc_add(g_minishell, value);
-	printf("**gc** :: value(spc) => '%p'\n", value);
+	// printf("**gc** :: value(spc) => '%p'\n", value);
 	token = new_token(value, WHITESPACE);
 	if (!token)
 		return (0);

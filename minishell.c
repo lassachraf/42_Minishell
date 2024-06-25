@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 11:45:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 21:39:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	increment_shlvl()
 	tmp = ft_atoi(shlvl) + 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
-	printf("**gc** :: new_shlvl(inc) => '%p'\n", new_shlvl);
+	// printf("**gc** :: new_shlvl(inc) => '%p'\n", new_shlvl);
 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
 }
 
@@ -191,17 +191,17 @@ void	ft_readline()
 {
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
-	printf("**gc** :: line => '%p'\n", g_minishell->line);
+	// printf("**gc** :: line => '%p'\n", g_minishell->line);
 	set_env_var(g_minishell->our_env, "?", "0");
 	if (!g_minishell->line)
 	{
+		decrement_shlvl();
 		ft_putstr_fd("exit\n", 1);
 		// ila kan SHLVL = 1, free minishell, w set exit status fchi tmp.
 		// else decrement w free ki l3ada
 		clear_env();
 		gc_free_all(g_minishell);
 		free(g_minishell);
-		// decrement_shlvl();
 		// exit(get_exit_status());
 		exit(1);
 	}
@@ -223,17 +223,10 @@ int	main(int ac, char **av, char **env)
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		t_gc *tmp = g_minishell->gc;
-		while (tmp)
-		{
-			printf("gc_add => '%p'\n", tmp->ptr);
-			tmp = tmp->next;
-		}
-		// printAST(g_minishell->ast, 1000, 99);
-		// executer();
+		executer();
 		gc_free_all(g_minishell);
 	}
-	// free env, free g_minishell.
+	gc_free_all(g_minishell);
 	clear_env();
 	free(g_minishell);
 	return (0);

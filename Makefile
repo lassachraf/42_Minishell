@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/06/25 11:36:40 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/06/25 21:35:13 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ CLEANING		:=	cleaning/clean.c
 
 ENVIRONMENT		:=	environment/env_utils.c				\
 					environment/free.c
+
+EXECUTING		:=	executing/executer.c
 
 EXPANDING		:=	expanding/expander.c				\
 					expanding/word_helper.c				\
@@ -66,6 +68,7 @@ TOKENIZING		:=	tokenizing/tokenizer.c				\
 SRCS			:=	$(BUILTINS)							\
 					$(CLEANING)							\
 					$(ENVIRONMENT)						\
+					$(EXECUTING)						\
 					$(EXPANDING)						\
 					$(MEMORY)							\
 					$(NODES)							\
