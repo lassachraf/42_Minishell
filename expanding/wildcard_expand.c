@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 18:50:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 19:29:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,13 @@ void	sort_strings(char **strings, size_t count)
 	}
 }
 
-int	custome_expand(t_token *token)
-{
-	if (token->prev == WORD)
-	{
+// int	custome_expand(t_token *token)
+// {
+// 	if (token->prev == WORD)
+// 	{
 		
-	}
-}
+// 	}
+// }
 
 void	asterisk_expand(t_token *token)
 {
@@ -137,6 +137,8 @@ void	asterisk_expand(t_token *token)
 		return ;
 	process_dirs(dir, &result, token->value);
 	if (result)
+	{
 		token->value = result;
-	custome_expand(token);
+		token->type = WORD;
+	}
 }
