@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 09:37:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 11:23:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 18:41:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	get_files(DIR *dir, struct dirent *entry, char **file_list,
 			subdir = opendir(entry->d_name);
 			if (!subdir)
 			{
-				file_list[i] = strdup(entry->d_name);
+				file_list[i] = ft_strdup(entry->d_name);
+				gc_add(g_minishell, file_list[i]);
 				i++;
 			}
 			else
@@ -76,11 +77,9 @@ void	append_files(char **result, char **file_list, int file_count)
 			append_to_result(result, "", 1);
 			file_per_line_count = 0;
 		}
-		free(file_list[i]);
 		i++;
 	}
 	append_to_result(result, "", 1);
-	free(file_list);
 }
 
 void	process_files(DIR *dir, char **result, const char *pattern)
@@ -89,13 +88,14 @@ void	process_files(DIR *dir, char **result, const char *pattern)
 	char			**file_list;
 	size_t			file_count;
 
-	file_count = count_files(dir, pattern);
+	file_count = count_files(dir, pattern); // good
 	dir = opendir(".");
 	if (!dir)
 		return ;
 	file_list = malloc(sizeof(char *) * file_count);
 	if (!file_list)
 		return ;
+	gc_add(g_minishell, file_list);
 	entry = readdir(dir);
 	get_files(dir, entry, file_list, pattern);
 	sort_strings(file_list, file_count);

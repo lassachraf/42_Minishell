@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 10:17:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 18:38:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ void	increment_shlvl()
 	tmp = ft_atoi(shlvl) + 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
-	// printf("**gc** :: new_shlvl(inc) => '%p'\n", new_shlvl);
 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
 }
 
@@ -157,7 +156,6 @@ void	decrement_shlvl()
 	tmp = ft_atoi(shlvl) - 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
-	printf("**gc** :: new_shlvl(dec) => '%p'\n", new_shlvl);
 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
 }
 
@@ -171,6 +169,7 @@ int	init_minishell(char **env)
 	g_minishell->our_env = dup_env(env);
 	if (!g_minishell->our_env)
 		return (print_errors("dup_env failed !"), 0);
+	increment_shlvl();
 	add_env_var(g_minishell->our_env, "?", "0", false);
 	signals();
 	return (1);
@@ -188,23 +187,20 @@ int	get_exit_status()
 
 void	ft_readline()
 {
+	int	exit_status;
+	
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
-	// printf("**gc** :: line => '%p'\n", g_minishell->line);
 	set_env_var(g_minishell->our_env, "?", "0");
-	// if (!ft_strncmp(g_minishell->line, "./minishell", ft_strlen(g_minishell->line)))
-	// 	increment_shlvl();
 	if (!g_minishell->line)
 	{
+		exit_status = get_exit_status();
 		decrement_shlvl();
 		ft_putstr_fd("exit\n", 1);
-		// ila kan SHLVL = 1, free minishell, w set exit status fchi tmp.
-		// else decrement w free ki l3ada
 		clear_env();
 		gc_free_all(g_minishell);
 		free(g_minishell);
-		// exit(get_exit_status());
-		exit(1);
+		exit(exit_status);
 	}
 	if (g_minishell->line[0])
 		add_history(g_minishell->line);
@@ -221,11 +217,12 @@ int	main(int ac, char **av, char **env)
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
-		// printf("cc\n");
+		// tokens and syntax are totally good in terms of leaks.
+		// chof m3aya hdshi tl parsing wl expand bash ma nzgel walo.
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		printAST(g_minishell->ast, 3212, 23123);
+		printAST(g_minishell->ast, 700, 403298);
 		// executer();
 		gc_free_all(g_minishell);
 	}
