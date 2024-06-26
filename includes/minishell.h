@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 21:38:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 09:21:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
-void    executer(void);
 
 /* Builtins */
 
@@ -120,6 +119,12 @@ void				clear_env(void);
 
 // Function that remove an element from the env.
 void				delete_env_var(t_env **env, char *key);
+
+/* Executing */
+
+// Main function that execute the user input.
+void				executer(void);
+
 
 /* Expanding */
 

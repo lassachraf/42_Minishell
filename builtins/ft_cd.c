@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 16:44:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 09:13:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,14 @@ void	ft_cd(t_minishell *mini, char *path)
 		cd_home(mini);
 		return ;
 	}
-	if (!chdir(path))
+	if (chdir(path))
 	{
 		cd_error(path);
 		return ;
 	}
 	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"));
 	cwd = getcwd(NULL, 0);
+	gc_add(g_minishell, cwd);
 	if (!cwd)
 	{
 		ft_putstr_fd(RED "badashell$: getcwd: `", 2);

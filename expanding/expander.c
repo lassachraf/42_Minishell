@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 18:45:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:06:02 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ t_token	*helper(t_token *tokens)
 		new_value = helper_expander(tokens->value);
 		if (new_value)
 		{
-			free(tokens->value);
+			// free(tokens->value);
 			tokens->value = new_value;
 		}
 		else
@@ -139,7 +139,7 @@ t_token	*helper(t_token *tokens)
 		new_value = helper_expander(tokens->value);
 		if (new_value)
 		{
-			free(tokens->value);
+			// free(tokens->value);
 			tokens->value = new_value;
 		}
 		else

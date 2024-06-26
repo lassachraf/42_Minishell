@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 21:39:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:17:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,6 @@ int	init_minishell(char **env)
 	g_minishell->our_env = dup_env(env);
 	if (!g_minishell->our_env)
 		return (print_errors("dup_env failed !"), 0);
-	increment_shlvl();
 	add_env_var(g_minishell->our_env, "?", "0", false);
 	signals();
 	return (1);
@@ -193,6 +192,8 @@ void	ft_readline()
 	gc_add(g_minishell, g_minishell->line);
 	// printf("**gc** :: line => '%p'\n", g_minishell->line);
 	set_env_var(g_minishell->our_env, "?", "0");
+	// if (!ft_strncmp(g_minishell->line, "./minishell", ft_strlen(g_minishell->line)))
+	// 	increment_shlvl();
 	if (!g_minishell->line)
 	{
 		decrement_shlvl();
@@ -220,10 +221,12 @@ int	main(int ac, char **av, char **env)
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
+		// printf("cc\n");
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		executer();
+		printAST(g_minishell->ast, 3212, 23123);
+		// executer();
 		gc_free_all(g_minishell);
 	}
 	gc_free_all(g_minishell);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/06/25 21:33:02 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 09:35:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ t_redir	*do_red(t_token **tokens) //
 	new = malloc(sizeof(t_redir));
 	if(!new)
 		return(NULL);
+	gc_add(g_minishell, new);
 	ft_bzero(new, sizeof(t_redir));
 	new->type = (*tokens)->type;
 	(*tokens) = (*tokens)->next;
@@ -182,6 +183,7 @@ t_node *parse_cmd(t_token **tokens) //
 			new = ft_lstnew(red);
 			if (!new)
 				return(NULL);
+			gc_add(g_minishell, new);
 			ft_lstadd_back(&red_list, new);
 		}
 		else if((*tokens)->type == WORD)
@@ -189,9 +191,10 @@ t_node *parse_cmd(t_token **tokens) //
 			new = ft_lstnew((*tokens)->value);
 			if (!new)
 				return(NULL);
+			gc_add(g_minishell, new);
 			ft_lstadd_back(&cmd_list,new);
 		}
-			(*tokens) = (*tokens)->next;
+		(*tokens) = (*tokens)->next;
 	}
 	if(!red_list)
 		return(string_node_new(cmd_list));

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:25:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 21:47:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:00:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void print_double(char ** argv)
 char **env_to_envp(t_env *env)
 {
     char **argv;
+    char    *tmp;
     int size;
     int i;
 
@@ -62,11 +63,15 @@ char **env_to_envp(t_env *env)
     argv = malloc(sizeof(char *) * (size + 1));
     if(!argv)
         return(NULL);
+    gc_add(g_minishell, argv);
     while(i < size)
     {
-        argv[i] = ft_strjoin(ft_strjoin(env->key, "="),env->value);
+        tmp = ft_strjoin(env->key, "=");
+        argv[i] = ft_strjoin(tmp ,env->value);
         if(!argv[i])
-            return(ft_malloc_error(argv,i), NULL);
+            return(gc_free_all(g_minishell), NULL);
+        gc_add(g_minishell, argv[i]);
+        free(tmp);
         env = env->next;
         i++;
     }
@@ -85,13 +90,15 @@ char **list_to_argv(t_list *list)
     size = ft_lstsize(list);
     argv = malloc(sizeof(char *) * (size + 1));
     if(!argv)
-        return(NULL);
+        return(gc_free_all(g_minishell), NULL);
+    gc_add(g_minishell, argv);
     while(i < size)
     {
         len = ft_strlen(list->content) + 1;
         argv[i] = malloc(sizeof(char) * len);
         if(!argv[i])
-            return(ft_malloc_error(argv,i), NULL);
+            return(gc_free_all(g_minishell), NULL);
+        gc_add(g_minishell, argv[i]);
         ft_memmove(argv[i], list->content, len);
         list = list->next;
         i++;
