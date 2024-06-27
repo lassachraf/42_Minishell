@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:25:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 17:06:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:58:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,35 +316,40 @@ void    executer(void)
     t_node *node;
 
     node = g_minishell->ast;
-    if (node->type == STRING_NODE)
-    {
-        if (ft_is_builtin(node->data.cmd->content))
-            execute_builtins(g_minishell, list_to_argv(g_minishell->ast->data.cmd));
-        else
-            do_cmd();
-    }
-	// else if(node->type == PAIR_NODE)
+	// while (node)
 	// {
-    //         printAST(node->data.pair.left, 1 , tmp);
-    //         printAST(node->data.pair.right, 0 , tmp);
-    // }
-    // else if (node->type == REDIR_NODE)
-    // {
-    //     while(node->data.redir)
-    //     {
-    //         t_redir *new = node->data.redir->content;
-    //         printf("REDIR NODE , name: '%s'\n",new->file);
-    //         while (new->cmd)
-    //         {
-    //             printf("'%s' ", (char*)new->cmd->content);
-    //             new->cmd = new->cmd->next;
-    //         }
-    //         printf("\n");
-    //         node->data.redir = node->data.redir->next;
-    //     }
-    // }
-    // else if(node->type == ERROR_NODE)
-    // {
-    //     printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
-    // }
+		if (node->type == STRING_NODE)
+		{
+			if (ft_is_builtin(node->data.cmd->content))
+				execute_builtins(g_minishell, list_to_argv(g_minishell->ast->data.cmd));
+			else
+				do_cmd();
+		}
+		// else if(node->type == PAIR_NODE)
+		// {
+		//         printAST(node->data.pair.left, 1 , tmp);
+		//         printAST(node->data.pair.right, 0 , tmp);
+		// }
+		// else if (node->type == REDIR_NODE)
+		// {
+		//     while(node->data.redir)
+		//     {
+		//         t_redir *new = node->data.redir->content;
+		//         printf("REDIR NODE , name: '%s'\n",new->file);
+		//         while (new->cmd)
+		//         {
+		//             printf("'%s' ", (char*)new->cmd->content);
+		//             new->cmd = new->cmd->next;
+		//         }
+		//         printf("\n");
+		//         node->data.redir = node->data.redir->next;
+		//     }
+		// }
+		// else if(node->type == ERROR_NODE)
+		// {
+		//     printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
+		// }
+	// }
+    
+	
 }

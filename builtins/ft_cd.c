@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 09:13:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:03:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void	ft_cd(t_minishell *mini, char *path)
 	gc_add(g_minishell, cwd);
 	if (!cwd)
 	{
-		ft_putstr_fd(RED "badashell$: getcwd: `", 2);
-		ft_putstr_fd("unable to determine current directory.", 2);
-		ft_putstr_fd("\n" RESET, 2);
+		print_errors("getcwd: unable to determine current directory.");
 		return ;
 	}
 	set_env_var(mini->our_env, "PWD", cwd);

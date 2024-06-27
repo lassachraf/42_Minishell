@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 17:06:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:30:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include "execution.h"
 
 typedef struct s_env
 {
@@ -58,7 +59,8 @@ extern t_minishell	*g_minishell;
 
 void	increment_shlvl();
 void	decrement_shlvl();
-
+int	get_exit_status();
+char **env_to_envp(t_env *env);
 
 /* Builtins */
 
@@ -72,10 +74,10 @@ void				ft_echo(char **args);
 void				ft_env(t_env *env);
 
 // Function that exit shell "exit".
-void				ft_exit(void);
+void				ft_exit(char *args);
 
 // Function that export variable to the environment "export".
-void				ft_export(void);
+void				ft_export(char **args, int nb_args);
 
 // Function that prints current working directory "pwd".
 void				ft_pwd(t_env *env);
@@ -118,7 +120,7 @@ void				add_env_var(t_env *env, char *key, char *value,
 						bool visible);
 
 // Function that clean the environment.
-void				clear_env(void);
+void				clear_env(t_env *env);
 
 // Function that remove an element from the env.
 void				delete_env_var(t_env **env, char *key);

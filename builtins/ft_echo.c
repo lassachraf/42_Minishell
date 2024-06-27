@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:25:01 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/04 17:01:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/27 09:33:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_echo(char **args)
 
 	i = 1;
 	new_line = 0;
-	if (args[i] != NULL && ft_check_option(args[i]) == 1)
+	if (args[i] && ft_check_option(args[i]) == 1)
 	{
 		new_line = 1;
 		i++;

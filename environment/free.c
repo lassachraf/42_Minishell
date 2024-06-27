@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 11:32:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/27 18:28:46 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	delete_env_var(t_env **env, char *key)
 	free(current);
 }
 
-void	clear_env(void)
+void	clear_env(t_env *env)
 {
 	t_env	*current;
 	t_env	*next;
 
-	current = g_minishell->our_env;
+	current = env;
 	while (current)
 	{
 		next = current->next;
@@ -51,5 +51,5 @@ void	clear_env(void)
 		free(current);
 		current = next;
 	}
-	g_minishell->our_env = NULL;
+	env = NULL;
 }
