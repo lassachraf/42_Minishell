@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 19:31:35 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/28 12:29:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,6 @@ void	print_env(t_env *env)
 		env = env->next;
 	}
 }
-// t_env *sort_env(t_env *env)
-// {
-//     t_env *tmp_env = dup_env(env);
-//     if (!tmp_env)
-//         return NULL;
-
-//     t_env *i, *j;
-//     char *temp_key;
-//     char *temp_value;
-
-//     for (i = tmp_env; i != NULL; i = i->next)
-//     {
-//         for (j = i->next; j != NULL; j = j->next)
-//         {
-//             if (strcmp(i->key, j->key > 0))
-//             {
-//                 temp_key = i->key;
-//                 temp_value = i->value;
-//                 i->key = j->key;
-//                 i->value = j->value;
-//                 j->key = temp_key;
-//                 j->value = temp_value;
-//             }
-//         }
-//     }
-
-//     return tmp_env;
-// }
 
 void    ft_swap(t_env *i, t_env *j, int *swapped)
 {
@@ -111,6 +83,16 @@ void	ft_export(char **args, int nb_args)
     }
     else
     {
-        printf("will be processed ghi sber !\n");
+        if (ft_strchr(args[1], '='))
+        {
+            printf("db nrje3 lik hhh\n");
+        }
+        else
+        {
+            if (get_env_var(g_minishell->our_env, args[1]))
+                return ;
+            else
+                add_env_var(g_minishell->our_env, args[1], "", 1);
+        }
     }
 }
