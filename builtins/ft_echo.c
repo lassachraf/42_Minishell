@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:25:01 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 09:33:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:37:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_check_option(char *s)
 	if (s[0] != '-')
 		return (0);
 	i++;
+	if (!s[i])
+		return (0);
 	while (s[i] && s[i] == 'n')
 		i++;
 	if (!s[i])

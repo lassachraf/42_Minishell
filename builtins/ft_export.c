@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/28 12:29:08 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:55:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	ft_export(char **args, int nb_args)
             if (get_env_var(g_minishell->our_env, args[1]))
                 return ;
             else
-                add_env_var(g_minishell->our_env, args[1], "", 1);
+                printf("PPPPPPPPPPPPP\n");
         }
     }
 }

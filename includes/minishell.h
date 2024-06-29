@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 19:30:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/28 14:46:22 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_env
 	char			*key;
 	char			*value;
 	bool			visible;
+	bool			export;
 	struct s_env	*next;
 }					t_env;
 
@@ -59,8 +60,8 @@ extern t_minishell	*g_minishell;
 
 void	increment_shlvl();
 void	decrement_shlvl();
-int	get_exit_status();
-char **env_to_envp(t_env *env);
+int		get_exit_status();
+char	**env_to_envp(t_env *env);
 
 /* Builtins */
 
