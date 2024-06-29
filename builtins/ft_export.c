@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/29 20:33:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:52:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ void	ft_export(char **args, int nb_args)
     t_env   *sorted_env;
     char    **split;
 
+    // sort env has a problem conserning the environment cuz it takes the bash env not our env
+    // should be fixed tmrrw with the other case "oussama sghir"
     sorted_env = sort_env(g_minishell->our_env);
     if (nb_args == 1)
         print_env(sorted_env);
