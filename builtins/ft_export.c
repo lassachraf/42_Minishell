@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/28 13:55:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 20:33:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ t_env   *sort_env(t_env *env)
     tmp_env = dup_env(env_to_envp(env));
     if (!tmp_env)
         return NULL;
+    printf("*********************************\n");
+    ft_env(tmp_env);
+    printf("*********************************\n");
     while (1)
     {
         swapped = 0;
@@ -70,22 +73,42 @@ t_env   *sort_env(t_env *env)
     return (tmp_env);
 }
 
+void    free_split(char **s)
+{
+    int i;
+    
+    i = 0;
+    while (s[i])
+        free(s[i++]);
+    free(s);
+}
+
 void	ft_export(char **args, int nb_args)
 {
-    (void)args;
     t_env   *sorted_env;
+    char    **split;
 
     sorted_env = sort_env(g_minishell->our_env);
     if (nb_args == 1)
-    {
         print_env(sorted_env);
-        clear_env(sorted_env);
-    }
     else
     {
         if (ft_strchr(args[1], '='))
         {
-            printf("db nrje3 lik hhh\n");
+            printf("before split => %s\n", args[0]);
+            split = ft_split(args[1], '=');
+            printf("split[0] => %s\n", split[0]);
+            printf("split[1] => %s\n", split[1]);
+            if (get_env_var(g_minishell->our_env, split[0]))
+            {
+                if (!split[1])
+                    set_env_var(g_minishell->our_env, split[0], args[2]);
+                else    
+                    set_env_var(g_minishell->our_env, split[0], split[1]);
+            }
+            else
+                add_env_var(g_minishell->our_env, split[0], args[2], true);
+            free_split(split);
         }
         else
         {
@@ -95,4 +118,5 @@ void	ft_export(char **args, int nb_args)
                 printf("PPPPPPPPPPPPP\n");
         }
     }
+    clear_env(sorted_env);
 }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/28 14:46:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 20:36:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void				delete_env_var(t_env **env, char *key);
 /* Executing */
 
 // Main function that execute the user input.
-void				executer(void);
+void				executer(t_node *node);
 
 
 /* Expanding */

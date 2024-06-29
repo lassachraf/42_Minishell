@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 17:55:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:28:24 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,8 @@ int	builtins_exec_check(char **args)
 		set_env_var(g_minishell->our_env, "?", "1");
 		return (1);
 	}
-	if ((!ft_strcmp(args[0], "pwd") || !ft_strcmp(args[0], "export") ||
-		!ft_strcmp(args[0], "exit") || !ft_strcmp(args[0], "unset")) &&
-		nb_options(args) == 0)
+	if ((!ft_strcmp(args[0], "export") || !ft_strcmp(args[0], "exit")
+		|| !ft_strcmp(args[0], "unset")) && nb_options(args) == 0)
 	{
 		ft_putstr_fd(RED "badashell$ : ", 2);
 		ft_putstr_fd(args[0], 2);
@@ -91,6 +90,8 @@ int	check_cd_and_exit(t_minishell *mini, char **args, int flag)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
+	for (int i = 0; i < nb_args(args); i++)
+        printf("** Arg %d => %s **\n", i, args[i]);
 	if (builtins_exec_check(args))
 		return ;
 	if (ft_strcmp(args[0], "echo") == 0)

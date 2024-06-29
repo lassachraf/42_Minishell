@@ -6,11 +6,47 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:25:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 13:58:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 20:43:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
+#include "../includes/minishell.h"
+
+void	open_pipe(int *pfd)
+{
+	if (pipe(pfd))
+	{
+		perror("pipe:");
+		return;
+	}
+}
+
+int	dup_2(int old_fd, int new_fd)
+{
+	if (dup2(old_fd, new_fd) < 0)
+		return (-1);
+	close(old_fd);
+	return (0);
+}
+
+
+void	fd_duper( int *pfd , int mode)
+{
+	if (mode == 1) // close pipe and leave stdout to 1 or to file
+	{
+		close(pfd[1]);
+		close(pfd[0]);
+	}
+	else // write to pipe[1]
+	{
+		close(pfd[0]);
+		if (dup_2(pfd[1], 1))
+			exit(EXIT_FAILURE);
+	}
+}
 
 char	*get_command(char *argv)
 {
@@ -44,12 +80,13 @@ char	*add_slash_cmd(char *path, char *cmd)
 		return (free(fullpath), free(a_path), NULL);
 }
 
+
 int	print_err(char *message, char *word)
 {
 	ft_putstr_fd(RED, 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
-    ft_putstr_fd("\n" RESET, 2);
+	ft_putstr_fd("\n" RESET, 2);
     return (0);
 }
 void	check_split(char **cmd, char *word)
@@ -59,7 +96,7 @@ void	check_split(char **cmd, char *word)
 		print_err("malloc failed in ft_split !!", word);
 		if (!word)
 			ft_putstr_fd("NULL\n", 2);
-		exit (EXIT_FAILURE);
+		return;
 	}
 }
 
@@ -99,7 +136,7 @@ static char	*founded_cmd(char *argv, char **paths, char **cmd)
 	{
 		free_double(paths);
 		free_double(cmd);
-		exit(EXIT_FAILURE);
+		return(NULL);
 	}
 	return (free_double(paths), free_double(cmd), fullpath);
 }
@@ -159,11 +196,11 @@ int	check_cmd(char *argv, char **env)
 		cmd = get_command(argv);
 	if (*argv != '\0' && (*argv == '/' || *argv == '.')
 		&& access(cmd, F_OK))
-		check = print_err("badashell: no such file or directory:", argv);
+		check = print_err("badashell$ : no such file or directory: ", argv);
 	else if (*argv != '\0' && access(cmd, F_OK))
-		check = print_err("badashell: command not found: ", argv);
+		check = print_err("badashell$ : command not found: ", argv);
 	else if (*argv != '\0' && access(cmd, X_OK))
-		check = print_err("badashell: permission denied: ", argv);
+		check = print_err("badashell$ : permission denied: ", argv);
 	free(cmd);
     return (check);
 }
@@ -178,7 +215,7 @@ void	call_execev(char **env, char *argv , char **cmd)
 	if (!founded_path)
 	{
 		free_double(cmd);
-		exit(EXIT_FAILURE);
+		return;
 	}
 	cat[0] = "cat";
 	cat[1] = NULL;
@@ -189,11 +226,8 @@ void	call_execev(char **env, char *argv , char **cmd)
 		execve(get_fullpath("cat", env), cat, env);
 	}
 	else
-    {
 		execve(founded_path, cmd, env);
-    }
 	print_err("badashell: command not found: ", "cat");
-	exit(EXIT_FAILURE);
 }
 
 int	ft_malloc_error(char **tab, size_t i)
@@ -229,7 +263,10 @@ void print_double(char ** argv)
     int i = 0;
 
     while(argv[i])
-        printf("%s\n",argv[i++]);
+    {
+        printf("%s\n",argv[i]);
+        i++;
+    }
 }
 
 char **env_to_envp(t_env *env)
@@ -288,68 +325,121 @@ char **list_to_argv(t_list *list)
     return(argv);
 }
 
-void do_cmd(void)
+// static void	increment_shlvl()
+// {
+// 	char	*shlvl;
+// 	char	*new_shlvl;
+// 	int		tmp;
+
+// 	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
+// 	tmp = ft_atoi(shlvl) + 1;
+// 	new_shlvl = ft_itoa(tmp);
+// 	gc_add(g_minishell, new_shlvl);
+// 	printf("tmp :: shlvl => '%d'\n", tmp);
+// 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
+// }
+void do_cmd(t_node *ast, int flag)
 {
     int id;
+	(void) flag;
     char **cmd;
     char **env;
 
-    cmd = list_to_argv(g_minishell->ast->data.cmd);
+    cmd = list_to_argv(ast->data.cmd);
     if(!cmd)
         return;
     env = env_to_envp(g_minishell->our_env);
-    if(!env)
+    if (!env)
+	{
         return;
-    id = check_cmd(*cmd, env);
-    if(id)
-    {
-        id = fork();
-        if (!id)
-            call_execev(env, *cmd , cmd);
-        else
-            wait(NULL);
-    }
+	}
+	id = check_cmd(*cmd, env);
+	call_execev(env, *cmd , cmd);
 }
 
-void    executer(void)
-{
-    t_node *node;
+/*
+	if mode == 0 it means a reagular dup of stdout to pipe write end pfd[1]
+	else 
+		it means thats cmd its last comd and dup should be to stdout or fd.
+*/
 
-    node = g_minishell->ast;
-	// while (node)
-	// {
-		if (node->type == STRING_NODE)
+void do_pipe(t_node *cmd , int mode)
+{
+	int	id;
+	int	pfd[2];
+
+	open_pipe(pfd);
+	id = fork();
+	if (id < 0)
+	{
+		print_err("pipex: error occuerd with fork!", NULL);
+		return;
+	}
+	if (id == 0)
+	{
+		fd_duper(pfd, mode); // mode is 0 (ls)  
+		do_cmd(cmd, mode);
+	}
+	else
+	{
+		if(!mode)
 		{
-			if (ft_is_builtin(node->data.cmd->content))
-				execute_builtins(g_minishell, list_to_argv(g_minishell->ast->data.cmd));
-			else
-				do_cmd();
+			close(pfd[1]);
+			dup_2(pfd[0], 0);
 		}
-		// else if(node->type == PAIR_NODE)
-		// {
-		//         printAST(node->data.pair.left, 1 , tmp);
-		//         printAST(node->data.pair.right, 0 , tmp);
-		// }
-		// else if (node->type == REDIR_NODE)
-		// {
-		//     while(node->data.redir)
-		//     {
-		//         t_redir *new = node->data.redir->content;
-		//         printf("REDIR NODE , name: '%s'\n",new->file);
-		//         while (new->cmd)
-		//         {
-		//             printf("'%s' ", (char*)new->cmd->content);
-		//             new->cmd = new->cmd->next;
-		//         }
-		//         printf("\n");
-		//         node->data.redir = node->data.redir->next;
-		//     }
-		// }
-		// else if(node->type == ERROR_NODE)
-		// {
-		//     printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
-		// }
-	// }
-    
-	
+	}
+}
+
+void    executer(t_node *node) // execve( char *path, char **argv, char **envp);
+{
+	int id;
+
+    if (node->type == STRING_NODE)
+    {
+        if (ft_is_builtin(node->data.cmd->content))
+            execute_builtins(g_minishell, list_to_argv(g_minishell->ast->data.cmd));
+        else
+		{
+			id = fork();
+			if(!id)
+            	do_cmd(g_minishell->ast, 1);
+			else
+				wait(NULL);
+		}
+    }
+	else if(node->type == PAIR_NODE)
+	{
+		if(node->data.pair.type == PIPE) // ls | cat
+		{
+			do_pipe(node->data.pair.left , 0);
+			if(node->data.pair.right->type == PAIR_NODE)
+			{
+				printf("heey\n");
+				executer(node->data.pair.right);
+			}
+			else
+				do_pipe(node->data.pair.right, 1);
+		}
+            // printAST(node->data.pair.left, 1 , tmp);
+            // printAST(node->data.pair.right, 0 , tmp);
+    }
+//     else if (node->type == REDIR_NODE)
+//     {
+//         while(node->data.redir)
+//         {
+//             t_redir *new = node->data.redir->content;
+//             printf("REDIR NODE , name: '%s'\n",new->file);
+//             while (new->cmd)
+//             {
+//                 printf("'%s' ", (char*)new->cmd->content);
+//                 new->cmd = new->cmd->next;
+//             }
+//             printf("\n");
+//             node->data.redir = node->data.redir->next;
+//         }
+//     }
+//     else if(node->type == ERROR_NODE)
+//     {
+//         printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
+//     }
 }

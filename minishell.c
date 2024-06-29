@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 19:32:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/29 20:35:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,6 @@ void	ft_readline()
 	if (!g_minishell->line)
 	{
 		exit_status = get_exit_status();
-		decrement_shlvl();
 		ft_putstr_fd("exit\n", 1);
 		clear_env(g_minishell->our_env);
 		gc_free_all(g_minishell);
@@ -223,7 +222,7 @@ int	main(int ac, char **av, char **env)
 		if (!g_minishell->ast)
 			continue ;
 		// printAST(g_minishell->ast, 700, 403298);
-		executer();
+		executer(g_minishell->ast);
 		gc_free_all(g_minishell);
 	}
 	gc_free_all(g_minishell);
