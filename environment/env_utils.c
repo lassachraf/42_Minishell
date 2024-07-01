@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/28 14:49:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:59:20 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	add_env_var(t_env *env, char *key, char *value, bool visible)
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
 	new_node->visible = visible;
+	new_node->export = true;
 	new_node->next = NULL;
 	if (!env)
 		env = new_node;
@@ -45,7 +46,7 @@ int	ft_key_length(char *str)
 	return (i);
 }
 
-void	set_env_var(t_env *env, char *var, char *new)
+void	set_env_var(t_env *env, char *var, char *new, bool export)
 {
 	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
 		env = env->next;
@@ -53,6 +54,7 @@ void	set_env_var(t_env *env, char *var, char *new)
 		return ;
 	free(env->value);
 	env->value = ft_strdup(new);
+	env->export = export;
 }
 
 char	*get_env_var(t_env *env, char *var)
@@ -85,6 +87,7 @@ t_env	*dup_env(char **env)
 		new_node->key = ft_substr(env[i], 0, ft_key_length(env[i]));
 		new_node->value = ft_strdup(getenv(new_node->key));
 		new_node->visible = true;
+		new_node->export = true;
 		new_node->next = NULL;
 		if (!head)
 			head = new_node;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/29 18:28:24 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/30 09:56:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	builtins_exec_check(char **args)
 			ft_putstr_fd("args.\n" RESET, 2);
 		else if (nb_options(args))
 			ft_putstr_fd("options.\n" RESET, 2);
-		set_env_var(g_minishell->our_env, "?", "1");
+		set_env_var(g_minishell->our_env, "?", "1", 0);
 		return (1);
 	}
 	if ((!ft_strcmp(args[0], "export") || !ft_strcmp(args[0], "exit")
@@ -57,7 +57,7 @@ int	builtins_exec_check(char **args)
 		ft_putstr_fd(RED "badashell$ : ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_putstr_fd(": can't run it with options.\n" RESET, 2);
-		set_env_var(g_minishell->our_env, "?", "1");
+		set_env_var(g_minishell->our_env, "?", "1", 0);
 		return (1);
 	}
 	return (0);

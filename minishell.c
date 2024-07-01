@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/29 20:35:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:43:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,20 +143,7 @@ void	increment_shlvl()
 	tmp = ft_atoi(shlvl) + 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
-	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
-}
-
-void	decrement_shlvl()
-{
-	char	*shlvl;
-	char	*new_shlvl;
-	int		tmp;
-
-	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
-	tmp = ft_atoi(shlvl) - 1;
-	new_shlvl = ft_itoa(tmp);
-	gc_add(g_minishell, new_shlvl);
-	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
+	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl, 1);
 }
 
 int	init_minishell(char **env)
@@ -166,6 +153,8 @@ int	init_minishell(char **env)
 		return (0);
 	g_minishell->dq_flag = 0;
 	g_minishell->gc = NULL;
+	g_minishell->stdin = dup(0);
+	g_minishell->stdout = dup(1); 
 	g_minishell->our_env = dup_env(env);
 	if (!g_minishell->our_env)
 		return (print_errors("dup_env failed !"), 0);
@@ -191,7 +180,7 @@ void	ft_readline()
 	
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
-	set_env_var(g_minishell->our_env, "?", "0");
+	set_env_var(g_minishell->our_env, "?", "0", 0);
 	if (!g_minishell->line)
 	{
 		exit_status = get_exit_status();
@@ -223,6 +212,8 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		// printAST(g_minishell->ast, 700, 403298);
 		executer(g_minishell->ast);
+		dup2(g_minishell->stdin, 0);
+		while(waitpid(-1, NULL, 0) != -1);
 		gc_free_all(g_minishell);
 	}
 	gc_free_all(g_minishell);

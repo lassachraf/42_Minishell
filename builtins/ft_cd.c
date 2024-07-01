@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 10:03:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/30 09:57:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	cd_home(t_minishell *mini)
 {
 	char	*home;
 
-	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"));
+	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"), 1);
 	home = get_env_var(mini->our_env, "HOME");
 	if (!home)
 		return (print_errors("badashell$: cd: HOME not set"), 1);
 	if (!chdir(home))
-		return (set_env_var(mini->our_env, "PWD", home), 0);
+		return (set_env_var(mini->our_env, "PWD", home, 1), 0);
 	return (1);
 }
 
@@ -46,7 +46,7 @@ void	ft_cd(t_minishell *mini, char *path)
 		cd_error(path);
 		return ;
 	}
-	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"));
+	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"), 1);
 	cwd = getcwd(NULL, 0);
 	gc_add(g_minishell, cwd);
 	if (!cwd)
@@ -54,5 +54,5 @@ void	ft_cd(t_minishell *mini, char *path)
 		print_errors("getcwd: unable to determine current directory.");
 		return ;
 	}
-	set_env_var(mini->our_env, "PWD", cwd);
+	set_env_var(mini->our_env, "PWD", cwd, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:25:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/29 20:43:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:08:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,21 +213,17 @@ void	call_execev(char **env, char *argv , char **cmd)
 	check_split(cmd, argv);
 	founded_path = get_fullpath(argv, env);
 	if (!founded_path)
-	{
-		free_double(cmd);
 		return;
-	}
 	cat[0] = "cat";
 	cat[1] = NULL;
 	if (*argv == '\0')
 	{
 		free(founded_path);
-		free_double(cmd);
 		execve(get_fullpath("cat", env), cat, env);
 	}
 	else
 		execve(founded_path, cmd, env);
-	print_err("badashell: command not found: ", "cat");
+	print_err("badashell$ : command not found: ", "cat");
 }
 
 int	ft_malloc_error(char **tab, size_t i)
@@ -413,10 +409,7 @@ void    executer(t_node *node) // execve( char *path, char **argv, char **envp);
 		{
 			do_pipe(node->data.pair.left , 0);
 			if(node->data.pair.right->type == PAIR_NODE)
-			{
-				printf("heey\n");
 				executer(node->data.pair.right);
-			}
 			else
 				do_pipe(node->data.pair.right, 1);
 		}

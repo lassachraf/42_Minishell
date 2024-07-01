@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/29 20:36:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:59:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,13 @@ typedef struct s_minishell
 	t_gc			*gc;
 	int				nb_tokens;
 	int				dq_flag;
+	int				stdin;
+	int				stdout;
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
 
 void	increment_shlvl();
-void	decrement_shlvl();
 int		get_exit_status();
 char	**env_to_envp(t_env *env);
 
@@ -108,7 +109,7 @@ void	clear_ast(t_node *tree);
 /* Environments */
 
 // Function that set environment variable.
-void				set_env_var(t_env *env, char *var, char *new);
+void				set_env_var(t_env *env, char *var, char *new, bool export);
 
 // Function that get the value of an environment variable.
 char				*get_env_var(t_env *env, char *var);

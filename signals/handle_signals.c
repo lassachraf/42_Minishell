@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 16:25:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/30 09:58:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_sigint_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	set_env_var(g_minishell->our_env, "?", "130");
+	set_env_var(g_minishell->our_env, "?", "130", 1);
 }
 
 void	signals(void)
