@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/30 09:56:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 20:45:10 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	builtins_exec_check(char **args)
 	return (0);
 }
 
-int	check_cd_and_exit(t_minishell *mini, char **args, int flag)
+int	check_cd_and_exit(t_minishell *mini, char **args)
 {
-	if (!flag)
+	if (!ft_strcmp(args[0], "cd"))
 	{
 		if (nb_args(args) > 2)
 		{
@@ -90,16 +90,14 @@ int	check_cd_and_exit(t_minishell *mini, char **args, int flag)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
-	for (int i = 0; i < nb_args(args); i++)
-        printf("** Arg %d => %s **\n", i, args[i]);
+	// for (int i = 0; i < nb_args(args); i++)
+    //     printf("** Arg %d => %s **\n", i, args[i]);
 	if (builtins_exec_check(args))
 		return ;
 	if (ft_strcmp(args[0], "echo") == 0)
 		ft_echo(args);
-	else if (!ft_strcmp(args[0], "cd"))
-		check_cd_and_exit(mini, args, 0);
-	else if (!ft_strcmp(args[0], "exit"))
-		check_cd_and_exit(mini, args, 1);
+	else if (!ft_strcmp(args[0], "cd") || !ft_strcmp(args[0], "exit"))
+		check_cd_and_exit(mini, args);
 	else if (ft_strcmp(args[0], "env") == 0)
 		ft_env(mini->our_env);
 	else if (ft_strcmp(args[0], "pwd") == 0)

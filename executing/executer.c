@@ -6,9 +6,10 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/01 19:49:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 20:43:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -80,10 +81,9 @@ char	*add_slash_cmd(char *path, char *cmd)
 
 int	print_err(char *message, char *word)
 {
-	ft_putstr_fd(RED, 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
-	ft_putstr_fd("\n"RESET, 2);
+	write(2, "\n", 1);
     return (0);
 }
 void	check_split(char **cmd, char *word)
@@ -370,7 +370,7 @@ void do_pipe(t_node *cmd , int mode)
 	id = fork();
 	if (id < 0)
 	{
-		print_errors("pipex: error occuerd with fork.");
+		print_err("pipex: error occuerd with fork!", NULL);
 		return;
 	}
 	if (id == 0)
@@ -384,12 +384,11 @@ void do_pipe(t_node *cmd , int mode)
 		dup_2(pfd[0], 0);
 		wait(&g_minishell->exit_s);
 		if (WIFEXITED(g_minishell->exit_s))
-        	g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+        g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
 		exit = ft_itoa(g_minishell->exit_s);
 		if(!exit)
 			return(print_errors("ERROR WITH FT_ITOA\n"));
 		set_env_var(g_minishell->our_env, "?", exit, 0);
-		free(exit);
 	}
 }
 
@@ -402,10 +401,7 @@ void    executer(t_node *node) // ls | wc | cat && ps
     if (node->type == STRING_NODE) // leaf 
     {
         if (ft_is_builtin(node->data.cmd->content))
-        {
-            printf("Yes its a builtin\n");
             execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-        }
         else
 		{
 			id = fork();
@@ -420,7 +416,6 @@ void    executer(t_node *node) // ls | wc | cat && ps
 				if(!exit)
 					return(print_errors("ERROR WITH FT_ITOA\n"));
 				set_env_var(g_minishell->our_env, "?", exit, 0);
-				free(exit);
 			}
 		}
     }
