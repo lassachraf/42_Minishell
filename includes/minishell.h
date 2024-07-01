@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:59:01 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/01 19:21:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_minishell
 	t_gc			*gc;
 	int				nb_tokens;
 	int				dq_flag;
+	int				exit_s;
 	int				stdin;
 	int				stdout;
 }					t_minishell;

@@ -5,13 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/25 21:25:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:08:44 by alassiqu         ###   ########.fr       */
+/*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
+/*   Updated: 2024/07/01 19:49:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../includes/minishell.h"
-
 
 #include "../includes/minishell.h"
 
@@ -86,7 +83,7 @@ int	print_err(char *message, char *word)
 	ft_putstr_fd(RED, 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
-	ft_putstr_fd("\n" RESET, 2);
+	ft_putstr_fd("\n"RESET, 2);
     return (0);
 }
 void	check_split(char **cmd, char *word)
@@ -165,13 +162,15 @@ char	*get_fullpath(char *argv, char **env)
 	char	*fullpath;
 	int		i;
 
-	if (*argv == '\0')
-		return (strdup(""));
+	// if (*argv == '\0')
+	// 	return (strdup(""));
 	i = 0;
 	fullpath = NULL;
 	paths = get_env_paths(env);
 	paths_num = strings_count(paths);
 	cmd = ft_split(argv, ' ');
+	if(!cmd)
+		return(free(paths),NULL);
 	if (!(access(*cmd, F_OK)))
 	{
 		if ((*argv == '/' || *argv == '.') && !access(*cmd, X_OK))
@@ -190,40 +189,54 @@ int	check_cmd(char *argv, char **env)
 	char	*cmd;
     int     check;
 
-    check = 1;
+    check = 0;
 	cmd = get_fullpath(argv, env);
 	if (!cmd && *argv == '.')
 		cmd = get_command(argv);
 	if (*argv != '\0' && (*argv == '/' || *argv == '.')
 		&& access(cmd, F_OK))
-		check = print_err("badashell$ : no such file or directory: ", argv);
+	{
+		print_err("badashell: no such file or directory:", argv);
+		check = 127;
+	}
 	else if (*argv != '\0' && access(cmd, F_OK))
-		check = print_err("badashell$ : command not found: ", argv);
+	{
+		print_err("badashell: command not found: ", argv);
+		check = 127;
+	}
 	else if (*argv != '\0' && access(cmd, X_OK))
-		check = print_err("badashell$ : permission denied: ", argv);
+	{
+		print_err("badashell: permission denied: ", argv);
+		check = 126;
+	}
 	free(cmd);
     return (check);
 }
 
 void	call_execev(char **env, char *argv , char **cmd)
 {
-	char	*cat[2];
+	// char	*cat[2];
 	char	*founded_path;
 
 	check_split(cmd, argv);
 	founded_path = get_fullpath(argv, env);
-	if (!founded_path)
-		return;
-	cat[0] = "cat";
-	cat[1] = NULL;
-	if (*argv == '\0')
-	{
-		free(founded_path);
-		execve(get_fullpath("cat", env), cat, env);
-	}
-	else
+	// if (!founded_path)
+	// {
+	// 	free_double(cmd);
+	// 	return;
+	// }
+	// cat[0] = "cat";
+	// cat[1] = NULL;
+	// if (*argv == '\0')
+	// {
+	// 	free(founded_path);
+	// 	free_double(cmd);
+	// 	execve(get_fullpath("cat", env), cat, env);
+	// }
+	// else
 		execve(founded_path, cmd, env);
-	print_err("badashell$ : command not found: ", "cat");
+	// print_err("badashell: command not found: ", "cat");
+	print_err("execve failed !!\n", NULL);
 }
 
 int	ft_malloc_error(char **tab, size_t i)
@@ -301,6 +314,8 @@ char **list_to_argv(t_list *list)
     int len;
 
     i = 0;
+	if(!list)
+		return(NULL);
     size = ft_lstsize(list);
     argv = malloc(sizeof(char *) * (size + 1));
     if(!argv)
@@ -321,23 +336,9 @@ char **list_to_argv(t_list *list)
     return(argv);
 }
 
-// static void	increment_shlvl()
-// {
-// 	char	*shlvl;
-// 	char	*new_shlvl;
-// 	int		tmp;
-
-// 	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
-// 	tmp = ft_atoi(shlvl) + 1;
-// 	new_shlvl = ft_itoa(tmp);
-// 	gc_add(g_minishell, new_shlvl);
-// 	printf("tmp :: shlvl => '%d'\n", tmp);
-// 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
-// }
-void do_cmd(t_node *ast, int flag)
+void do_cmd(t_node *ast)
 {
     int id;
-	(void) flag;
     char **cmd;
     char **env;
 
@@ -345,12 +346,12 @@ void do_cmd(t_node *ast, int flag)
     if(!cmd)
         return;
     env = env_to_envp(g_minishell->our_env);
-    if (!env)
-	{
-        return;
-	}
+    if(!env)
+		return;
 	id = check_cmd(*cmd, env);
-	call_execev(env, *cmd , cmd);
+	if(!id)
+		call_execev(env, *cmd , cmd);
+	exit(id);
 }
 
 /*
@@ -363,60 +364,94 @@ void do_pipe(t_node *cmd , int mode)
 {
 	int	id;
 	int	pfd[2];
+	char *exit;
 
 	open_pipe(pfd);
 	id = fork();
 	if (id < 0)
 	{
-		print_err("pipex: error occuerd with fork!", NULL);
+		print_errors("pipex: error occuerd with fork.");
 		return;
 	}
 	if (id == 0)
 	{
 		fd_duper(pfd, mode); // mode is 0 (ls)  
-		do_cmd(cmd, mode);
+		do_cmd(cmd);
 	}
 	else
 	{
-		if(!mode)
-		{
-			close(pfd[1]);
-			dup_2(pfd[0], 0);
-		}
+		close(pfd[1]);
+		dup_2(pfd[0], 0);
+		wait(&g_minishell->exit_s);
+		if (WIFEXITED(g_minishell->exit_s))
+        	g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+		exit = ft_itoa(g_minishell->exit_s);
+		if(!exit)
+			return(print_errors("ERROR WITH FT_ITOA\n"));
+		set_env_var(g_minishell->our_env, "?", exit, 0);
+		free(exit);
 	}
 }
 
-void    executer(t_node *node) // execve( char *path, char **argv, char **envp);
+void    executer(t_node *node) // ls | wc | cat && ps
 {
 	int id;
-
-    if (node->type == STRING_NODE)
+	char *exit;
+	if (!node)
+		return;
+    if (node->type == STRING_NODE) // leaf 
     {
         if (ft_is_builtin(node->data.cmd->content))
-            execute_builtins(g_minishell, list_to_argv(g_minishell->ast->data.cmd));
+        {
+            printf("Yes its a builtin\n");
+            execute_builtins(g_minishell, list_to_argv(node->data.cmd));
+        }
         else
 		{
 			id = fork();
 			if(!id)
-            	do_cmd(g_minishell->ast, 1);
+            	do_cmd(node);
 			else
-				wait(NULL);
+			{
+				wait(&g_minishell->exit_s);
+				if (WIFEXITED(g_minishell->exit_s))
+        			g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+				exit = ft_itoa(g_minishell->exit_s);
+				if(!exit)
+					return(print_errors("ERROR WITH FT_ITOA\n"));
+				set_env_var(g_minishell->our_env, "?", exit, 0);
+				free(exit);
+			}
 		}
     }
-	else if(node->type == PAIR_NODE)
+	else if(node->type == PAIR_NODE) // pair
 	{
 		if(node->data.pair.type == PIPE) // ls | cat
 		{
 			do_pipe(node->data.pair.left , 0);
-			if(node->data.pair.right->type == PAIR_NODE)
-				executer(node->data.pair.right);
-			else
-				do_pipe(node->data.pair.right, 1);
+			executer(node->data.pair.right);
 		}
-            // printAST(node->data.pair.left, 1 , tmp);
-            // printAST(node->data.pair.right, 0 , tmp);
+		else if (node->data.pair.type == OR)
+		{
+			executer(node->data.pair.left);
+			if(g_minishell->exit_s)
+			{
+				dup2(g_minishell->stdin,0);
+				executer(node->data.pair.right);
+			}
+		}
+		else if (node->data.pair.type == AND)
+		{
+			executer(node->data.pair.left);
+			if(!g_minishell->exit_s)
+			{
+				dup2(g_minishell->stdin,0);
+				executer(node->data.pair.right);
+			}
+		}
     }
-//     else if (node->type == REDIR_NODE)
+	while(wait(NULL)!= -1);
+//     else if (node->type == REDIR_NODE) // leaf
 //     {
 //         while(node->data.redir)
 //         {
