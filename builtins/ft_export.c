@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 16:49:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:57:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ void	print_env(t_env *env)
 {
 	while (env)
 	{
-		if (ft_strncmp(env->key, "_", 1))
+		if (env->export)
 		{
 			printf("declare -x ");
 			printf("%s", env->key);
-			if (env->value && env->export)
+			if (env->value)
 				printf("=\"%s\"\n", env->value);
 			else
 				printf("\n");
@@ -33,6 +33,8 @@ void    ft_swap(t_env *i, t_env *j, int *swapped)
 {
     char    *temp_key;
     char    *temp_value;
+    int     temp_visblity;
+    int     temp_export;
 
     temp_key = i->key;
     i->key = j->key;
@@ -40,6 +42,12 @@ void    ft_swap(t_env *i, t_env *j, int *swapped)
     temp_value = i->value;
     i->value = j->value;
     j->value = temp_value;
+    temp_visblity = i->visible;
+    i->visible = j->visible;
+    j->visible = temp_visblity;
+    temp_export = i->export;
+    i->export = j->export;
+    j->export = temp_export;
     *swapped = 1;
 }
 
@@ -64,7 +72,10 @@ t_env   *new_dup(t_env *env)
 		if (!new_node)
 			return (NULL);
 		new_node->key = ft_strdup(env->key);
-		new_node->value = ft_strdup(env->value);
+        if (!env->value)
+            new_node->value = NULL;
+        else
+            new_node->value = ft_strdup(env->value);
 		new_node->visible = env->visible;
 		new_node->export = env->export;
 		new_node->next = NULL;
@@ -122,19 +133,8 @@ int check_identifier(char **s)
     i = 0;
     if (!s || !*s)
         return (0);
-    if (!ft_isalpha(s[0][i]))
-    {
-        ft_putstr_fd(RED "badashell$ : export: `=", 2);
-        ft_putstr_fd(s[1], 2);
-        ft_putstr_fd("`: not a valid identifier.\n" RESET, 2);
-        return (-1);
-        return (-1);
-    }
-    i++;
-    while (ft_isalnum(s[0][i]))
+    if (ft_isalpha(s[0][0]) || !ft_strncmp(&s[0][0], "_", 1))
         i++;
-    if (!s[0][i])
-        return (0);
     else
     {
         ft_putstr_fd(RED "badashell$ : export: `=", 2);
@@ -142,12 +142,52 @@ int check_identifier(char **s)
         ft_putstr_fd("`: not a valid identifier.\n" RESET, 2);
         return (-1);
     }
+    while (ft_isalnum(s[0][i]) || !ft_strncmp(&s[0][i], "_", 1))
+        i++;
+    if (!s[0][i])
+        return (0);
+    else
+    {
+        ft_putstr_fd(RED "badashell$ : export: `=", 2);
+        ft_putstr_fd(s[1], 2);
+        ft_putstr_fd("`: not a valid identifier ** .\n" RESET, 2);
+        return (-1);
+    }
+}
+
+int    process_equal(t_env *sorted_env, char **args)
+{
+    char    **split;
+
+    split = ft_split(args[1], '=');
+    if (check_identifier(split) == -1)
+        return (clear_env(sorted_env), free_split(split), -1);
+    if (get_env_var(g_minishell->our_env, split[0]))
+    {
+        printf("*** Already in env ***\n");
+        printf("*** args[2] == %s ***\n", args[2]);
+        printf("*** split[1] == %s ***\n", split[1]);
+        set_as_visible(g_minishell->our_env, split[0]);
+        set_as_exported(g_minishell->our_env, split[0]);
+        if (!split[1] && !args[2])
+            set_env_var(g_minishell->our_env, split[0], "\0");
+        else if (!split[1])
+            set_env_var(g_minishell->our_env, split[0], args[2]);
+        else
+            set_env_var(g_minishell->our_env, split[0], split[1]);
+    }
+    else
+    {
+        printf("*** New to the env ***\n");
+        add_env_var(g_minishell->our_env, split[0], split[1]);
+        set_as_exported(g_minishell->our_env, split[0]);
+    }
+    return (free_split(split), 0);
 }
 
 void	ft_export(char **args, int nb_args)
 {
     t_env   *sorted_env;
-    char    **split;
 
     sorted_env = sort_env(g_minishell->our_env);
     if (nb_args == 1)
@@ -156,34 +196,17 @@ void	ft_export(char **args, int nb_args)
     {
         if (ft_strchr(args[1], '='))
         {
-            split = ft_split(args[1], '=');
-            if (check_identifier(split) == -1)
-            {
-                clear_env(sorted_env);
-                free_split(split);
+            printf("*** New value case ***\n");
+            if (process_equal(sorted_env, args) == -1)
                 return ;
-            }
-            if (get_env_var(g_minishell->our_env, split[0]))
-            {
-                printf("*** Already in env ***\n");
-                printf("*** split[1]= %s ***\n", split[1]);
-                printf("*** args[2]= %s ***\n", args[2]);
-                set_env_var(g_minishell->our_env, split[0], split[1], 1);
-            }
-            else
-            {
-                printf("*** New to the env ***\n");
-                printf("*** split[1]= %s ***\n", split[1]);
-                add_env_var(g_minishell->our_env, split[0], split[1], 1);
-            }
-            free_split(split);
         }
         else
         {
+            printf("*** No new value case ***\n");
             if (!get_env_var(g_minishell->our_env, args[1]))
             {
-                printf("*** New to the export only ***\n");
-                add_env_var(g_minishell->our_env, args[1], NULL, 0);
+                add_env_var(g_minishell->our_env, args[1], NULL);
+                set_as_invisible(g_minishell->our_env, args[1]);
             }
         }
     }

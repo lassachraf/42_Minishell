@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/30 17:43:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:22:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	increment_shlvl()
 	tmp = ft_atoi(shlvl) + 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
-	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl, 1);
+	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
 }
 
 int	init_minishell(char **env)
@@ -159,7 +159,10 @@ int	init_minishell(char **env)
 	if (!g_minishell->our_env)
 		return (print_errors("dup_env failed !"), 0);
 	increment_shlvl();
-	add_env_var(g_minishell->our_env, "?", "0", false);
+	add_env_var(g_minishell->our_env, "?", "0");
+	set_as_invisible(g_minishell->our_env, "?");
+	set_as_unexported(g_minishell->our_env, "?");
+	set_as_unexported(g_minishell->our_env, "_");
 	signals();
 	return (1);
 }
@@ -180,7 +183,7 @@ void	ft_readline()
 	
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
-	set_env_var(g_minishell->our_env, "?", "0", 0);
+	set_env_var(g_minishell->our_env, "?", "0");
 	if (!g_minishell->line)
 	{
 		exit_status = get_exit_status();
@@ -205,12 +208,9 @@ int	main(int ac, char **av, char **env)
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
-		// tokens and syntax are totally good in terms of leaks.
-		// chof m3aya hdshi tl parsing wl expand bash ma nzgel walo.
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		// printAST(g_minishell->ast, 700, 403298);
 		executer(g_minishell->ast);
 		dup2(g_minishell->stdin, 0);
 		while(waitpid(-1, NULL, 0) != -1);

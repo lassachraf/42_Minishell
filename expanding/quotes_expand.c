@@ -6,12 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:13:39 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 19:19:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 11:18:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 char	*ft_strcpy(char *dest, const char *src)
 {
@@ -24,27 +23,11 @@ char	*ft_strcpy(char *dest, const char *src)
 	return (dest);
 }
 
-void	append_to_result(char **result, const char *str, int newline)
+void	fill(char *new_result, char *str, int len, int newline)
 {
-	size_t	len;
-	size_t	str_len;
-	char	*new_result;
+	int	str_len;
 
-	len = 0;
 	str_len = ft_strlen(str);
-	if (*result)
-		len = ft_strlen(*result);
-	if (newline)
-		new_result = malloc(len + str_len + 2);
-	else
-		new_result = malloc(len + str_len + 3);
-	if (!new_result)
-		return ;
-	if (*result)
-	{
-		ft_strcpy(new_result, *result);
-		free(*result);
-	}
 	ft_strcpy(new_result + len, str);
 	if (newline == 1)
 	{
@@ -62,6 +45,30 @@ void	append_to_result(char **result, const char *str, int newline)
 		new_result[len + str_len + 1] = ' ';
 		new_result[len + str_len + 2] = '\0';
 	}
+}
+
+void	append_to_result(char **result, const char *str, int newline)
+{
+	char	*new_result;
+	size_t	str_len;
+	size_t	len;
+
+	len = 0;
+	str_len = ft_strlen(str);
+	if (*result)
+		len = ft_strlen(*result);
+	if (newline)
+		new_result = malloc(len + str_len + 2);
+	else
+		new_result = malloc(len + str_len + 3);
+	if (!new_result)
+		return ;
+	if (*result)
+	{
+		ft_strcpy(new_result, *result);
+		free(*result);
+	}
+	fill(new_result, str, len, newline);
 	*result = new_result;
 }
 
@@ -115,13 +122,13 @@ void	sort_strings(char **strings, size_t count)
 	}
 }
 
-int	custome_expand(t_token *token)
-{
-	if (token->prev == WORD)
-	{
+// int	custome_expand(t_token *token)
+// {
+// 	if (token->prev == WORD)
+// 	{
 		
-	}
-}
+// 	}
+// }
 
 void	asterisk_expand(t_token *token)
 {
@@ -138,6 +145,10 @@ void	asterisk_expand(t_token *token)
 		return ;
 	process_dirs(dir, &result, token->value);
 	if (result)
+	{
+		free(token->value);
 		token->value = result;
-	custome_expand(token);
+		token->type = WORD;
+	}
+	token = token->next;
 }

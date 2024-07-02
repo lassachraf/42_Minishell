@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:59:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:43:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	add_env_var(t_env *env, char *key, char *value, bool visible)
+void	add_env_var(t_env *env, char *key, char *value)
 {
 	t_env	*new_node;
 	t_env	*current;
@@ -21,8 +21,11 @@ void	add_env_var(t_env *env, char *key, char *value, bool visible)
 	if (!new_node)
 		return ;
 	new_node->key = ft_strdup(key);
-	new_node->value = ft_strdup(value);
-	new_node->visible = visible;
+	if (!value)
+		new_node->value = NULL;
+	else
+		new_node->value = ft_strdup(value);
+	new_node->visible = true;
 	new_node->export = true;
 	new_node->next = NULL;
 	if (!env)
@@ -44,29 +47,6 @@ int	ft_key_length(char *str)
 	while (str[i] != '=')
 		i++;
 	return (i);
-}
-
-void	set_env_var(t_env *env, char *var, char *new, bool export)
-{
-	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
-		env = env->next;
-	if (!env)
-		return ;
-	free(env->value);
-	env->value = ft_strdup(new);
-	env->export = export;
-}
-
-char	*get_env_var(t_env *env, char *var)
-{
-	if (!ft_strncmp(var, "\0", 1))
-		return (NULL);
-	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
-		env = env->next;
-	if (env && ft_strlen(env->key) == ft_strlen(var))
-		return (env->value);
-	else
-		return (NULL);
 }
 
 t_env	*dup_env(char **env)

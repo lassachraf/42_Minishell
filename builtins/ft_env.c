@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/30 09:57:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:01:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_env(t_env *env)
 {
-	set_env_var(env, "_", "/usr/bin/env", 1);
+	set_env_var(env, "_", "/usr/bin/env");
 	while (env)
 	{
 		if (env->visible)

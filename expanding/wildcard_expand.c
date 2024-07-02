@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 19:29:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 11:21:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,31 @@ char	*ft_strcpy(char *dest, const char *src)
 	return (dest);
 }
 
-void	append_to_result(char **result, const char *str, int newline)
+void	fill(char *new_result, char *str, int len, int newline)
+{
+	int	str_len;
+
+	str_len = ft_strlen(str);
+	ft_strcpy(new_result + len, str);
+	if (newline == 1)
+	{
+		new_result[len + str_len] = '\n';
+		new_result[len + str_len + 1] = '\0';
+	}
+	else if (newline == 2)
+	{
+		new_result[len + str_len] = ':';
+		new_result[len + str_len + 1] = '\0';
+	}
+	else
+	{
+		new_result[len + str_len] = ' ';
+		new_result[len + str_len + 1] = ' ';
+		new_result[len + str_len + 2] = '\0';
+	}
+}
+
+void	append_to_result(char **result, char *str, int newline)
 {
 	size_t	len;
 	size_t	str_len;
@@ -44,23 +68,7 @@ void	append_to_result(char **result, const char *str, int newline)
 		ft_strcpy(new_result, *result);
 		free(*result);
 	}
-	ft_strcpy(new_result + len, str);
-	if (newline == 1)
-	{
-		new_result[len + str_len] = '\n';
-		new_result[len + str_len + 1] = '\0';
-	}
-	else if (newline == 2)
-	{
-		new_result[len + str_len] = ':';
-		new_result[len + str_len + 1] = '\0';
-	}
-	else
-	{
-		new_result[len + str_len] = ' ';
-		new_result[len + str_len + 1] = ' ';
-		new_result[len + str_len + 2] = '\0';
-	}
+	fill(new_result, str, len, newline);
 	*result = new_result;
 }
 

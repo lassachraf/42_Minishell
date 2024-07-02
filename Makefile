@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/06/26 19:27:40 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/02 16:50:31 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,12 +26,13 @@ BUILTINS		:=	builtins/ft_env.c 					\
 					builtins/ft_exit.c 					\
 					builtins/ft_export.c 				\
 					builtins/ft_pwd.c 					\
-					builtins/ft_unset.c
+					builtins/ft_unset.c					\
+					builtins/setters.c
 
 CLEANING		:=	cleaning/clean.c
 
 ENVIRONMENT		:=	environment/env_utils.c				\
-					environment/free.c
+					environment/env_helpers.c
 
 EXECUTING		:=	executing/executer.c
 

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 20:45:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:48:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	nb_options(char **args)
 
 int	builtins_exec_check(char **args)
 {
-	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1 || !nb_options(args)))
+	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1
+		|| !nb_options(args)))
 	{
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("badashell$ : env: can't run it with ", 2);
@@ -48,7 +49,7 @@ int	builtins_exec_check(char **args)
 			ft_putstr_fd("args.\n" RESET, 2);
 		else if (nb_options(args))
 			ft_putstr_fd("options.\n" RESET, 2);
-		set_env_var(g_minishell->our_env, "?", "1", 0);
+		set_env_var(g_minishell->our_env, "?", "1");
 		return (1);
 	}
 	if ((!ft_strcmp(args[0], "export") || !ft_strcmp(args[0], "exit")
@@ -57,7 +58,7 @@ int	builtins_exec_check(char **args)
 		ft_putstr_fd(RED "badashell$ : ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_putstr_fd(": can't run it with options.\n" RESET, 2);
-		set_env_var(g_minishell->our_env, "?", "1", 0);
+		set_env_var(g_minishell->our_env, "?", "1");
 		return (1);
 	}
 	return (0);
@@ -69,8 +70,8 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 	{
 		if (nb_args(args) > 2)
 		{
-			return (0);
 			print_errors("cd : too many arguments.");
+			return (set_env_var(g_minishell->our_env, "?", "1"), 0);
 		}
 		else
 			ft_cd(mini, args[1]);
@@ -80,7 +81,7 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 		if (nb_args(args) > 2)
 		{
 			print_errors("exit : too many arguments.");
-			return (0);
+			return (set_env_var(g_minishell->our_env, "?", "1"), 0);
 		}
 		else
 			ft_exit(args[1]);
@@ -90,8 +91,6 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
-	// for (int i = 0; i < nb_args(args); i++)
-    //     printf("** Arg %d => %s **\n", i, args[i]);
 	if (builtins_exec_check(args))
 		return ;
 	if (ft_strcmp(args[0], "echo") == 0)
@@ -106,6 +105,7 @@ void	execute_builtins(t_minishell *mini, char **args)
 		ft_export(args, nb_args(args));
 	else if (ft_strcmp(args[0], "unset") == 0)
 		ft_unset();
+	g_minishell->exit_s = 0;
 }
 
 bool	ft_is_builtin(char *arg)

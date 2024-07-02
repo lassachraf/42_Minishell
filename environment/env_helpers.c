@@ -1,16 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   env_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/27 18:28:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 19:00:23 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	set_env_var(t_env *env, char *var, char *new)
+{
+	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
+		env = env->next;
+	if (!env)
+		return ;
+	free(env->value);
+	if (!new)
+		env->value = NULL;
+	else if (!ft_strcmp(new, "\0"))
+		env->value = ft_strdup("");
+	else
+	{
+		printf("*** else case ***\n");	
+		env->value = ft_strdup(new);
+	}
+}
+
+char	*get_env_var(t_env *env, char *var)
+{
+	if (!ft_strncmp(var, "\0", 1))
+		return (NULL);
+	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
+		env = env->next;
+	if (env && ft_strlen(env->key) == ft_strlen(var))
+	{
+		if (env->value)
+			return (env->value);
+		else
+			return ("");
+	}
+	else
+		return (NULL);
+}
 
 void	delete_env_var(t_env **env, char *key)
 {

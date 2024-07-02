@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/01 20:43:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:17:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,10 @@ char	*add_slash_cmd(char *path, char *cmd)
 
 int	print_err(char *message, char *word)
 {
+	ft_putstr_fd(RED "badashell$ : ", 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
-	write(2, "\n", 1);
+	ft_putstr_fd("\n" RESET, 2);
     return (0);
 }
 void	check_split(char **cmd, char *word)
@@ -196,17 +197,17 @@ int	check_cmd(char *argv, char **env)
 	if (*argv != '\0' && (*argv == '/' || *argv == '.')
 		&& access(cmd, F_OK))
 	{
-		print_err("badashell: no such file or directory:", argv);
+		print_err("no such file or directory:", argv);
 		check = 127;
 	}
 	else if (*argv != '\0' && access(cmd, F_OK))
 	{
-		print_err("badashell: command not found: ", argv);
+		print_err("command not found: ", argv);
 		check = 127;
 	}
 	else if (*argv != '\0' && access(cmd, X_OK))
 	{
-		print_err("badashell: permission denied: ", argv);
+		print_err("permission denied: ", argv);
 		check = 126;
 	}
 	free(cmd);
@@ -338,15 +339,15 @@ char **list_to_argv(t_list *list)
 
 void do_cmd(t_node *ast)
 {
-    int id;
-    char **cmd;
-    char **env;
+	char	**env;
+	char	**cmd;
+	int		id;
 
-    cmd = list_to_argv(ast->data.cmd);
-    if(!cmd)
-        return;
-    env = env_to_envp(g_minishell->our_env);
-    if(!env)
+	cmd = list_to_argv(ast->data.cmd);
+	if(!cmd)
+		return;
+	env = env_to_envp(g_minishell->our_env);
+	if(!env)
 		return;
 	id = check_cmd(*cmd, env);
 	if(!id)
@@ -370,12 +371,12 @@ void do_pipe(t_node *cmd , int mode)
 	id = fork();
 	if (id < 0)
 	{
-		print_err("pipex: error occuerd with fork!", NULL);
-		return;
+		print_errors("pipex: error occuerd with fork!");
+		return ;
 	}
 	if (id == 0)
 	{
-		fd_duper(pfd, mode); // mode is 0 (ls)  
+		fd_duper(pfd, mode);
 		do_cmd(cmd);
 	}
 	else
@@ -384,44 +385,46 @@ void do_pipe(t_node *cmd , int mode)
 		dup_2(pfd[0], 0);
 		wait(&g_minishell->exit_s);
 		if (WIFEXITED(g_minishell->exit_s))
-        g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
 		exit = ft_itoa(g_minishell->exit_s);
 		if(!exit)
 			return(print_errors("ERROR WITH FT_ITOA\n"));
-		set_env_var(g_minishell->our_env, "?", exit, 0);
+		set_env_var(g_minishell->our_env, "?", exit);
+		free(exit);
 	}
 }
 
-void    executer(t_node *node) // ls | wc | cat && ps
+void	executer(t_node *node)
 {
 	int id;
 	char *exit;
 	if (!node)
 		return;
-    if (node->type == STRING_NODE) // leaf 
-    {
-        if (ft_is_builtin(node->data.cmd->content))
-            execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-        else
+	if (node->type == STRING_NODE)
+	{
+		if (ft_is_builtin(node->data.cmd->content))
+			execute_builtins(g_minishell, list_to_argv(node->data.cmd));
+		else
 		{
 			id = fork();
 			if(!id)
-            	do_cmd(node);
+				do_cmd(node);
 			else
 			{
 				wait(&g_minishell->exit_s);
 				if (WIFEXITED(g_minishell->exit_s))
-        			g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+					g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
 				exit = ft_itoa(g_minishell->exit_s);
 				if(!exit)
 					return(print_errors("ERROR WITH FT_ITOA\n"));
-				set_env_var(g_minishell->our_env, "?", exit, 0);
+				set_env_var(g_minishell->our_env, "?", exit);
+				free(exit);
 			}
 		}
-    }
-	else if(node->type == PAIR_NODE) // pair
+	}
+	else if(node->type == PAIR_NODE)
 	{
-		if(node->data.pair.type == PIPE) // ls | cat
+		if(node->data.pair.type == PIPE)
 		{
 			do_pipe(node->data.pair.left , 0);
 			executer(node->data.pair.right);
@@ -444,12 +447,12 @@ void    executer(t_node *node) // ls | wc | cat && ps
 				executer(node->data.pair.right);
 			}
 		}
-    }
-	while(wait(NULL)!= -1);
-//     else if (node->type == REDIR_NODE) // leaf
-//     {
-//         while(node->data.redir)
-//         {
+	}
+	while(wait(NULL) != -1);
+//	 else if (node->type == REDIR_NODE) // leaf
+//	 {
+//		 while(node->data.redir)
+//	     {
 //             t_redir *new = node->data.redir->content;
 //             printf("REDIR NODE , name: '%s'\n",new->file);
 //             while (new->cmd)

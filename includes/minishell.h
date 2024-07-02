@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/01 19:21:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:51:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,20 @@ void				execute_builtins(t_minishell *mini, char **args);
 // Function that checks if the command is a builtin or not.
 bool				ft_is_builtin(char *arg);
 
+// Setters.c
+
+// Set the env variable as exported.
+void				set_as_exported(t_env *env, char *var);
+
+// Set the env variable as unexported.
+void				set_as_unexported(t_env *env, char *var);
+
+// Set the env variable as visible.
+void				set_as_visible(t_env *env, char *var);
+
+// Set the env variable as invisible.
+void				set_as_invisible(t_env *env, char *var);
+
 /* Cleaning */
 
 // Function that cleanup minishell for each prompt.
@@ -110,7 +124,7 @@ void	clear_ast(t_node *tree);
 /* Environments */
 
 // Function that set environment variable.
-void				set_env_var(t_env *env, char *var, char *new, bool export);
+void				set_env_var(t_env *env, char *var, char *new);
 
 // Function that get the value of an environment variable.
 char				*get_env_var(t_env *env, char *var);
@@ -119,8 +133,7 @@ char				*get_env_var(t_env *env, char *var);
 t_env				*dup_env(char **env);
 
 // Function that add a new env variable.
-void				add_env_var(t_env *env, char *key, char *value,
-						bool visible);
+void				add_env_var(t_env *env, char *key, char *value);
 
 // Function that clean the environment.
 void				clear_env(t_env *env);
@@ -170,7 +183,7 @@ void				sort_strings(char **strings, size_t count);
 int					match_pattern(const char *pattern, const char *filename);
 
 // Function that append result to the value.
-void				append_to_result(char **result, const char *str, int newline);
+void				append_to_result(char **result, char *str, int newline);
 
 
 /* Memory */
