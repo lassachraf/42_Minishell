@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 20:48:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 20:40:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,30 +91,23 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
+	printf("***Execute builtins***\n");
 	if (builtins_exec_check(args))
 		return ;
-	if (ft_strcmp(args[0], "echo") == 0)
+	if (!ft_strcmp(args[0], "echo"))
 		ft_echo(args);
 	else if (!ft_strcmp(args[0], "cd") || !ft_strcmp(args[0], "exit"))
 		check_cd_and_exit(mini, args);
-	else if (ft_strcmp(args[0], "env") == 0)
+	else if (!ft_strcmp(args[0], "env"))
 		ft_env(mini->our_env);
-	else if (ft_strcmp(args[0], "pwd") == 0)
+	else if (!ft_strcmp(args[0], "pwd"))
 		ft_pwd(mini->our_env);
-	else if (ft_strcmp(args[0], "export") == 0)
+	else if (!ft_strcmp(args[0], "export"))
 		ft_export(args, nb_args(args));
-	else if (ft_strcmp(args[0], "unset") == 0)
-		ft_unset();
+	else if (!ft_strcmp(args[0], "unset"))
+	{
+		if (args[1])
+			ft_unset(args[1]);
+	}
 	g_minishell->exit_s = 0;
-}
-
-bool	ft_is_builtin(char *arg)
-{
-	if (!arg)
-		return (false);
-	if (!ft_strcmp(arg, "echo") || !ft_strcmp(arg, "cd") || !ft_strcmp(arg,
-			"exit") || !ft_strcmp(arg, "pwd") || !ft_strcmp(arg, "export")
-		|| !ft_strcmp(arg, "unset") || !ft_strcmp(arg, "env"))
-		return (true);
-	return (false);
 }

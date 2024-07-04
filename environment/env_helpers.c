@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 19:00:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/03 18:42:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	set_env_var(t_env *env, char *var, char *new)
 	else if (!ft_strcmp(new, "\0"))
 		env->value = ft_strdup("");
 	else
-	{
-		printf("*** else case ***\n");	
 		env->value = ft_strdup(new);
-	}
 }
 
 char	*get_env_var(t_env *env, char *var)

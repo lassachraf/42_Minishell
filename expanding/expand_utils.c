@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 19:31:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:35:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	remove_token(t_token **head, t_token *token)
 
 void	replace(t_token *current)
 {
+	free(current->value);
 	current->value = ft_strdup("\0");
-	gc_add(g_minishell, current->value);
 	current->type = WORD;
 }
 

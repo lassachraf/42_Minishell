@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 17:22:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 20:57:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ int	init_minishell(char **env)
 		return (print_errors("dup_env failed !"), 0);
 	increment_shlvl();
 	add_env_var(g_minishell->our_env, "?", "0");
+	add_env_var(g_minishell->our_env, "aa", "ls -la");
 	set_as_invisible(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "_");
@@ -183,7 +184,6 @@ void	ft_readline()
 	
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
-	set_env_var(g_minishell->our_env, "?", "0");
 	if (!g_minishell->line)
 	{
 		exit_status = get_exit_status();
@@ -212,9 +212,10 @@ int	main(int ac, char **av, char **env)
 		if (!g_minishell->ast)
 			continue ;
 		executer(g_minishell->ast);
-		dup2(g_minishell->stdin, 0);
-		while(waitpid(-1, NULL, 0) != -1);
+		// while(waitpid(-1, NULL, 0) != -1);
 		gc_free_all(g_minishell);
+		// dup2(g_minishell->stdout, 1);
+		// dup2(g_minishell->stdin, 0);
 	}
 	gc_free_all(g_minishell);
 	clear_env(g_minishell->our_env);

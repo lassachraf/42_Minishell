@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 18:35:55 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:06:02 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 		}
 	}
 	var = ft_substr(expand, 0, k);
-	gc_add(g_minishell, var);
 	expanded = get_env_var(g_minishell->our_env, var);
+	free(var);
 	(*i) += k + 1;
 	if (!expanded)
 		return ;
@@ -123,7 +123,10 @@ t_token	*helper(t_token *tokens)
 		g_minishell->dq_flag = 1;
 		new_value = helper_expander(tokens->value);
 		if (new_value)
+		{
+			// free(tokens->value);
 			tokens->value = new_value;
+		}
 		else
 		{
 			tmp = tokens->next;
@@ -135,7 +138,10 @@ t_token	*helper(t_token *tokens)
 	{
 		new_value = helper_expander(tokens->value);
 		if (new_value)
+		{
+			// free(tokens->value);
 			tokens->value = new_value;
+		}
 		else
 		{
 			tmp = tokens->next;

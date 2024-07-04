@@ -6,10 +6,9 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/02 17:17:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 20:34:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -33,15 +32,15 @@ int	dup_2(int old_fd, int new_fd)
 
 void	fd_duper( int *pfd , int mode)
 {
-	if (mode == 1) // close pipe and leave stdout to 1 or to file
+	if (mode == 1)
 	{
 		close(pfd[1]);
 		close(pfd[0]);
 	}
-	else // write to pipe[1]
+	else
 	{
 		close(pfd[0]);
-		if (dup_2(pfd[1], 1))
+		if (dup_2(pfd[1], 1)) // 
 			exit(EXIT_FAILURE);
 	}
 }
@@ -54,12 +53,13 @@ char	*get_command(char *argv)
 	i = 0;
 	while (argv[i] != ' ' && argv[i] != '\0')
 		i++;
-	cmd = malloc(i + 1);
+	cmd = malloc((i + 1) * sizeof(char));
 	if (!cmd)
 	{
 		perror("malloc");
 		return (NULL);
 	}
+	gc_add(g_minishell, cmd);
 	ft_memmove(cmd, argv, i);
 	cmd[i] = '\0';
 	return (cmd);
@@ -78,15 +78,15 @@ char	*add_slash_cmd(char *path, char *cmd)
 		return (free(fullpath), free(a_path), NULL);
 }
 
-
 int	print_err(char *message, char *word)
 {
-	ft_putstr_fd(RED "badashell$ : ", 2);
+	ft_putstr_fd(RED, 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
 	ft_putstr_fd("\n" RESET, 2);
     return (0);
 }
+
 void	check_split(char **cmd, char *word)
 {
 	if (!cmd)
@@ -163,8 +163,6 @@ char	*get_fullpath(char *argv, char **env)
 	char	*fullpath;
 	int		i;
 
-	// if (*argv == '\0')
-	// 	return (strdup(""));
 	i = 0;
 	fullpath = NULL;
 	paths = get_env_paths(env);
@@ -197,17 +195,17 @@ int	check_cmd(char *argv, char **env)
 	if (*argv != '\0' && (*argv == '/' || *argv == '.')
 		&& access(cmd, F_OK))
 	{
-		print_err("no such file or directory:", argv);
+		print_err("badashell: no such file or directory:", argv);
 		check = 127;
 	}
 	else if (*argv != '\0' && access(cmd, F_OK))
 	{
-		print_err("command not found: ", argv);
+		print_err("badashell: command not found: ", argv);
 		check = 127;
 	}
 	else if (*argv != '\0' && access(cmd, X_OK))
 	{
-		print_err("permission denied: ", argv);
+		print_err("badashell: permission denied: ", argv);
 		check = 126;
 	}
 	free(cmd);
@@ -216,27 +214,11 @@ int	check_cmd(char *argv, char **env)
 
 void	call_execev(char **env, char *argv , char **cmd)
 {
-	// char	*cat[2];
 	char	*founded_path;
 
 	check_split(cmd, argv);
 	founded_path = get_fullpath(argv, env);
-	// if (!founded_path)
-	// {
-	// 	free_double(cmd);
-	// 	return;
-	// }
-	// cat[0] = "cat";
-	// cat[1] = NULL;
-	// if (*argv == '\0')
-	// {
-	// 	free(founded_path);
-	// 	free_double(cmd);
-	// 	execve(get_fullpath("cat", env), cat, env);
-	// }
-	// else
-		execve(founded_path, cmd, env);
-	// print_err("badashell: command not found: ", "cat");
+	execve(founded_path, cmd, env);
 	print_err("execve failed !!\n", NULL);
 }
 
@@ -329,9 +311,8 @@ char **list_to_argv(t_list *list)
         if(!argv[i])
             return(gc_free_all(g_minishell), NULL);
         gc_add(g_minishell, argv[i]);
-        ft_memmove(argv[i], list->content, len);
+        ft_memmove(argv[i++], list->content, len);
         list = list->next;
-        i++;
     }
     argv[i] = NULL;
     return(argv);
@@ -339,15 +320,15 @@ char **list_to_argv(t_list *list)
 
 void do_cmd(t_node *ast)
 {
-	char	**env;
-	char	**cmd;
-	int		id;
+    int id;
+    char **cmd;
+    char **env;
 
-	cmd = list_to_argv(ast->data.cmd);
-	if(!cmd)
-		return;
-	env = env_to_envp(g_minishell->our_env);
-	if(!env)
+    cmd = list_to_argv(ast->data.cmd);
+    if(!cmd)
+        return;
+    env = env_to_envp(g_minishell->our_env);
+    if(!env)
 		return;
 	id = check_cmd(*cmd, env);
 	if(!id)
@@ -361,80 +342,156 @@ void do_cmd(t_node *ast)
 		it means thats cmd its last comd and dup should be to stdout or fd.
 */
 
-void do_pipe(t_node *cmd , int mode)
+void wait_and_get(void)
+{
+	char *exit;
+
+	wait(&g_minishell->exit_s);
+	if (WIFEXITED(g_minishell->exit_s))
+		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
+	exit = ft_itoa(g_minishell->exit_s);
+	if(!exit)
+		return(print_errors("ERROR WITH FT_ITOA\n"));
+	set_env_var(g_minishell->our_env, "?", exit);
+	free(exit);
+}
+
+void open_redir(t_redir *redir)
+{
+	redir->fd = open(redir->file,redir->mode, 0644);
+}
+
+
+void do_pipe(t_node *cmd , int mode) // ls | cat | cat -e
 {
 	int	id;
 	int	pfd[2];
-	char *exit;
 
 	open_pipe(pfd);
 	id = fork();
 	if (id < 0)
 	{
-		print_errors("pipex: error occuerd with fork!");
-		return ;
+		print_err("pipex: error occuerd with fork!", NULL);
+		return;
 	}
 	if (id == 0)
 	{
-		fd_duper(pfd, mode);
+		fd_duper(pfd, mode); // mode 0 normal, 1 last cmd
 		do_cmd(cmd);
 	}
 	else
 	{
 		close(pfd[1]);
-		dup_2(pfd[0], 0);
-		wait(&g_minishell->exit_s);
-		if (WIFEXITED(g_minishell->exit_s))
-		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
-		exit = ft_itoa(g_minishell->exit_s);
-		if(!exit)
-			return(print_errors("ERROR WITH FT_ITOA\n"));
-		set_env_var(g_minishell->our_env, "?", exit);
-		free(exit);
+		dup_2(pfd[0], 0); // stdin -> pipe
+		if(mode)
+			wait_and_get();
 	}
 }
 
-void	executer(t_node *node)
+int do_here_docs(t_list *red_list) // func that open every here doc and return a fd to the last one.
+{
+	t_redir *new ;
+
+	while(red_list)
+	{
+		unlink("/var/tmp/tmp.txt");
+		new = red_list->content;
+		if(new->type == LL_REDIR)
+		{
+			new->fd = here_doc(new->file);
+			if(new->fd < 0)
+				return(0);
+		}
+		red_list = red_list->next;
+	}
+	return(1);
+}
+
+int input_to_dup(t_list *red_list) // < <<
+{
+	t_redir *new ;
+	int fd;
+	
+	fd = -1;
+	while(red_list)
+	{
+		new = red_list->content;
+		if(new->type == L_REDIR || new->type == LL_REDIR)
+			fd = new->fd;
+		red_list = red_list->next;
+	}
+	return (fd);
+}
+
+int output_to_dup(t_list *red_list) // > >>
+{
+	t_redir *new ;
+	int fd;
+	
+	fd = -1;
+	while(red_list)
+	{
+		new = red_list->content;
+		if(new->type == R_REDIR || new->type == RR_REDIR)
+			fd = new->fd;
+		red_list = red_list->next;
+	}
+	return (fd);
+}
+
+void open_and_set(t_list *red_list)
+{
+    t_redir *new ;
+	while(red_list) // linked list of reds
+    {
+		new = red_list->content;
+        // printf("REDIR NODE , name: '%s'\n",new->file);
+		if(new->type != LL_REDIR)
+			open_redir(new);
+        red_list = red_list->next;
+    }
+}
+
+void    executer(t_node *node) // ls | wc | cat && ps
 {
 	int id;
-	char *exit;
+	int fd_input;
+	int fd_output;
+
 	if (!node)
 		return;
-	if (node->type == STRING_NODE)
-	{
-		if (ft_is_builtin(node->data.cmd->content))
-			execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-		else
+    if (node->type == STRING_NODE) // leaf 
+    {
+        if (ft_is_builtin(node->data.cmd->content))
+		{
+			printf("executing builtins \n\n");
+            execute_builtins(g_minishell, list_to_argv(node->data.cmd));
+		}
+        else
 		{
 			id = fork();
 			if(!id)
-				do_cmd(node);
+            	do_cmd(node);
 			else
-			{
-				wait(&g_minishell->exit_s);
-				if (WIFEXITED(g_minishell->exit_s))
-					g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
-				exit = ft_itoa(g_minishell->exit_s);
-				if(!exit)
-					return(print_errors("ERROR WITH FT_ITOA\n"));
-				set_env_var(g_minishell->our_env, "?", exit);
-				free(exit);
-			}
+				wait_and_get();
 		}
-	}
+    }
 	else if(node->type == PAIR_NODE)
 	{
 		if(node->data.pair.type == PIPE)
 		{
-			do_pipe(node->data.pair.left , 0);
-			executer(node->data.pair.right);
+			do_pipe(node->data.pair.left , 0); 
+			if(node->data.pair.right->type != STRING_NODE)
+				executer(node->data.pair.right);
+			else
+				do_pipe(node->data.pair.right, 1);
 		}
 		else if (node->data.pair.type == OR)
 		{
 			executer(node->data.pair.left);
 			if(g_minishell->exit_s)
 			{
-				dup2(g_minishell->stdin,0);
+				dup2(g_minishell->stdin, 0);
 				executer(node->data.pair.right);
 			}
 		}
@@ -443,27 +500,31 @@ void	executer(t_node *node)
 			executer(node->data.pair.left);
 			if(!g_minishell->exit_s)
 			{
-				dup2(g_minishell->stdin,0);
+				dup2(g_minishell->stdin, 0);
 				executer(node->data.pair.right);
 			}
 		}
-	}
-	while(wait(NULL) != -1);
-//	 else if (node->type == REDIR_NODE) // leaf
-//	 {
-//		 while(node->data.redir)
-//	     {
-//             t_redir *new = node->data.redir->content;
-//             printf("REDIR NODE , name: '%s'\n",new->file);
-//             while (new->cmd)
-//             {
-//                 printf("'%s' ", (char*)new->cmd->content);
-//                 new->cmd = new->cmd->next;
-//             }
-//             printf("\n");
-//             node->data.redir = node->data.redir->next;
-//         }
-//     }
+    }
+    else if (node->type == REDIR_NODE) //leaf // ls -a < input1 << here1 << here2 < input2 < input3 << here3 > output1 >> output2 -k
+    {
+		// do here_docs first
+		t_list *last;
+		t_redir *new;
+		
+		if (do_here_docs(node->data.redir) == 0)
+			return (print_errors("ERROR ACCURE WITH HERE_DOC\n"));
+		open_and_set(node->data.redir);
+		fd_input = input_to_dup(node->data.redir);
+		fd_output = output_to_dup(node->data.redir);
+		if(fd_input > 0)
+			dup2(fd_input, 0);
+		if(fd_output > 0)
+			dup2(fd_output, 1);
+		last = ft_lstlast(node->data.redir);
+		new = last->content;
+		if(new->cmd)
+			executer(string_node_new(new->cmd));
+    }
 //     else if(node->type == ERROR_NODE)
 //     {
 //         printf("add'%p', -ERROR -------> '%s",node ,node->data.error);

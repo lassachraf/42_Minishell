@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 18:19:32 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:33:40 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	handle_dollar(char *s, int *i, int *len)
 		}
 	}
 	var = ft_substr(expand, 0, j);
-	gc_add(g_minishell, var);
 	env_len = check_env(var);
+	free(var);
 	(*i) += j + 1;
 	if (env_len == -1)
 		return ;

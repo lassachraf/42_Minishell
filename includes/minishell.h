@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 16:51:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 20:36:39 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 # include "execution.h"
 
 typedef struct s_env
@@ -64,6 +65,8 @@ extern t_minishell	*g_minishell;
 void	increment_shlvl();
 int		get_exit_status();
 char	**env_to_envp(t_env *env);
+int		here_doc(char *limiter);
+char **list_to_argv(t_list *list);
 
 /* Builtins */
 
@@ -86,7 +89,7 @@ void				ft_export(char **args, int nb_args);
 void				ft_pwd(t_env *env);
 
 // Function that unset environment variable "unset".
-void				ft_unset(void);
+void				ft_unset(char *key);
 
 /* Builtins utils */
 
@@ -95,6 +98,25 @@ void				execute_builtins(t_minishell *mini, char **args);
 
 // Function that checks if the command is a builtin or not.
 bool				ft_is_builtin(char *arg);
+
+// Function that print the export. 
+void				print_env(t_env *env);
+
+// Function that swap two environment nodes.
+void				ft_swap(t_env *i, t_env *j, int *swapped);
+
+// Function to fill up the duplicated environment.
+void				fill_dup(t_env *env, t_env *new_node, t_env *head, t_env *current);
+
+// Fuction that duplcate the environment for export.
+t_env				*new_dup(t_env *env);
+
+// Function that sort the environment "ASCII SORT".
+t_env				*sort_env(t_env *env);
+
+// Function that free the split.
+void				free_split(char **s);
+
 
 // Setters.c
 

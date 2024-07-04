@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:38:34 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 16:34:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:31:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ int	syntax_second_phase(t_token *token)
 	if (is_redirection(token->type))
 	{
 		if (!token->next || token->next->type == END)
+		{
+			print_errors("syntax error near unexpected token `newline`");
+			return (-1);
+		}
+		else if (token->type == L_REDIR && token->next 
+			&& token->next->type == R_REDIR)
 		{
 			print_errors("syntax error near unexpected token `newline`");
 			return (-1);
