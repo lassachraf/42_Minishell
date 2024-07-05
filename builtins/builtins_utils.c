@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/04 20:40:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:30:42 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
-	printf("***Execute builtins***\n");
 	if (builtins_exec_check(args))
 		return ;
 	if (!ft_strcmp(args[0], "echo"))

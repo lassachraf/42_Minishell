@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/04 20:57:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/05 02:59:09 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,10 +212,10 @@ int	main(int ac, char **av, char **env)
 		if (!g_minishell->ast)
 			continue ;
 		executer(g_minishell->ast);
-		// while(waitpid(-1, NULL, 0) != -1);
+		while(waitpid(-1, NULL, 0) != -1);
 		gc_free_all(g_minishell);
-		// dup2(g_minishell->stdout, 1);
-		// dup2(g_minishell->stdin, 0);
+		dup2(g_minishell->stdout, 1);
+		dup2(g_minishell->stdin, 0);
 	}
 	gc_free_all(g_minishell);
 	clear_env(g_minishell->our_env);
