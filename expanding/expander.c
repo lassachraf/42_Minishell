@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/06 15:29:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/06 20:44:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,12 @@ char	*handle_space(char *value, char *new_value)
 	(void)value;
 	len = (ft_count_words(new_value, ' ') * 2) + ft_strlen(new_value);
 	new_one = malloc(sizeof(char) * (len + 1));
+	if (!new_one)
+		return (NULL);
+	gc_add(g_minishell, new_one);
 	while (new_value[i])
 	{
-		if (ft_isalpha(new_value[i]))
+		if (ft_isalpha(new_value[i]) && !ft_strncmp(&new_value[i], "-", 1))
 		{
 			new_one[j++] = '"';
 			while (new_value[i] && !ft_isspace(new_value[i]))
@@ -176,6 +179,8 @@ t_token	*helper(t_token *tokens)
 	char	*new_value;
 
 	new_value = NULL;
+	if (tokens->prev && tokens->prev->type == LL_REDIR)
+		return (tokens->next);
 	if (tokens->prev && tokens->prev->type == D_QUOTE)
 	{
 		g_minishell->dq_flag = 1;
