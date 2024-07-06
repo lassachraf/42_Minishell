@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/04 20:36:39 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:31:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define RED "\033[1;31m"
 # define ORANGE "\033[1;33m"
 # define RESET "\033[0m"
-# define PROMPT "✨ badashell$> "
+# define PROMPT "badashell$> "
 
 # include "../libft/libft.h"
 # include "builtins.h"

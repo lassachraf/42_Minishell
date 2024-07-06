@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 17:03:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:22:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	cd_home(t_minishell *mini)
 	set_env_var(mini->our_env, "OLDPWD", get_env_var(mini->our_env, "PWD"));
 	home = get_env_var(mini->our_env, "HOME");
 	if (!home)
-		return (print_errors("badashell$: cd: HOME not set"), 1);
+		return (print_errors("cd: HOME not set"), 1);
 	if (!chdir(home))
 		return (set_env_var(mini->our_env, "PWD", home), 0);
 	return (1);
@@ -42,7 +42,7 @@ char	*custome_path(char *path)
 	home = get_env_var(g_minishell->our_env, "HOME");
 	new_path = malloc(sizeof(char) * (ft_strlen(home) + ft_strlen(path)));
 	if (!new_path)
-		print_errors("Allocation failed");
+		print_errors("Allocation failed !");
 	if (!ft_strncmp(path, "~", 1))
 	{
 		i = -1;

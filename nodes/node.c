@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   node.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:02:16 by baouragh          #+#    #+#             */
-/*   Updated: 2024/06/26 09:32:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/04 18:00:59 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 #include "../includes/minishell.h"
 
@@ -22,8 +24,8 @@ t_node	*redir_node_new(t_list *red_list)
 	gc_add(g_minishell, new);
 	new->type = REDIR_NODE;
 	new->data.redir = red_list;
-	gc_add(g_minishell, new->data.redir);
-	gc_add(g_minishell, new->data.redir->content);
+	// gc_add(g_minishell, new->data.redir);
+	// gc_add(g_minishell, new->data.redir->content);
 	return (new);
 }
 
@@ -68,14 +70,14 @@ t_node	*pair_node_new(t_node *left, t_node *right, t_type type)
 	return (new);
 }
 
-t_node	*error_node_new(const char *msg)
-{
-	t_node	*new;
+// t_node	*error_node_new(const char *msg)
+// {
+// 	t_node	*new;
 
-	new = malloc(sizeof(t_node));
-	if (!new)
-		return (NULL);
-	new->type = ERROR_NODE;
-	new->data.error = msg;
-	return (new);
-}
+// 	new = malloc(sizeof(t_node));
+// 	if (!new)
+// 		return (NULL);
+// 	new->type = ERROR_NODE;
+// 	new->data.error = msg;
+// 	return (new);
+// }

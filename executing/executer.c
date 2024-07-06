@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/04 20:34:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:28:16 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,19 +376,19 @@ void do_pipe(t_node *cmd , int mode) // ls | cat | cat -e
 	}
 	if (id == 0)
 	{
-		fd_duper(pfd, mode); // mode 0 normal, 1 last cmd
+		fd_duper(pfd, mode);
 		do_cmd(cmd);
 	}
 	else
 	{
 		close(pfd[1]);
-		dup_2(pfd[0], 0); // stdin -> pipe
+		dup_2(pfd[0], 0);
 		if(mode)
 			wait_and_get();
 	}
 }
 
-int do_here_docs(t_list *red_list) // func that open every here doc and return a fd to the last one.
+int do_here_docs(t_list *red_list)
 {
 	t_redir *new ;
 
@@ -452,7 +452,7 @@ void open_and_set(t_list *red_list)
     }
 }
 
-void    executer(t_node *node) // ls | wc | cat && ps
+void    executer(t_node *node)
 {
 	int id;
 	int fd_input;
@@ -460,13 +460,10 @@ void    executer(t_node *node) // ls | wc | cat && ps
 
 	if (!node)
 		return;
-    if (node->type == STRING_NODE) // leaf 
+    if (node->type == STRING_NODE)
     {
         if (ft_is_builtin(node->data.cmd->content))
-		{
-			printf("executing builtins \n\n");
             execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-		}
         else
 		{
 			id = fork();

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 10:06:02 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/06 15:29:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,64 @@ char	*helper_expander(char *s)
 	return (new);
 }
 
+int	contains_space(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && !ft_isspace(s[i]))
+		i++;
+	return ((s[i] != '\0'));
+}
+
+int	ft_count_words(char const *s, char c)
+{
+	int	words;
+
+	words = 0;
+	while (*s)
+	{
+		while (*s == c)
+			s++;
+		if (*s)
+		{
+			words++;
+			while (*s && *s != c)
+				s++;
+		}
+	}
+	return (words);
+}
+
+char	*handle_space(char *value, char *new_value)
+{
+	char	*new_one;
+	int		len;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	(void)value;
+	len = (ft_count_words(new_value, ' ') * 2) + ft_strlen(new_value);
+	new_one = malloc(sizeof(char) * (len + 1));
+	while (new_value[i])
+	{
+		if (ft_isalpha(new_value[i]))
+		{
+			new_one[j++] = '"';
+			while (new_value[i] && !ft_isspace(new_value[i]))
+				new_one[j++] = new_value[i++];
+			new_one[j++] = '"';
+		}
+		else
+			new_one[j++] = new_value[i++];
+	}
+	new_one[j] = '\0';
+	printf("new value is => '%s'\n", new_one);
+	return (new_one);
+}
+
 t_token	*helper(t_token *tokens)
 {
 	t_token	*tmp;
@@ -122,32 +180,32 @@ t_token	*helper(t_token *tokens)
 	{
 		g_minishell->dq_flag = 1;
 		new_value = helper_expander(tokens->value);
-		if (new_value)
-		{
-			// free(tokens->value);
+		if (contains_space(new_value))
+			tokens->value = handle_space(tokens->value, new_value);
+		else if (new_value)
 			tokens->value = new_value;
-		}
-		else
+		else if (!new_value)
 		{
 			tmp = tokens->next;
 			remove_token(&g_minishell->tokens, tokens);
 			return (tmp);
 		}
+		printf("*** new_value >>>> `%s` ***\n", tokens->value);
 	}
 	else
 	{
 		new_value = helper_expander(tokens->value);
-		if (new_value)
-		{
-			// free(tokens->value);
+		if (contains_space(new_value))
+			tokens->value = handle_space(tokens->value, new_value);
+		else if (new_value)
 			tokens->value = new_value;
-		}
-		else
+		else if (!new_value)
 		{
 			tmp = tokens->next;
 			remove_token(&g_minishell->tokens, tokens);
 			return (tmp);
 		}
+		printf("*** new_value >>>> `%s` ***\n", tokens->value);
 	}
 	return (tokens->next);
 }
