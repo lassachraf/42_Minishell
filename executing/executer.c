@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/08 17:14:13 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:05:34 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,10 +484,7 @@ void	executer(t_node *node)
 	if (node->type == STRING_NODE)
 	{
 		if (ft_is_builtin(node->data.cmd->content))
-		{
-			print_double(list_to_argv(node->data.cmd));
 			execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-		}
 		else
 		{
 			id = fork();
