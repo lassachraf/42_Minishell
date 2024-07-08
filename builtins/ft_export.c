@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 10:03:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:34:29 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 void	print_env(t_env *env)
 {
-    if (!env)
-    {
-        printf("*** -- -- -- ***\n");
-    }
 	while (env)
 	{
 		if (env->export)
@@ -33,20 +29,18 @@ void	print_env(t_env *env)
 	}
 }
 
-void    error_identifier(char **s, char *args)
+void    error_identifier(char **s)
 {
     ft_putstr_fd(RED "badashell$ : export: `", 2);
     if (s[0])
         ft_putstr_fd(s[0], 2);
     ft_putstr_fd("=", 2);
-    if (s[1] && !args)
+    if (s[1])
         ft_putstr_fd(s[1], 2);
-    else if (args && !s[1])
-        ft_putstr_fd(args, 2);
     ft_putstr_fd("`: not a valid identifier.\n" RESET, 2);
 }
 
-int check_identifier(char **s, char *args, int join_flag)
+int check_identifier(char **s, int join_flag)
 {
     int i;
 
@@ -57,7 +51,7 @@ int check_identifier(char **s, char *args, int join_flag)
     if (ft_isalpha(s[0][0]) || !ft_strncmp(&s[0][0], "_", 1))
         i++;
     else
-        return (error_identifier(s, args), -1);
+        return (error_identifier(s), -1);
     while (ft_isalnum(s[0][i]) || !ft_strncmp(&s[0][i], "_", 1))
         i++;
     printf("** s[0] >>>> `%c`, join_flag >>> `%d` **\n", s[0][i], join_flag);
@@ -66,7 +60,7 @@ int check_identifier(char **s, char *args, int join_flag)
     else if (join_flag == 0 && !s[0][i])
         return (0);
     else
-        return (error_identifier(s, args), -1);
+        return (error_identifier(s), -1);
 }
 
 void	ft_swap(t_env *i, t_env *j, int *swapped)
@@ -164,32 +158,26 @@ void	free_split(char **s)
 	free(s);
 }
 
-int    process_equal(t_env *sorted_env, char **args)
+int    process_equal(t_env *sorted_env, char **args, int i)
 {
     char    **split;
 
-    split = ft_split(args[1], '=');
+    split = ft_split(args[i], '=');
     if (!split)
-        return (error_identifier(NULL, args[1]), -1);
-    if (check_identifier(split, args[2], 0) == -1)
+        return (print_errors("Split failed in process equal"), -1);
+    if (check_identifier(split, 0) == -1)
         return (clear_env(sorted_env), free_split(split), -1);
     if (get_env_var(g_minishell->our_env, split[0]))
     {
         set_as_visible(g_minishell->our_env, split[0]);
         set_as_exported(g_minishell->our_env, split[0]);
-        if (!split[1] && !args[2])
-            set_env_var(g_minishell->our_env, split[0], "\0");
-        else if (!split[1])
-            set_env_var(g_minishell->our_env, split[0], args[2]);
-        else
+        if (split[1])
             set_env_var(g_minishell->our_env, split[0], split[1]);
     }
     else
     {
-        if (!split[1] && !args[2])
+        if (!split[1])
             add_env_var(g_minishell->our_env, split[0], "\0");
-        else if (!split[1])
-            add_env_var(g_minishell->our_env, split[0], args[2]);
         else
             add_env_var(g_minishell->our_env, split[0], split[1]);
         set_as_exported(g_minishell->our_env, split[0]);
@@ -237,35 +225,31 @@ char    **custome_split(char **split)
     return (split);
 }
 
-int    process_joining(t_env *sorted_env, char **args)
+int    process_joining(t_env *sorted_env, char **args, int i)
 {
     char    **split;
     char    *temp;
     char    *new;
 
     new = NULL;
-    split = ft_split(args[1], '=');
+    split = ft_split(args[i], '=');
     split = custome_split(split);
-    if (check_identifier(split, args[2], 0) == -1)
+    if (check_identifier(split, 0) == -1)
         return (clear_env(sorted_env), free_split(split), -1);
     if (get_env_var(g_minishell->our_env, split[0]))
     {
         set_as_visible(g_minishell->our_env, split[0]);
         set_as_exported(g_minishell->our_env, split[0]);
         temp = get_env_var(g_minishell->our_env, split[0]);
-        if (!split[1] && args[2])
-            new = ft_strjoin(temp, args[2]);
-        else if (split[1] && !args[2])
+        if (split[1])
             new = ft_strjoin(temp, split[1]);
         gc_add(g_minishell, new);
         set_env_var(g_minishell->our_env, split[0], new);
     }
     else
     {
-        if (!split[1] && !args[2])
+        if (!split[1])
             add_env_var(g_minishell->our_env, split[0], "\0");
-        else if (!split[1])
-            add_env_var(g_minishell->our_env, split[0], args[2]);
         else
             add_env_var(g_minishell->our_env, split[0], split[1]);
         set_as_exported(g_minishell->our_env, split[0]);
@@ -276,53 +260,9 @@ int    process_joining(t_env *sorted_env, char **args)
 void	ft_export(char **args, int nb_args)
 {
     t_env   *sorted_env;
-    // int     i;
-
-    sorted_env = sort_env(g_minishell->our_env);
-    printf("*** nb_args >>>>>>> `%d` ***\n", nb_args);
-    if (nb_args == 1)
-        print_env(sorted_env);
-    else
-    {
-        // Should be a while ...
-        if (args[1])
-        {
-            if (ft_strchr(args[1], '='))
-            {
-                if (ft_strstr(args[1], "+="))
-                {
-                    if (process_joining(sorted_env, args) == -1)
-                        return ;
-                }
-                else if (process_equal(sorted_env, args) == -1)
-                    return ;
-            }
-            else
-            {
-                if (check_identifier(&args[1], args[2], 0) == -1)
-                {
-                    clear_env(sorted_env);
-                    return ;
-                }
-                else if (!get_env_var(g_minishell->our_env, args[1]))
-                {
-                    add_env_var(g_minishell->our_env, args[1], NULL);
-                    set_as_invisible(g_minishell->our_env, args[1]);
-                }
-            }
-            // i++;
-        }
-    }
-    clear_env(sorted_env);
-}
-
-void	ft_exportbvsdf(char **args, int nb_args)
-{
-    t_env   *sorted_env;
     int     i;
 
     sorted_env = sort_env(g_minishell->our_env);
-    printf("*** nb_args >>>>>>> `%d` ***\n", nb_args);
     if (nb_args == 1)
         print_env(sorted_env);
     else
@@ -332,17 +272,19 @@ void	ft_exportbvsdf(char **args, int nb_args)
         {
             if (ft_strchr(args[i], '='))
             {
+                printf("Equal case with arguments: `%s`\n", args[i]);
                 if (ft_strstr(args[i], "+="))
                 {
-                    if (process_joining(sorted_env, args) == -1)
+                    if (process_joining(sorted_env, args, i) == -1)
                         return ;
                 }
-                else if (process_equal(sorted_env, args) == -1)
+                else if (process_equal(sorted_env, args, i) == -1)
                     return ;
             }
             else
             {
-                if (check_identifier(&args[i], args[i + 1], 0) == -1)
+                printf("No value case arguments: `%s`\n", args[i]);
+                if (check_identifier(&args[i], 0) == -1)
                 {
                     clear_env(sorted_env);
                     return ;
@@ -353,8 +295,51 @@ void	ft_exportbvsdf(char **args, int nb_args)
                     set_as_invisible(g_minishell->our_env, args[i]);
                 }
             }
-            i += 2;
+            i++;
         }
     }
     clear_env(sorted_env);
 }
+
+// void	ft_exportbvsdf(char **args, int nb_args)
+// {
+//     t_env   *sorted_env;
+//     int     i;
+
+//     sorted_env = sort_env(g_minishell->our_env);
+//     printf("*** nb_args >>>>>>> `%d` ***\n", nb_args);
+//     if (nb_args == 1)
+//         print_env(sorted_env);
+//     else
+//     {
+//         i = 1;
+//         while (args[i])
+//         {
+//             if (ft_strchr(args[i], '='))
+//             {
+//                 if (ft_strstr(args[i], "+="))
+//                 {
+//                     if (process_joining(sorted_env, args) == -1)
+//                         return ;
+//                 }
+//                 else if (process_equal(sorted_env, args) == -1)
+//                     return ;
+//             }
+//             else
+//             {
+//                 if (check_identifier(&args[i], args[i + 1], 0) == -1)
+//                 {
+//                     clear_env(sorted_env);
+//                     return ;
+//                 }
+//                 else if (!get_env_var(g_minishell->our_env, args[i]))
+//                 {
+//                     add_env_var(g_minishell->our_env, args[i], NULL);
+//                     set_as_invisible(g_minishell->our_env, args[i]);
+//                 }
+//             }
+//             i += 2;
+//         }
+//     }
+//     clear_env(sorted_env);
+// }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:26:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/04 17:33:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:18:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ static int	re_open_hidden_file(char *name)
 
 static int	write_or_break(int fd, char *limiter, char *buf)
 {
-	int	doc_len;
 	int	buf_len;
 
 	if(!buf)
 		return(0);
-	doc_len = ft_strlen(limiter); // LIMITER
 	buf_len = ft_strlen(buf);
 	if (buf[0] == '\0' || !ft_strncmp (limiter, buf, buf_len))
 		return (0);

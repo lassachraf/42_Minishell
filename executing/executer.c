@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/07 12:32:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:14:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	open_pipe(int *pfd)
 	if (pipe(pfd))
 	{
 		perror("pipe:");
-		return;
+		return ;
 	}
 }
 
@@ -29,8 +29,7 @@ int	dup_2(int old_fd, int new_fd)
 	return (0);
 }
 
-
-void	fd_duper( int *pfd , int mode)
+void	fd_duper(int *pfd, int mode)
 {
 	if (mode == 1)
 	{
@@ -40,7 +39,7 @@ void	fd_duper( int *pfd , int mode)
 	else
 	{
 		close(pfd[0]);
-		if (dup_2(pfd[1], 1)) // 
+		if (dup_2(pfd[1], 1)) //
 			exit(EXIT_FAILURE);
 	}
 }
@@ -84,7 +83,7 @@ int	print_err(char *message, char *word)
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(word, 2);
 	ft_putstr_fd("\n" RESET, 2);
-    return (0);
+	return (0);
 }
 
 void	check_split(char **cmd, char *word)
@@ -94,7 +93,7 @@ void	check_split(char **cmd, char *word)
 		print_err("malloc failed in ft_split !!", word);
 		if (!word)
 			ft_putstr_fd("NULL\n", 2);
-		return;
+		return ;
 	}
 }
 
@@ -134,7 +133,7 @@ static char	*founded_cmd(char *argv, char **paths, char **cmd)
 	{
 		free_double(paths);
 		free_double(cmd);
-		return(NULL);
+		return (NULL);
 	}
 	return (free_double(paths), free_double(cmd), fullpath);
 }
@@ -150,7 +149,7 @@ char	**get_env_paths(char **env)
 	if (!*env)
 		return (NULL);
 	res = ft_split(*env, ':');
-	check_split(res,*env);
+	check_split(res, *env);
 	ft_memmove(*res, ft_strchr(*res, '/'), ft_strlen(*res));
 	return (res);
 }
@@ -168,8 +167,8 @@ char	*get_fullpath(char *argv, char **env)
 	paths = get_env_paths(env);
 	paths_num = strings_count(paths);
 	cmd = ft_split(argv, ' ');
-	if(!cmd)
-		return(free(paths),NULL);
+	if (!cmd)
+		return (free(paths), NULL);
 	if (!(access(*cmd, F_OK)))
 	{
 		if ((*argv == '/' || *argv == '.') && !access(*cmd, X_OK))
@@ -186,9 +185,9 @@ char	*get_fullpath(char *argv, char **env)
 int	check_cmd(char *argv, char **env)
 {
 	char	*cmd;
-    int     check;
+	int		check;
 
-    check = 0;
+	check = 0;
 	cmd = get_fullpath(argv, env);
 	if (!cmd && *argv == '.') // ./
 		cmd = get_command(argv);
@@ -197,7 +196,7 @@ int	check_cmd(char *argv, char **env)
 		print_err("badashell$ : No such file or directory : ", argv);
 		check = 127;
 	}
-	else if(access(cmd, F_OK) && argv[ft_strlen(argv) - 1] == '/')
+	else if (access(cmd, F_OK) && argv[ft_strlen(argv) - 1] == '/')
 	{
 		print_err("badashell$ : Is a directory : ", argv);
 		check = 126;
@@ -213,10 +212,10 @@ int	check_cmd(char *argv, char **env)
 		check = 126;
 	}
 	free(cmd);
-    return (check);
+	return (check);
 }
 
-void	call_execev(char **env, char *argv , char **cmd)
+void	call_execev(char **env, char *argv, char **cmd)
 {
 	char	*founded_path;
 
@@ -241,143 +240,143 @@ int	ft_malloc_error(char **tab, size_t i)
 	return (1);
 }
 
-int  env_size(t_env *env)
+int	env_size(t_env *env)
 {
-    int size;
-    
-    size = 0;
-    while(env)
-    {
-        if(env->visible)
-            size++;
-        env = env->next;
-    }
-    return(size);
+	int	size;
+
+	size = 0;
+	while (env)
+	{
+		if (env->visible)
+			size++;
+		env = env->next;
+	}
+	return (size);
 }
 
-void print_double(char ** argv)
+void	print_double(char **argv)
 {
-    int i = 0;
+	int	i;
 
-    while(argv[i])
-    {
-        printf("%s\n",argv[i]);
-        i++;
-    }
+	i = 0;
+	while (argv[i])
+	{
+		printf("%s\n", argv[i]);
+		i++;
+	}
 }
 
-char **env_to_envp(t_env *env)
+char	**env_to_envp(t_env *env)
 {
-    char **argv;
-    char    *tmp;
-    int size;
-    int i;
+	char	**argv;
+	char	*tmp;
+	int		size;
+	int		i;
 
-    i = 0;
-    size = env_size(env);
-    argv = malloc(sizeof(char *) * (size + 1));
-    if(!argv)
-        return(NULL);
-    gc_add(g_minishell, argv);
-    while(i < size)
-    {
-        tmp = ft_strjoin(env->key, "=");
-        argv[i] = ft_strjoin(tmp ,env->value);
-        if(!argv[i])
-            return(gc_free_all(g_minishell), NULL);
-        gc_add(g_minishell, argv[i]);
-        free(tmp);
-        env = env->next;
-        i++;
-    }
-    argv[i] = NULL;
-    return(argv);
+	i = 0;
+	size = env_size(env);
+	argv = malloc(sizeof(char *) * (size + 1));
+	if (!argv)
+		return (NULL);
+	gc_add(g_minishell, argv);
+	while (i < size)
+	{
+		tmp = ft_strjoin(env->key, "=");
+		argv[i] = ft_strjoin(tmp, env->value);
+		if (!argv[i])
+			return (gc_free_all(g_minishell), NULL);
+		gc_add(g_minishell, argv[i]);
+		free(tmp);
+		env = env->next;
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
 }
 
-char **list_to_argv(t_list *list)
+char	**list_to_argv(t_list *list)
 {
-    char **argv;
-    int size;
-    int i;
-    int len;
+	char	**argv;
+	int		size;
+	int		i;
+	int		len;
 
-    i = 0;
-	if(!list)
-		return(NULL);
-    size = ft_lstsize(list);
-    argv = malloc(sizeof(char *) * (size + 1));
-    if(!argv)
-        return(gc_free_all(g_minishell), NULL);
-    gc_add(g_minishell, argv);
-    while(i < size)
-    {
-        len = ft_strlen(list->content) + 1;
-        argv[i] = malloc(sizeof(char) * len);
-        if(!argv[i])
-            return(gc_free_all(g_minishell), NULL);
-        gc_add(g_minishell, argv[i]);
-        ft_memmove(argv[i++], list->content, len);
-        list = list->next;
-    }
-    argv[i] = NULL;
-    return(argv);
+	i = 0;
+	if (!list)
+		return (NULL);
+	size = ft_lstsize(list);
+	argv = malloc(sizeof(char *) * (size + 1));
+	if (!argv)
+		return (gc_free_all(g_minishell), NULL);
+	gc_add(g_minishell, argv);
+	while (i < size)
+	{
+		len = ft_strlen(list->content) + 1;
+		argv[i] = malloc(sizeof(char) * len);
+		if (!argv[i])
+			return (gc_free_all(g_minishell), NULL);
+		gc_add(g_minishell, argv[i]);
+		ft_memmove(argv[i++], list->content, len);
+		list = list->next;
+	}
+	argv[i] = NULL;
+	return (argv);
 }
 
-void do_cmd(t_node *ast)
+void	do_cmd(t_node *ast)
 {
-    int id;
-    char **cmd;
-    char **env;
+	int		id;
+	char	**cmd;
+	char	**env;
 
-    cmd = list_to_argv(ast->data.cmd);
-    if(!cmd)
-        return;
-    env = env_to_envp(g_minishell->our_env);
-    if(!env)
-		return;
+	cmd = list_to_argv(ast->data.cmd);
+	if (!cmd)
+		return ;
+	env = env_to_envp(g_minishell->our_env);
+	if (!env)
+		return ;
 	id = check_cmd(*cmd, env);
-	if(!id)
-		call_execev(env, *cmd , cmd);
+	if (!id)
+		call_execev(env, *cmd, cmd);
 	exit(id);
 }
 
 /*
 	if mode == 0 it means a reagular dup of stdout to pipe write end pfd[1]
-	else 
+	else
 		it means thats cmd its last comd and dup should be to stdout or fd.
 */
 
-void wait_and_get(void)
+void	wait_and_get(void)
 {
-	char *exit;
+	char	*exit;
 
 	wait(&g_minishell->exit_s);
 	if (WIFEXITED(g_minishell->exit_s))
 		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
 	exit = ft_itoa(g_minishell->exit_s);
-	if(!exit)
-		return(print_errors("ERROR WITH FT_ITOA\n"));
+	if (!exit)
+		return (print_errors("ERROR WITH FT_ITOA\n"));
 	set_env_var(g_minishell->our_env, "?", exit);
 	free(exit);
 }
 
-void open_redir(t_redir *redir)
+void	open_redir(t_redir *redir)
 {
-	redir->fd = open(redir->file,redir->mode, 0644);
+	redir->fd = open(redir->file, redir->mode, 0644);
 }
 
-
-void do_pipe(t_node *cmd , int mode) // ls | cat | cat -e
+void	do_pipe(t_node *cmd, int mode) // ls | cat | cat -e
 {
-	int	id;
-	int	pfd[2];
+	int id;
+	int pfd[2];
 
 	open_pipe(pfd);
 	id = fork();
 	if (id < 0)
 	{
 		print_err("pipex: error occuerd with fork!", NULL);
-		return;
+		return ;
 	}
 	if (id == 0)
 	{
@@ -388,102 +387,122 @@ void do_pipe(t_node *cmd , int mode) // ls | cat | cat -e
 	{
 		close(pfd[1]);
 		dup_2(pfd[0], 0);
-		if(mode)
+		if (mode)
 			wait_and_get();
 	}
 }
 
-int do_here_docs(t_list *red_list)
+int	do_here_docs(t_list *red_list)
 {
-	t_redir *new ;
+	t_redir	*new;
 
-	while(red_list)
+	while (red_list)
 	{
 		unlink("/var/tmp/tmp.txt");
 		new = red_list->content;
-		if(new->type == LL_REDIR)
+		if (new->type == LL_REDIR)
 		{
 			new->fd = here_doc(new->file);
-			if(new->fd < 0)
-				return(0);
+			if (new->fd < 0)
+				return (0);
 		}
 		red_list = red_list->next;
 	}
-	return(1);
+	return (1);
 }
 
-int input_to_dup(t_list *red_list) // < <<
+int	input_to_dup(t_list *red_list) // < <<
 {
-	t_redir *new ;
+	t_redir *new;
 	int fd;
-	
+
 	fd = -1;
-	while(red_list)
+	while (red_list)
 	{
 		new = red_list->content;
-		if(new->type == L_REDIR || new->type == LL_REDIR)
+		if (new->type == L_REDIR || new->type == LL_REDIR)
 			fd = new->fd;
 		red_list = red_list->next;
 	}
 	return (fd);
 }
 
-int output_to_dup(t_list *red_list) // > >>
+int	output_to_dup(t_list *red_list) // > >>
 {
-	t_redir *new ;
+	t_redir *new;
 	int fd;
-	
+
 	fd = -1;
-	while(red_list)
+	while (red_list)
 	{
 		new = red_list->content;
-		if(new->type == R_REDIR || new->type == RR_REDIR)
+		if (new->type == R_REDIR || new->type == RR_REDIR)
 			fd = new->fd;
 		red_list = red_list->next;
 	}
 	return (fd);
 }
 
-void open_and_set(t_list *red_list)
+void	open_and_set(t_list *red_list)
 {
-    t_redir *new ;
-	while(red_list) // linked list of reds
-    {
+	t_redir	*new;
+
+	while (red_list) // linked list of reds
+	{
 		new = red_list->content;
-        // printf("REDIR NODE , name: '%s'\n",new->file);
-		if(new->type != LL_REDIR)
+		// printf("REDIR NODE , name: '%s'\n",new->file);
+		if (new->type != LL_REDIR)
 			open_redir(new);
-        red_list = red_list->next;
-    }
+		red_list = red_list->next;
+	}
 }
 
-void    executer(t_node *node)
+int	custome_size(t_list *lst)
 {
-	int id;
-	int fd_input;
-	int fd_output;
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		if (!ft_strchr(lst->next->content, '='))
+			lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+
+void	executer(t_node *node)
+{
+	int	id;
+	int	fd_input;
+	int	fd_output;
+	t_list *last;
+	t_redir *new;
 
 	if (!node)
-		return;
-    if (node->type == STRING_NODE)
-    {
-        if (ft_is_builtin(node->data.cmd->content))
-            execute_builtins(g_minishell, list_to_argv(node->data.cmd));
-        else
+		return ;
+	if (node->type == STRING_NODE)
+	{
+		if (ft_is_builtin(node->data.cmd->content))
+		{
+			print_double(list_to_argv(node->data.cmd));
+			execute_builtins(g_minishell, list_to_argv(node->data.cmd));
+		}
+		else
 		{
 			id = fork();
-			if(!id)
-            	do_cmd(node);
+			if (!id)
+				do_cmd(node);
 			else
 				wait_and_get();
 		}
-    }
-	else if(node->type == PAIR_NODE)
+	}
+	else if (node->type == PAIR_NODE)
 	{
-		if(node->data.pair.type == PIPE)
+		if (node->data.pair.type == PIPE)
 		{
-			do_pipe(node->data.pair.left , 0); 
-			if(node->data.pair.right->type != STRING_NODE)
+			do_pipe(node->data.pair.left, 0);
+			if (node->data.pair.right->type != STRING_NODE)
 				executer(node->data.pair.right);
 			else
 				do_pipe(node->data.pair.right, 1);
@@ -491,7 +510,7 @@ void    executer(t_node *node)
 		else if (node->data.pair.type == OR)
 		{
 			executer(node->data.pair.left);
-			if(g_minishell->exit_s)
+			if (g_minishell->exit_s)
 			{
 				dup2(g_minishell->stdin, 0);
 				executer(node->data.pair.right);
@@ -500,35 +519,32 @@ void    executer(t_node *node)
 		else if (node->data.pair.type == AND)
 		{
 			executer(node->data.pair.left);
-			if(!g_minishell->exit_s)
+			if (!g_minishell->exit_s)
 			{
 				dup2(g_minishell->stdin, 0);
 				executer(node->data.pair.right);
 			}
 		}
-    }
-    else if (node->type == REDIR_NODE) //leaf // ls -a < input1 << here1 << here2 < input2 < input3 << here3 > output1 >> output2 -k
-    {
+	}
+	else if (node->type == REDIR_NODE) // leaf // ls-a < input1 << here1 << here2 < input2 < input3 << here3 > output1 >> output2 -k
+	{
 		// do here_docs first
-		t_list *last;
-		t_redir *new;
-		
 		if (do_here_docs(node->data.redir) == 0)
 			return (print_errors("ERROR ACCURE WITH HERE_DOC\n"));
 		open_and_set(node->data.redir);
 		fd_input = input_to_dup(node->data.redir);
 		fd_output = output_to_dup(node->data.redir);
-		if(fd_input > 0)
+		if (fd_input > 0)
 			dup2(fd_input, 0);
-		if(fd_output > 0)
+		if (fd_output > 0)
 			dup2(fd_output, 1);
 		last = ft_lstlast(node->data.redir);
 		new = last->content;
-		if(new->cmd)
+		if (new->cmd)
 			executer(string_node_new(new->cmd));
-    }
-//     else if(node->type == ERROR_NODE)
-//     {
-//         printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
-//     }
+	}
+	//     else if(node->type == ERROR_NODE)
+	//     {
+	//         printf("add'%p', -ERROR -------> '%s",node ,node->data.error);
+	//     }
 }

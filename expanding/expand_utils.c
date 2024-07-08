@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/07 11:13:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:17:35 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	remove_quotes(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*tmp;
+	char	*value;
 
 	current = *tokens;
 	while (current)
@@ -67,9 +68,29 @@ void	remove_quotes(t_token **tokens)
 		// }
 		if (current->type == S_QUOTE || current->type == D_QUOTE)
 		{
-			tmp = current->next;
-			remove_token(tokens, current);
-			current = tmp;
+			if (current->prev && current->next && current->prev->type == WORD
+				&& current->next->type == WORD)
+			{
+				value = ft_strjoin(current->prev->value, current->next->value);
+				current->prev->value = value;
+				gc_add(g_minishell, value);
+				tmp = current->next->next;
+				remove_token(tokens, current);
+				remove_token(tokens, current->next);
+				current = tmp;
+				if (current->type == D_QUOTE || current->type == S_QUOTE)
+				{
+					tmp = current->next;
+					remove_token(tokens, current);
+					current = tmp;
+				}
+			}
+			else
+			{
+				tmp = current->next;
+				remove_token(tokens, current);
+				current = tmp;
+			}
 		}
 		else
 			current = current->next;

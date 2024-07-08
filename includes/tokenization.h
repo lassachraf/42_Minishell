@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 16:37:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:00:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef enum e_type
 	DOLLAR,
 	AMPERSAND,
 	WHITESPACE,
+	WORD_QUOTE,
 	ERROR
 }					t_type;
 
@@ -49,14 +50,12 @@ typedef struct s_token
 /* Function that checks if the character is either 
 a single quote or a double quote. */
 int					is_special(char c);
+
 // Function that checks if the character is a separator.
 int					is_separator(char *s);
+
 // Function that skips the whitespaces.
 void				skip_spaces(char **line);
-// Function that skips the quotes.
-bool				skip_quotes(char *line, size_t *i);
-// Function that prints in case of error.
-void				print_quote_err(char c);
 
 /* Helpers */
 // Function that create and return a new token node.
