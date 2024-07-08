@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/03 18:42:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/07 11:31:35 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	set_env_var(t_env *env, char *var, char *new)
 
 char	*get_env_var(t_env *env, char *var)
 {
-	if (!ft_strncmp(var, "\0", 1))
+	if (!var)
 		return (NULL);
 	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
 		env = env->next;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/05 15:29:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/07 13:52:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,47 +50,48 @@ void	printAST(t_node *node, int x, t_type type)
 {
 	t_type	tmp;
 	t_redir	*new;
+	t_node	*temp = node;
 
-	if (!node)
+	if (!temp)
 		return ;
 	tmp = ERROR;
-	if (node->type == STRING_NODE)
+	if (temp->type == STRING_NODE)
 	{
 		print_root(type, x);
-		while (node->data.cmd)
+		while (temp->data.cmd)
 		{
-			printf("'%s' ", (char *)node->data.cmd->content);
-			node->data.cmd = node->data.cmd->next;
+			printf("'%s' ", (char *)temp->data.cmd->content);
+			temp->data.cmd = temp->data.cmd->next;
 		}
 		printf("\n");
 	}
-	else if (node->type == PAIR_NODE)
+	else if (temp->type == PAIR_NODE)
 	{
 		print_root(type, x);
-		if (node->data.pair.type == PIPE)
+		if (temp->data.pair.type == PIPE)
 		{
 			printf("\n*** PIPE ***\n");
 			tmp = PIPE;
 		}
-		else if (node->data.pair.type == OR)
+		else if (temp->data.pair.type == OR)
 		{
 			printf("\n*** OR ***\n");
 			tmp = OR;
 		}
-		else if (node->data.pair.type == AND)
+		else if (temp->data.pair.type == AND)
 		{
 			printf("\n*** AND ***\n");
 			tmp = AND;
 		}
-		else if (node->data.pair.type == L_PAREN)
+		else if (temp->data.pair.type == L_PAREN)
 		{
 			printf("L_PAREN\n");
 			tmp = L_PAREN;
 		}
 		// if(node->data.pair.type <= 3)
 		// {
-		printAST(node->data.pair.left, 1, tmp);
-		printAST(node->data.pair.right, 0, tmp);
+		printAST(temp->data.pair.left, 1, tmp);
+		printAST(temp->data.pair.right, 0, tmp);
 		// }
 		// else
 		// {
@@ -98,12 +99,12 @@ void	printAST(t_node *node, int x, t_type type)
 		//     printAST(node->data.pair.right, 0 , tmp);
 		// }
 	}
-	else if (node->type == REDIR_NODE)
+	else if (temp->type == REDIR_NODE)
 	{
 		print_root(type, x);
-		while (node->data.redir)
+		while (temp->data.redir)
 		{
-			new = node->data.redir->content;
+			new = temp->data.redir->content;
 			printf("REDIR NODE , name: '%s'\n", new->file);
 			while (new->cmd)
 			{
@@ -111,12 +112,12 @@ void	printAST(t_node *node, int x, t_type type)
 				new->cmd = new->cmd->next;
 			}
 			printf("\n");
-			node->data.redir = node->data.redir->next;
+			temp->data.redir = temp->data.redir->next;
 		}
 	}
-	else if (node->type == ERROR_NODE)
+	else if (temp->type == ERROR_NODE)
 	{
-		printf("add '%p', -ERROR -------> '%s", node, node->data.error);
+		printf("add '%p', -ERROR -------> '%s", temp, temp->data.error);
 	}
 }
 
@@ -193,7 +194,10 @@ void	ft_readline()
 		exit(exit_status);
 	}
 	if (g_minishell->line[0])
+	{
 		add_history(g_minishell->line);
+		set_env_var(g_minishell->our_env, "_", g_minishell->line);
+	}
 }
 
 int	main(int ac, char **av, char **env)

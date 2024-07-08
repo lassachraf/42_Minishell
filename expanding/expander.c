@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/06 20:44:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:19:29 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,36 +141,59 @@ int	ft_count_words(char const *s, char c)
 	return (words);
 }
 
-char	*handle_space(char *value, char *new_value)
+void add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
 {
-	char	*new_one;
-	int		len;
+    if (!tokens || !new_token)
+	{
+        return ;
+	}
+	// printf("** About to add : first step done **\n");
+    if (prev_token == NULL)
+    {
+        new_token->next = *tokens;
+        if (*tokens)
+            (*tokens)->prev = new_token;
+        *tokens = new_token;
+        return;
+    }
+    new_token->prev = prev_token;
+    new_token->next = prev_token->next;
+    if (prev_token->next)
+        prev_token->next->prev = new_token;
+    prev_token->next = new_token;
+	// printf("*** Added Succesfully ***\n");
+	// print_tokens(*tokens);
+}
+
+void	handle_space(t_token *tokens, char *new_value)
+{
+	t_token	*current;
 	int		i;
 	int		j;
 
+	current = tokens;
+	if (ft_count_words(new_value, ' ') < 2)
+	{
+		tokens->value = new_value;
+		return ;
+	}
 	i = 0;
-	j = 0;
-	(void)value;
-	len = (ft_count_words(new_value, ' ') * 2) + ft_strlen(new_value);
-	new_one = malloc(sizeof(char) * (len + 1));
-	if (!new_one)
-		return (NULL);
-	gc_add(g_minishell, new_one);
+	remove_token(&g_minishell->tokens, current);
 	while (new_value[i])
 	{
-		if (ft_isalpha(new_value[i]) && !ft_strncmp(&new_value[i], "-", 1))
+		if (!ft_isspace(new_value[i]))
 		{
-			new_one[j++] = '"';
+			j = i;
 			while (new_value[i] && !ft_isspace(new_value[i]))
-				new_one[j++] = new_value[i++];
-			new_one[j++] = '"';
+				i++;
+			char *chunk = ft_substr(new_value, j, (i - j));
+			t_token *new_tok = new_token(chunk, WORD);
+			add_token_middle(&g_minishell->tokens, new_tok, current->prev);
+			current = new_tok->next;
 		}
 		else
-			new_one[j++] = new_value[i++];
+			i++;
 	}
-	new_one[j] = '\0';
-	printf("new value is => '%s'\n", new_one);
-	return (new_one);
 }
 
 t_token	*helper(t_token *tokens)
@@ -185,32 +208,30 @@ t_token	*helper(t_token *tokens)
 	{
 		g_minishell->dq_flag = 1;
 		new_value = helper_expander(tokens->value);
-		if (contains_space(new_value))
-			tokens->value = handle_space(tokens->value, new_value);
-		else if (new_value)
-			tokens->value = new_value;
-		else if (!new_value)
+		if (!new_value)
 		{
 			tmp = tokens->next;
 			remove_token(&g_minishell->tokens, tokens);
 			return (tmp);
 		}
-		printf("*** new_value >>>> `%s` ***\n", tokens->value);
+		else if (contains_space(new_value))
+			handle_space(tokens, new_value);
+		else if (new_value)
+			tokens->value = new_value;
 	}
 	else
 	{
 		new_value = helper_expander(tokens->value);
-		if (contains_space(new_value))
-			tokens->value = handle_space(tokens->value, new_value);
-		else if (new_value)
-			tokens->value = new_value;
-		else if (!new_value)
+		if (!new_value)
 		{
 			tmp = tokens->next;
 			remove_token(&g_minishell->tokens, tokens);
 			return (tmp);
 		}
-		printf("*** new_value >>>> `%s` ***\n", tokens->value);
+		else if (contains_space(new_value))
+			handle_space(tokens, new_value);
+		else if (new_value)
+			tokens->value = new_value;
 	}
 	return (tokens->next);
 }
@@ -232,9 +253,9 @@ void	expanding(void)
 		else if (tokens->type == ASTERISK)
 			asterisk_expand(tokens);
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
-		    tokens = helper(tokens);
-        else
-            tokens = tokens->next;
+			tokens = helper(tokens);
+		else
+			tokens = tokens->next;
 	}
 }
 

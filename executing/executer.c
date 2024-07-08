@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/05 15:28:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:32:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,22 +190,26 @@ int	check_cmd(char *argv, char **env)
 
     check = 0;
 	cmd = get_fullpath(argv, env);
-	if (!cmd && *argv == '.')
+	if (!cmd && *argv == '.') // ./
 		cmd = get_command(argv);
-	if (*argv != '\0' && (*argv == '/' || *argv == '.')
-		&& access(cmd, F_OK))
+	if (*argv != '\0' && (*argv == '/' || *argv == '.') && access(cmd, F_OK))
 	{
-		print_err("badashell: no such file or directory:", argv);
+		print_err("badashell$ : No such file or directory : ", argv);
 		check = 127;
+	}
+	else if(access(cmd, F_OK) && argv[ft_strlen(argv) - 1] == '/')
+	{
+		print_err("badashell$ : Is a directory : ", argv);
+		check = 126;
 	}
 	else if (*argv != '\0' && access(cmd, F_OK))
 	{
-		print_err("badashell: command not found: ", argv);
+		print_err("badashell$ : Command not found : ", argv);
 		check = 127;
 	}
 	else if (*argv != '\0' && access(cmd, X_OK))
 	{
-		print_err("badashell: permission denied: ", argv);
+		print_err("badashell$ : Permission denied : ", argv);
 		check = 126;
 	}
 	free(cmd);
@@ -219,7 +223,8 @@ void	call_execev(char **env, char *argv , char **cmd)
 	check_split(cmd, argv);
 	founded_path = get_fullpath(argv, env);
 	execve(founded_path, cmd, env);
-	print_err("execve failed !!\n", NULL);
+	// $PWD :: Should be fixed !
+	print_err("WHATTT!!! Execve failed !!\n", NULL);
 }
 
 int	ft_malloc_error(char **tab, size_t i)

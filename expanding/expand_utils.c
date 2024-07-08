@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/06 19:59:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/07 11:13:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,16 @@ void	remove_quotes(t_token **tokens)
 	current = *tokens;
 	while (current)
 	{
-		if (current->prev && current->next &&
-			special_case(current->prev->type, current->type, current->next->type))
-		{
-			tmp = current->next;
-			remove_token(tokens, current);
-			current = tmp;
-			replace(current);
-			current = current->next;
-		}
-		else if (current->type == S_QUOTE || current->type == D_QUOTE)
+		// if (current->prev && current->next &&
+		// 	special_case(current->prev->type, current->type, current->next->type))
+		// {
+		// 	tmp = current->next;
+		// 	remove_token(tokens, current);
+		// 	current = tmp;
+		// 	replace(current);
+		// 	current = current->next;
+		// }
+		if (current->type == S_QUOTE || current->type == D_QUOTE)
 		{
 			tmp = current->next;
 			remove_token(tokens, current);
@@ -98,4 +98,5 @@ void	remove_whitespace(t_token **tokens)
 void	post_expander(void)
 {
 	remove_quotes(&g_minishell->tokens);
+	// print_tokens(g_minishell->tokens);
 }

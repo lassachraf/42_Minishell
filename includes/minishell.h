@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/05 15:31:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 10:20:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	increment_shlvl();
 int		get_exit_status();
 char	**env_to_envp(t_env *env);
 int		here_doc(char *limiter);
-char **list_to_argv(t_list *list);
+char	**list_to_argv(t_list *list);
+void	printAST(t_node *node, int x, t_type type);
 
 /* Builtins */
 
@@ -105,9 +106,6 @@ void				print_env(t_env *env);
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
 
-// Function to fill up the duplicated environment.
-void				fill_dup(t_env *env, t_env *new_node, t_env *head, t_env *current);
-
 // Fuction that duplcate the environment for export.
 t_env				*new_dup(t_env *env);
 
@@ -116,7 +114,6 @@ t_env				*sort_env(t_env *env);
 
 // Function that free the split.
 void				free_split(char **s);
-
 
 // Setters.c
 
