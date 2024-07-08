@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/07 13:52:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:47:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,15 +155,16 @@ int	init_minishell(char **env)
 	g_minishell->dq_flag = 0;
 	g_minishell->gc = NULL;
 	g_minishell->stdin = dup(0);
-	g_minishell->stdout = dup(1); 
+	g_minishell->stdout = dup(1);
 	g_minishell->our_env = dup_env(env);
-	if (!g_minishell->our_env)
-		return (print_errors("dup_env failed !"), 0);
-	increment_shlvl();
-	add_env_var(g_minishell->our_env, "?", "0");
-	set_as_invisible(g_minishell->our_env, "?");
-	set_as_unexported(g_minishell->our_env, "?");
-	set_as_unexported(g_minishell->our_env, "_");
+	if (g_minishell->our_env)
+	{
+		increment_shlvl();
+		add_env_var(g_minishell->our_env, "?", "0");
+		set_as_invisible(g_minishell->our_env, "?");
+		set_as_unexported(g_minishell->our_env, "?");
+		set_as_unexported(g_minishell->our_env, "_");
+	}
 	signals();
 	return (1);
 }
@@ -181,12 +182,14 @@ int	get_exit_status()
 void	ft_readline()
 {
 	int	exit_status;
-	
+
+	exit_status = 0;
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
 	if (!g_minishell->line)
 	{
-		exit_status = get_exit_status();
+		if (g_minishell->our_env)
+			exit_status = get_exit_status();
 		ft_putstr_fd("exit\n", 1);
 		clear_env(g_minishell->our_env);
 		gc_free_all(g_minishell);

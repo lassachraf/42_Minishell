@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:23:51 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/04 17:04:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:45:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 void	ft_pwd(t_env *env)
 {
+	char	*cwd;
+
+	cwd = NULL;
 	if (!get_env_var(env, "PWD"))
 	{
-		printf("%s\n", getcwd(NULL, 0));
+		cwd = getcwd(NULL, 0);
+		gc_add(g_minishell, cwd);
+		printf("%s\n", cwd);
 		return ;
 	}
 	printf("%s\n", get_env_var(env, "PWD"));
