@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 17:43:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 09:36:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ t_env	*dup_env(char **env)
 
 	head = NULL;
 	current = NULL;
-	i = 0;
-	while (env[i])
+	i = -1;
+	while (env[++i])
 	{
 		new_node = (t_env *)malloc(sizeof(t_env));
 		if (!new_node)
@@ -74,7 +74,33 @@ t_env	*dup_env(char **env)
 		else
 			current->next = new_node;
 		current = new_node;
-		i++;
 	}
+	return (head);
+}
+
+t_env	*special_dup_env(void)
+{
+	t_env	*head;
+	t_env	*pwd;
+	t_env	*shlvl;
+	t_env	*underscore;
+	char	*cwd;
+
+	head = NULL;
+	cwd = getcwd(NULL, 0);
+	gc_add(g_minishell, cwd);
+	pwd = (t_env *)malloc(sizeof(t_env));
+	shlvl = (t_env *)malloc(sizeof(t_env));
+	underscore = (t_env *)malloc(sizeof(t_env));
+	if (!pwd || !shlvl || !underscore)
+		return (NULL);
+	pwd->key = ft_strdup("PWD");
+	pwd->value = ft_strdup(cwd);
+	pwd->visible = true;
+	pwd->export = true;
+	pwd->next = NULL;
+	head = pwd;
+	add_env_var(head, "SHLVL", "1");
+	add_env_var(head, "_", "/usr/bin/env");
 	return (head);
 }
