@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 20:47:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:16:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,8 @@ void	increment_shlvl()
 	int		tmp;
 
 	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
+	if (!shlvl)
+		return ;
 	tmp = ft_atoi(shlvl) + 1;
 	new_shlvl = ft_itoa(tmp);
 	gc_add(g_minishell, new_shlvl);
@@ -156,17 +158,22 @@ int	init_minishell(char **env)
 	g_minishell->gc = NULL;
 	g_minishell->stdin = dup(0);
 	g_minishell->stdout = dup(1);
-	g_minishell->our_env = dup_env(env);
-	if (g_minishell->our_env)
+	g_minishell->our_env = NULL;
+	if (env && *env)
 	{
+		g_minishell->our_env = dup_env(env);
 		increment_shlvl();
-		add_env_var(g_minishell->our_env, "?", "0");
-		set_as_invisible(g_minishell->our_env, "?");
-		set_as_unexported(g_minishell->our_env, "?");
-		set_as_unexported(g_minishell->our_env, "_");
 	}
-	signals();
-	return (1);
+	else
+	{
+		g_minishell->our_env = special_dup_env();
+		ft_env(g_minishell->our_env);
+	}
+	add_env_var(g_minishell->our_env, "?", "0");
+	set_as_invisible(g_minishell->our_env, "?");
+	set_as_unexported(g_minishell->our_env, "?");
+	set_as_unexported(g_minishell->our_env, "_");
+	return (signals(), 1);
 }
 
 int	get_exit_status()
@@ -199,7 +206,6 @@ void	ft_readline()
 	if (g_minishell->line[0])
 	{
 		add_history(g_minishell->line);
-		set_env_var(g_minishell->our_env, "_", g_minishell->line);
 	}
 }
 
