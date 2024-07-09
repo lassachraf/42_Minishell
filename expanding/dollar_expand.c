@@ -6,11 +6,40 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 10:23:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:41:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	handle_cases(char *expand, int *i, int *j, int *len)
+{
+	if (!ft_strncmp(expand, "\0", 1))
+	{
+		(*i) += 1;
+		return ((*len) += 1, -1);
+	}
+	else if (!ft_strncmp(expand, "?", 1) || !ft_strncmp(expand, "_", 1))
+		*j = 1;
+	else if (!ft_strncmp(expand, "$", 1) || ft_isspace(*expand)
+		|| !ft_isalnum(*expand)
+		|| (!ft_isalnum(*expand) && ft_strncmp(expand, "_", 1)))
+	{
+		(*i) += 2;
+		return ((*len) += 2, -1);
+	}
+	else
+	{
+		while (expand[*j])
+		{
+			if (ft_isalnum(expand[*j]) || !ft_strncmp(&expand[*j], "_", 1))
+				(*j)++;
+			else
+				break ;
+		}
+	}
+	return (0);
+}
 
 void	handle_dollar(char *s, int *i, int *len)
 {
@@ -22,30 +51,8 @@ void	handle_dollar(char *s, int *i, int *len)
 	expand = s + *i;
 	j = 0;
 	expand++;
-	if (!ft_strncmp(expand, "\0", 1))
-	{
-		*i += 1;
-		(*len) += 1;
+	if (handle_cases(expand, i, &j, len) == -1)
 		return ;
-	}
-	else if (!ft_strncmp(expand, "?", 1) || !ft_strncmp(expand, "_", 1))
-		j = 1;
-	else if (!ft_strncmp(expand, "$", 1) || ft_isspace(*expand) || !ft_isalnum(*expand) || (!ft_isalnum(*expand) && ft_strncmp(expand, "_", 1)))
-	{
-		*i += 2;
-		(*len) += 2;
-		return ;
-	}
-	else
-	{
-		while (expand[j])
-		{
-			if (ft_isalnum(expand[j]) || !ft_strncmp(&expand[j], "_", 1))
-				j++;
-			else
-				break ;
-		}
-	}
 	var = ft_substr(expand, 0, j);
 	env_len = check_env(var);
 	free(var);

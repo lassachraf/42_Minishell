@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 17:17:35 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 13:10:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	special_case(t_type prev_type, t_type curr_type, t_type next_type)
 {
 	if ((curr_type == S_QUOTE || curr_type == D_QUOTE) && curr_type == next_type)
 	{
-		// "ls" "-la"
 		if (prev_type == WORD)
 			return (0);
 		else
