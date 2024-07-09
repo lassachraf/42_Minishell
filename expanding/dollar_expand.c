@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/24 15:33:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:23:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handle_dollar(char *s, int *i, int *len)
 		(*len) += 1;
 		return ;
 	}
-	else if (!ft_strncmp(expand, "?", 1))
+	else if (!ft_strncmp(expand, "?", 1) || !ft_strncmp(expand, "_", 1))
 		j = 1;
 	else if (!ft_strncmp(expand, "$", 1) || ft_isspace(*expand) || !ft_isalnum(*expand) || (!ft_isalnum(*expand) && ft_strncmp(expand, "_", 1)))
 	{

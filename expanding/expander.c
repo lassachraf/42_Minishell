@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/07 12:19:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:39:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 		new[(*j)++] = s[(*i)++];
 		return ;
 	}
-	else if (!ft_strncmp(&expand[1], "?", 1))
+	else if (!ft_strncmp(&expand[1], "?", 1) || !ft_strncmp(&expand[1], "_", 1))
 	{
 		k = 1;	
 		expand++;
@@ -147,7 +147,6 @@ void add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
 	{
         return ;
 	}
-	// printf("** About to add : first step done **\n");
     if (prev_token == NULL)
     {
         new_token->next = *tokens;
@@ -161,8 +160,6 @@ void add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
     if (prev_token->next)
         prev_token->next->prev = new_token;
     prev_token->next = new_token;
-	// printf("*** Added Succesfully ***\n");
-	// print_tokens(*tokens);
 }
 
 void	handle_space(t_token *tokens, char *new_value)

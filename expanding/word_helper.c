@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/14 15:05:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:39:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ char	*get_var(char *s, int *i)
 				|| !ft_strncmp(&expand[j], "_", 1)))
 			j++;
 	var = ft_substr(expand, 0, j);
-	printf("var::: `%s`, j::: `%d`\n", var, j);
 	*i += j + 1;
 	value = get_env_var(g_minishell->our_env, var);
-	free(var);
 	if (value)
-		return (value);
+		return (free(var), value);
 	else
-		return (NULL);
+		return (free(var), NULL);
 }
 
 int	check_env(char *var)
@@ -47,7 +45,9 @@ int	check_env(char *var)
 	if (!var)
 		return (-1);
 	if (!get_env_var(g_minishell->our_env, var))
+	{
 		return (-1);
+	}
 	else
 		return (ft_strlen(get_env_var(g_minishell->our_env, var)));
 }
