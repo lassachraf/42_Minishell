@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:26:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:18:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:51:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,19 +128,3 @@ int	here_doc(char *limiter)
 	}
 	return(-1);
 }
-// void	signal_rr(int s)
-// {
-// 	if (s == SIGINT)
-// 	{
-// 		printf("dd\n");
-// 		exit(130);
-// 	}
-// }
-
-// void	signal_rr_oo(int s)
-// {
-// 	if (s == SIGINT)
-// 	{
-// 		printf("\n");
-// 	}
-// }

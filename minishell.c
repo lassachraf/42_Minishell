@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 10:16:55 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 13:28:34 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,11 +154,10 @@ int	init_minishell(char **env)
 	g_minishell = malloc(sizeof(t_minishell));
 	if (!g_minishell)
 		return (0);
-	g_minishell->dq_flag = 0;
 	g_minishell->gc = NULL;
+	g_minishell->dq_flag = 0;
 	g_minishell->stdin = dup(0);
 	g_minishell->stdout = dup(1);
-	g_minishell->our_env = NULL;
 	if (env && *env)
 	{
 		g_minishell->our_env = dup_env(env);
@@ -172,6 +171,7 @@ int	init_minishell(char **env)
 	add_env_var(g_minishell->our_env, "?", "0");
 	set_as_invisible(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "?");
+	set_env_var(g_minishell->our_env, "_", "]");
 	set_as_unexported(g_minishell->our_env, "_");
 	return (signals(), 1);
 }

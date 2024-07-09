@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:43:25 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/07 12:44:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 13:09:16 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	needle_len = strlen(needle);
 	haystack_len = strlen(haystack);
 	if (needle_len == 0)
-		return (char *)haystack;
+		return ((char *)haystack);
 	while (*haystack && (haystack + needle_len <= haystack + haystack_len))
 	{
 		if (strncmp(haystack, needle, needle_len) == 0)
-			return (char *)haystack;
+			return ((char *)haystack);
 		haystack++;
 	}
 	return (NULL);
