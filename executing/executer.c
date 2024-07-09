@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/08 19:05:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:34:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -483,6 +483,7 @@ void	executer(t_node *node)
 		return ;
 	if (node->type == STRING_NODE)
 	{
+		set_env_var(g_minishell->our_env, "_", (char *)ft_lstlast(node->data.cmd)->content);
 		if (ft_is_builtin(node->data.cmd->content))
 			execute_builtins(g_minishell, list_to_argv(node->data.cmd));
 		else
