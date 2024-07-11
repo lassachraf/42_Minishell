@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 09:35:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:49:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int		here_doc(char *limiter);
 char	**list_to_argv(t_list *list);
 void	printAST(t_node *node, int x, t_type type);
 t_env	*special_dup_env(void);
+char	*custome_path(char *path);
 
 /* Builtins */
 

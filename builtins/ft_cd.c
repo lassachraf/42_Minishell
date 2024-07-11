@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/06 14:22:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:51:02 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ void	ft_cd(t_minishell *mini, char *path)
 {
 	char	*cwd;
 
-	if (path && ft_strchr(path, '~'))
-		path = custome_path(path);
 	if (!path)
 	{
 		cd_home(mini);

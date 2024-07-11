@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 10:39:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:50:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,8 +247,16 @@ void	expanding(void)
 			while (tokens && tokens->type != S_QUOTE)
 				tokens = tokens->next;
 		}
-		else if (tokens->type == ASTERISK)
-			asterisk_expand(tokens);
+		else if (tokens->type == WORD && ft_strchr(tokens->value, '~'))
+			tokens->value = custome_path(tokens->value);
+		else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
+		{
+			// if there quotes before, no expand should be done.
+
+			// printf("** Should expand the asterisk **\n");
+			// asterisk_expand(tokens);
+			tokens = tokens->next;
+		}
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
 			tokens = helper(tokens);
 		else

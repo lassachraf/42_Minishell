@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:38:55 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/06 10:50:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:06:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_special(char c)
 {
-	return (c == '*' || c == '&' || c == '\'' || c == '"');
+	return (c == '\'' || c == '"');
 }
 
 int	is_separator(char *s)

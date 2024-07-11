@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 13:28:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:32:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,9 +204,7 @@ void	ft_readline()
 		exit(exit_status);
 	}
 	if (g_minishell->line[0])
-	{
 		add_history(g_minishell->line);
-	}
 }
 
 int	main(int ac, char **av, char **env)
