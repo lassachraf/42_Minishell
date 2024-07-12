@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 16:34:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:36:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,20 +104,18 @@ void				execute_builtins(t_minishell *mini, char **args);
 // Function that checks if the command is a builtin or not.
 bool				ft_is_builtin(char *arg);
 
-// Function that print the export. 
+// Fuction that duplcate the environment for export.
+t_env				*new_dup(t_env *env);
+
+// Function that print the export.
 void				print_env(t_env *env);
+
+// Function that sort the env to be set to export.
+t_env				*sort_env(t_env *env);
 
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
 
-// Fuction that duplcate the environment for export.
-t_env				*new_dup(t_env *env);
-
-// Function that sort the environment "ASCII SORT".
-t_env				*sort_env(t_env *env);
-
-// Function that free the split.
-void				free_split(char **s);
 
 // Setters.c
 
