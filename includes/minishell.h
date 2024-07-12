@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/11 21:49:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:34:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "execution.h"
@@ -70,6 +71,7 @@ char	**list_to_argv(t_list *list);
 void	printAST(t_node *node, int x, t_type type);
 t_env	*special_dup_env(void);
 char	*custome_path(char *path);
+void	add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token);
 
 /* Builtins */
 
@@ -189,10 +191,10 @@ void				post_expander(void);
 void				handle_dollar(char *s, int *i, int *len);
 
 // Function that expand the asterisk.
-void				asterisk_expand(t_token *token);
+void				asterisk_expand(t_token **tokens, t_token *curr);
 
 // Function that help processing the files from directory stream.
-void				process_files(DIR *dir, char **result, const char *pattern);
+void				process_files(t_token **tokens, t_token *prev, char *pattern);
 
 // Function that help processing the directories.
 void				process_dirs(DIR *dir, char **result, const char *pattern);
@@ -292,20 +294,6 @@ int					check_right_parenthesis(t_token *token);
 
 // Function that prints errors.
 void				print_errors(char *message);
-
-/* Tokenization */
-
-// The main function that tokenizes the input string.
-t_token				*tokenizer(void);
-
-// Function that specifie the the type of the token.
-t_token				*choose_token(char *value, char c);
-
-// Function that append quote token to the list of token.
-int					add_quote(t_token **tokens, char **line);
-
-// Function that return if the character is a quote or not.
-int					is_quote(char c);
 
 /* Debugging ones */
 void				print_tokens(t_token *token);

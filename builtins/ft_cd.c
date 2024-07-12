@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/11 21:51:02 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 09:08:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*custome_path(char *path)
 	new_path = malloc(sizeof(char) * (ft_strlen(home) + ft_strlen(path)));
 	if (!new_path)
 		print_errors("Allocation failed !");
+	gc_add(g_minishell, new_path);
 	if (!ft_strncmp(path, "~", 1))
 	{
 		i = -1;
@@ -53,7 +54,6 @@ char	*custome_path(char *path)
 			new_path[i++] = path[j];
 		new_path[i] = 0;
 	}
-	gc_add(g_minishell, new_path);
 	return (new_path);
 }
 

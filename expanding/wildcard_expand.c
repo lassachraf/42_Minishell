@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 13:20:48 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:32:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,24 +111,22 @@ void	sort_strings(char **strings, size_t count)
 	}
 }
 
-void	asterisk_expand(t_token *token)
+void asterisk_expand(t_token **tokens, t_token *curr)
 {
-	DIR		*dir;
-	char	*result;
+    DIR				*dir;
+    struct dirent	*entry;
 
-	result = NULL;
 	dir = opendir(".");
-	if (!dir)
-		return ;
-	process_files(dir, &result, token->value);
-	dir = opendir(".");
-	if (!dir)
-		return ;
-	process_dirs(dir, &result, token->value);
-	if (result)
+    if (!dir)
 	{
-		free(token->value);
-		token->value = result;
-		token->type = WORD;
+        return ;
 	}
+	entry = readdir(dir);
+    while (entry)
+	{
+        if (entry->d_name[0] != '.' && match_pattern(curr->value, entry->d_name))
+            add_token_middle(tokens, new_token(ft_strdup(entry->d_name), WORD), curr->prev);
+		entry = readdir(dir);
+    }
+    closedir(dir);
 }

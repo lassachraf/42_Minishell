@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:13:52 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 19:04:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 10:58:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	syntax(void)
 {
 	t_token	*token;
 
-	remove_whitespace(&g_minishell->tokens);
+	remove_whitespaces(&g_minishell->tokens);
 	token = g_minishell->tokens;
 	while (token)
 	{

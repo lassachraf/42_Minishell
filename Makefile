@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/04 17:29:11 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/12 15:24:16 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ SIGNALS			:=	signals/handle_signals.c
 TOKENIZING		:=	tokenizing/tokenizer.c				\
 					tokenizing/tokenizer_utils.c		\
 					tokenizing/tokenizer_helpers.c		\
+					tokenizing/tokens_helpers.c			\
 					tokenizing/tokenizer_free.c
 
 SRCS			:=	$(BUILTINS)							\

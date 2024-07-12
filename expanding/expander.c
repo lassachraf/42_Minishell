@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/11 21:50:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:09:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	ft_count_words(char const *s, char c)
 	return (words);
 }
 
-void add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
+void	add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
 {
     if (!tokens || !new_token)
 	{
@@ -193,9 +193,24 @@ void	handle_space(t_token *tokens, char *new_value)
 	}
 }
 
-t_token	*helper(t_token *tokens)
+void	check_for_value(t_token **tokens, char *new)
 {
 	t_token	*tmp;
+
+	if (!new)
+	{
+		tmp = (*tokens)->next;
+		remove_token(&g_minishell->tokens, (*tokens));
+		(*tokens) = tmp;
+	}
+	else if (contains_space(new))
+		handle_space(*tokens, new);
+	else
+		(*tokens)->value = new;
+}
+
+t_token	*word_helper(t_token *tokens)
+{
 	char	*new_value;
 
 	new_value = NULL;
@@ -205,30 +220,12 @@ t_token	*helper(t_token *tokens)
 	{
 		g_minishell->dq_flag = 1;
 		new_value = helper_expander(tokens->value);
-		if (!new_value)
-		{
-			tmp = tokens->next;
-			remove_token(&g_minishell->tokens, tokens);
-			return (tmp);
-		}
-		else if (contains_space(new_value))
-			handle_space(tokens, new_value);
-		else if (new_value)
-			tokens->value = new_value;
+		check_for_value(&tokens, new_value);
 	}
 	else
 	{
 		new_value = helper_expander(tokens->value);
-		if (!new_value)
-		{
-			tmp = tokens->next;
-			remove_token(&g_minishell->tokens, tokens);
-			return (tmp);
-		}
-		else if (contains_space(new_value))
-			handle_space(tokens, new_value);
-		else if (new_value)
-			tokens->value = new_value;
+		check_for_value(&tokens, new_value);
 	}
 	return (tokens->next);
 }
@@ -251,14 +248,12 @@ void	expanding(void)
 			tokens->value = custome_path(tokens->value);
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
 		{
-			// if there quotes before, no expand should be done.
-
-			// printf("** Should expand the asterisk **\n");
-			// asterisk_expand(tokens);
+			if (!(tokens->prev && (tokens->prev->type == S_QUOTE || tokens->prev->type == D_QUOTE)))
+				asterisk_expand(&g_minishell->tokens, tokens);
 			tokens = tokens->next;
 		}
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
-			tokens = helper(tokens);
+			tokens = word_helper(tokens);
 		else
 			tokens = tokens->next;
 	}
@@ -267,5 +262,5 @@ void	expanding(void)
 void	expander(void)
 {
 	expanding();
-	post_expander();
+	remove_quotes(&g_minishell->tokens);
 }

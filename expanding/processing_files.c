@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 09:37:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/23 11:23:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:03:05 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,66 +39,63 @@ size_t	count_files(DIR *dir, const char *pattern)
 void	get_files(DIR *dir, struct dirent *entry, char **file_list,
 		const char *pattern)
 {
-	DIR		*subdir;
 	size_t	i;
 
 	i = 0;
+	(void)dir;
 	while (entry)
 	{
 		if (entry->d_name[0] != '.' && match_pattern(pattern, entry->d_name))
 		{
-			subdir = opendir(entry->d_name);
-			if (!subdir)
-			{
-				file_list[i] = strdup(entry->d_name);
-				i++;
-			}
-			else
-				closedir(subdir);
+			file_list[i] = strdup(entry->d_name);
+			i++;
 		}
-		entry = readdir(dir);
+		entry = readdir(dir);	
+	}
+	if (!file_list)
+	{
+		printf("NULLLLLLLLLLLLL\n");
+		return ;
+	}
+	i = 0;
+	while (file_list[i])
+	{
+		printf("** `%zu` >> `%s` **\n", i, file_list[i]);
+		i++;
 	}
 }
 
-void	append_files(char **result, char **file_list, int file_count)
+void	append_files(t_token **tokens, t_token *prev, char **file_list, int file_count)
 {
-	int	file_per_line_count;
 	int	i;
 
-	file_per_line_count = 0;
 	i = 0;
 	while (i < file_count)
 	{
-		append_to_result(result, file_list[i], 0);
-		file_per_line_count++;
-		if (i + 1 < file_count && file_per_line_count >= MAX_FILES_PER_LINE)
-		{
-			append_to_result(result, "", 1);
-			file_per_line_count = 0;
-		}
+		add_token_middle(tokens, new_token(file_list[i], WORD), prev);
 		free(file_list[i]);
 		i++;
 	}
-	append_to_result(result, "", 1);
 	free(file_list);
 }
 
-void	process_files(DIR *dir, char **result, const char *pattern)
+void	process_files(t_token **tokens, t_token *prev, char *pattern)
 {
+	DIR				*dir;
 	struct dirent	*entry;
-	char			**file_list;
-	size_t			file_count;
+	char			**file_list = NULL;
+	int				file_count;
+	int				i;
 
-	file_count = count_files(dir, pattern);
 	dir = opendir(".");
 	if (!dir)
 		return ;
-	file_list = malloc(sizeof(char *) * file_count);
-	if (!file_list)
-		return ;
+	file_count = count_files(dir, pattern);
 	entry = readdir(dir);
+	i = 0;
 	get_files(dir, entry, file_list, pattern);
 	sort_strings(file_list, file_count);
-	append_files(result, file_list, file_count);
+	append_files(tokens, prev, file_list, file_count);
 	closedir(dir);
+	print_tokens(*tokens);
 }
