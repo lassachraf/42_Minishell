@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/04 22:30:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:18:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	nb_options(char **args)
 int	builtins_exec_check(char **args)
 {
 	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1
-		|| !nb_options(args)))
+			|| !nb_options(args)))
 	{
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("badashell$ : env: can't run it with ", 2);
@@ -53,7 +53,7 @@ int	builtins_exec_check(char **args)
 		return (1);
 	}
 	if ((!ft_strcmp(args[0], "export") || !ft_strcmp(args[0], "exit")
-		|| !ft_strcmp(args[0], "unset")) && nb_options(args) == 0)
+			|| !ft_strcmp(args[0], "unset")) && nb_options(args) == 0)
 	{
 		ft_putstr_fd(RED "badashell$ : ", 2);
 		ft_putstr_fd(args[0], 2);
