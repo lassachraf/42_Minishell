@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:22:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/25 10:57:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:52:02 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,4 @@ void	gc_free_all(t_minishell *mini)
 	}
 	mini->gc = NULL;
 }
+
