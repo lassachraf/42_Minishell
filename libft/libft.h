@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:11:04 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/07 12:45:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:24:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char				*ft_strdup(const char *s1);
 int					ft_isspace(char c);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strstr(const char *haystack, const char *needle);
+char				*ft_strncpy(char *dest, char *src, unsigned int n);
 
 // Additional PART :)
 
