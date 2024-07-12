@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 17:32:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:03:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,5 @@ void asterisk_expand(t_token **tokens, t_token *curr)
 		entry = readdir(dir);
     }
     closedir(dir);
+	remove_token(tokens, curr);
 }
