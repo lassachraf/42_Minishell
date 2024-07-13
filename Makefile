@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/12 18:13:50 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/12 20:14:38 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,6 @@ BUILTINS		:=	builtins/ft_env.c 					\
 					builtins/ft_pwd.c 					\
 					builtins/ft_unset.c					\
 					builtins/setters.c
-
-CLEANING		:=	cleaning/clean.c
 
 ENVIRONMENT		:=	environment/env_utils.c				\
 					environment/env_helpers.c

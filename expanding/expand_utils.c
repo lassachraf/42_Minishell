@@ -6,9 +6,8 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:33:35 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 11:06:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:14:09 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-

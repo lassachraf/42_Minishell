@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 10:57:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:16:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_token
 
 /* Tokenizer_utils */
 
-// Function that checks if the character is either a single quote or a double quote.
+// Function that checks if the character is a quote.
 int					is_special(char c);
 
 // Function that checks if the character is a separator.
@@ -67,7 +67,8 @@ t_token				*new_token(char *value, t_type type);
 void				add_token_back(t_token **tokens, t_token *new_token);
 
 // Function that append the separator to the list of tokens.
-int					append_separator(t_token **tokens, char **line, t_type type);
+int					append_separator(t_token **tokens, char **line,
+						t_type type);
 
 // Function that append other tokens to the list of tokens.
 int					append_identifier(t_token **tokens, char **line);

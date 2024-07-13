@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 15:23:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 09:19:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	printAST(t_node *node, int x, t_type type)
 {
 	t_type	tmp;
 	t_redir	*new;
-	t_node	*temp = node;
+	t_node	*temp;
 
+	temp = node;
 	if (!temp)
 		return ;
 	tmp = ERROR;
@@ -134,7 +135,7 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
-void	increment_shlvl()
+void	increment_shlvl(void)
 {
 	char	*shlvl;
 	char	*new_shlvl;
@@ -173,10 +174,11 @@ int	init_minishell(char **env)
 	set_as_unexported(g_minishell->our_env, "?");
 	set_env_var(g_minishell->our_env, "_", "]");
 	set_as_unexported(g_minishell->our_env, "_");
-	return (signals(), 1);
+	signal(SIGINT, ft_sigint_handler);
+	return (1);
 }
 
-int	get_exit_status()
+int	get_exit_status(void)
 {
 	char	*value;
 	int		exit_status;
@@ -186,7 +188,7 @@ int	get_exit_status()
 	return (exit_status);
 }
 
-void	ft_readline()
+void	ft_readline(void)
 {
 	int	exit_status;
 
@@ -195,8 +197,7 @@ void	ft_readline()
 	gc_add(g_minishell, g_minishell->line);
 	if (!g_minishell->line)
 	{
-		if (g_minishell->our_env)
-			exit_status = get_exit_status();
+		exit_status = get_exit_status();
 		ft_putstr_fd("exit\n", 1);
 		clear_env(g_minishell->our_env);
 		gc_free_all(g_minishell);
@@ -207,13 +208,14 @@ void	ft_readline()
 		add_history(g_minishell->line);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int achraf, char **bader, char **env)
 {
-	(void)ac, (void)av;
+	(void)achraf, (void)bader;
 	if (!init_minishell(env))
 		return (1);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		ft_readline();
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
@@ -221,15 +223,15 @@ int	main(int ac, char **av, char **env)
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		// printAST(g_minishell->ast, 5452, 876435);
+		signal(SIGQUIT, ft_sigquit_handler);
 		executer(g_minishell->ast);
-		while(waitpid(-1, NULL, 0) != -1);
+		signal(SIGQUIT, SIG_IGN);
+		while (waitpid(-1, NULL, 0) != -1)
+			;
 		gc_free_all(g_minishell);
 		dup2(g_minishell->stdout, 1);
 		dup2(g_minishell->stdin, 0);
 	}
-	gc_free_all(g_minishell);
-	clear_env(g_minishell->our_env);
-	free(g_minishell);
+	cleanup_minishell();
 	return (0);
 }

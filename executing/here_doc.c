@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:26:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 14:51:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 09:57:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,20 @@ static void	read_buf(char **buf)
 		gc_add(g_minishell, *buf);
 }
 
-static void wait_and_get(void)
+static void	wait_and_get(void)
 {
 	char *exit;
 
 	wait(&g_minishell->exit_s);
-	// printf("befor '%d'\n",g_minishell->exit_s);
 	if (WIFEXITED(g_minishell->exit_s))
 		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
 	exit = ft_itoa(g_minishell->exit_s);
-	// printf("after '%s'\n",exit);
 	if(!exit)
 		return(print_errors("ERROR WITH FT_ITOA\n"));
 	set_env_var(g_minishell->our_env, "?", exit);
 	free(exit);
 }
-static void	ft_sigint_handler(int sig)
+static void	ft_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -85,7 +83,7 @@ static void	ft_sigint_handler(int sig)
 void	h_signals(void)
 {
 	rl_catch_signals = 0;
-	signal(SIGINT, ft_sigint_handler);
+	signal(SIGINT, ft_sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -99,7 +97,7 @@ int	here_doc(char *limiter)
 	id = fork();
 	if (!id)
 	{
-		h_signals();
+		// h_signals();
 		fd = open_hidden_file();
 		while (1)
 		{
@@ -120,11 +118,11 @@ int	here_doc(char *limiter)
 			return(fd_hidden);
 			// dup_2(fd_hidden, 0);
 		}
-		else if(g_minishell->exit_s == 130)
-		{
-			printf("CTRL + C , remove tmp file !!\n");
-			unlink("/var/tmp/tmp.txt");
-		}
+		// else if(g_minishell->exit_s == 130)
+		// {
+		// 	// printf("CTRL + C , remove tmp file !!\n");
+		// 	// unlink("/var/tmp/tmp.txt");
+		// }
 	}
 	return(-1);
 }

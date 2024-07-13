@@ -6,12 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:24:28 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 18:24:39 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:17:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {

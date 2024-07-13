@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/06/26 09:42:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:15:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef enum e_node
 	CHAR_NODE,
 	REDIR_NODE,
 	STRING_NODE
-}			t_node_type;
+}						t_node_type;
 
 typedef struct s_node	t_node;
 

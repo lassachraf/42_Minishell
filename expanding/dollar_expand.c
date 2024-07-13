@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 14:41:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:13:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	handle_cases(char *expand, int *i, int *j, int *len)
 	else if (!ft_strncmp(expand, "?", 1) || !ft_strncmp(expand, "_", 1))
 		*j = 1;
 	else if (!ft_strncmp(expand, "$", 1) || ft_isspace(*expand)
-		|| !ft_isalnum(*expand)
-		|| (!ft_isalnum(*expand) && ft_strncmp(expand, "_", 1)))
+		|| !ft_isalnum(*expand) || (!ft_isalnum(*expand) && ft_strncmp(expand,
+				"_", 1)))
 	{
 		(*i) += 2;
 		return ((*len) += 2, -1);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 18:17:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:13:42 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 	}
 	else if (!ft_strncmp(&expand[1], "?", 1) || !ft_strncmp(&expand[1], "_", 1))
 	{
-		k = 1;	
+		k = 1;
 		expand++;
 	}
-	else if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1]) || (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1) && ft_strncmp(&expand[1], "?", 1)) || !ft_isalnum(expand[1]))
+	else if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1])
+		|| (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1)
+			&& ft_strncmp(&expand[1], "?", 1)) || !ft_isalnum(expand[1]))
 	{
 		new[(*j)++] = s[(*i)++];
 		new[(*j)++] = s[(*i)++];
@@ -86,7 +88,7 @@ char	*new_value(char *s, int size)
 	}
 	new[j] = '\0';
 	if (!new[0])
-		return (NULL);	
+		return (NULL);
 	return (new);
 }
 
@@ -141,25 +143,26 @@ int	ft_count_words(char const *s, char c)
 	return (words);
 }
 
-void	add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token)
+void	add_token_middle(t_token **tokens, t_token *new_token,
+		t_token *prev_token)
 {
-    if (!tokens || !new_token)
+	if (!tokens || !new_token)
 	{
-        return ;
+		return ;
 	}
-    if (prev_token == NULL)
-    {
-        new_token->next = *tokens;
-        if (*tokens)
-            (*tokens)->prev = new_token;
-        *tokens = new_token;
-        return;
-    }
-    new_token->prev = prev_token;
-    new_token->next = prev_token->next;
-    if (prev_token->next)
-        prev_token->next->prev = new_token;
-    prev_token->next = new_token;
+	if (prev_token == NULL)
+	{
+		new_token->next = *tokens;
+		if (*tokens)
+			(*tokens)->prev = new_token;
+		*tokens = new_token;
+		return ;
+	}
+	new_token->prev = prev_token;
+	new_token->next = prev_token->next;
+	if (prev_token->next)
+		prev_token->next->prev = new_token;
+	prev_token->next = new_token;
 }
 
 void	handle_space(t_token *tokens, char *new_value)
@@ -167,6 +170,8 @@ void	handle_space(t_token *tokens, char *new_value)
 	t_token	*current;
 	int		i;
 	int		j;
+	char	*chunk;
+	t_token	*new_tok;
 
 	current = tokens;
 	if (ft_count_words(new_value, ' ') < 2)
@@ -183,8 +188,8 @@ void	handle_space(t_token *tokens, char *new_value)
 			j = i;
 			while (new_value[i] && !ft_isspace(new_value[i]))
 				i++;
-			char *chunk = ft_substr(new_value, j, (i - j));
-			t_token *new_tok = new_token(chunk, WORD);
+			chunk = ft_substr(new_value, j, (i - j));
+			new_tok = new_token(chunk, WORD);
 			add_token_middle(&g_minishell->tokens, new_tok, current->prev);
 			current = new_tok->next;
 		}
@@ -248,7 +253,8 @@ void	expanding(void)
 			tokens->value = custome_path(tokens->value);
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
 		{
-			if (!(tokens->prev && (tokens->prev->type == S_QUOTE || tokens->prev->type == D_QUOTE)))
+			if (!(tokens->prev && (tokens->prev->type == S_QUOTE
+						|| tokens->prev->type == D_QUOTE)))
 				asterisk_expand(&g_minishell->tokens, tokens);
 			tokens = tokens->next;
 		}

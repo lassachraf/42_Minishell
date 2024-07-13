@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 18:36:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 09:19:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@
 
 # include "../libft/libft.h"
 # include "builtins.h"
+# include "execution.h"
 # include "memory.h"
 # include "parsing.h"
 # include "tokenization.h"
 # include <dirent.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
-# include <unistd.h>
-# include <stdbool.h>
 # include <sys/wait.h>
-# include <fcntl.h>
-# include "execution.h"
+# include <unistd.h>
 
 typedef struct s_env
 {
@@ -63,15 +63,16 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
-void	increment_shlvl();
-int		get_exit_status();
-char	**env_to_envp(t_env *env);
-int		here_doc(char *limiter);
-char	**list_to_argv(t_list *list);
-void	printAST(t_node *node, int x, t_type type);
-t_env	*special_dup_env(void);
-char	*custome_path(char *path);
-void	add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token);
+void				increment_shlvl(void);
+int					get_exit_status(void);
+char				**env_to_envp(t_env *env);
+int					here_doc(char *limiter);
+char				**list_to_argv(t_list *list);
+void				printAST(t_node *node, int x, t_type type);
+t_env				*special_dup_env(void);
+char				*custome_path(char *path);
+void				add_token_middle(t_token **tokens, t_token *new_token,
+						t_token *prev_token);
 
 /* Builtins */
 
@@ -116,7 +117,6 @@ t_env				*sort_env(t_env *env);
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
 
-
 // Setters.c
 
 // Set the env variable as exported.
@@ -139,8 +139,8 @@ void				cleanup(void);
 // Function that cleanup minishell.
 void				cleanup_minishell(void);
 
-// 
-void	clear_ast(t_node *tree);
+//
+void				clear_ast(t_node *tree);
 
 /* Environments */
 
@@ -167,7 +167,6 @@ void				delete_env_var(t_env **env, char *key);
 // Main function that execute the user input.
 void				executer(t_node *node);
 
-
 /* Expanding */
 
 // Main function to do expand.
@@ -192,7 +191,8 @@ void				handle_dollar(char *s, int *i, int *len);
 void				asterisk_expand(t_token **tokens, t_token *curr);
 
 // Function that help processing the files from directory stream.
-void				process_files(t_token **tokens, t_token *prev, char *pattern);
+void				process_files(t_token **tokens, t_token *prev,
+						char *pattern);
 
 // Function that help processing the directories.
 void				process_dirs(DIR *dir, char **result, const char *pattern);
@@ -205,7 +205,6 @@ int					match_pattern(const char *pattern, const char *filename);
 
 // Function that append result to the value.
 void				append_to_result(char **result, char *str, int newline);
-
 
 /* Memory */
 
@@ -252,8 +251,13 @@ void				remove_token(t_token **head, t_token *token);
 
 /* Signals */
 
+// Function that initalizes the signales.
+void				ft_sigint_handler(int sig);
+
 // Function that handle signals.
 void				signals(void);
+
+void	ft_sigquit_handler(int sig);
 
 /* Syntax */
 

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/09 10:34:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 23:01:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,9 +490,15 @@ void	executer(t_node *node)
 		{
 			id = fork();
 			if (!id)
+			{
+				signals();	
 				do_cmd(node);
+			}
 			else
+			{
 				wait_and_get();
+				signal(SIGQUIT, SIG_IGN);
+			}
 		}
 	}
 	else if (node->type == PAIR_NODE)

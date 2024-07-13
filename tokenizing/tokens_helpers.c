@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 10:50:24 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:24:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	handle_special_case(t_token **tokens, t_token **current)
 
 void	join_tokens(t_token **tokens, t_token **current)
 {
-	t_token *tmp;
+	t_token	*tmp;
 	char	*value;
 
 	value = ft_strjoin((*current)->prev->value, (*current)->next->value);
@@ -72,9 +72,11 @@ void	remove_quotes(t_token **tokens)
 		if (current->type == S_QUOTE || current->type == D_QUOTE)
 		{
 			if (current->prev && current->next && current->prev->type == WORD
-				&& ft_strchr(current->prev->value, '=') && current->next->type == WORD)
+				&& ft_strchr(current->prev->value, '=')
+				&& current->next->type == WORD)
 				join_tokens(tokens, &current);
-			else if (current->next && special_case(current->prev, current, current->next))
+			else if (current->next && special_case(current->prev, current,
+					current->next))
 				handle_special_case(tokens, &current);
 			else
 			{
