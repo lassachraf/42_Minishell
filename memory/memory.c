@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:20:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 10:20:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 14:38:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	clear_ast(t_node *tree)
 	{
 		free_tree(&tree);
 	}
-	else if (tree->type == ERROR_NODE)
-		free(tree);
 }
 
 char	*ft_malloc(t_minishell *mini, size_t size)

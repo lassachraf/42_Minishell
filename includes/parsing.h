@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 19:15:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 14:15:39 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 typedef enum e_node
 {
-	ERROR_NODE = -1,
 	PAIR_NODE,
 	CHAR_NODE,
 	REDIR_NODE,
@@ -36,6 +35,7 @@ typedef struct s_redir
 	int					fd;
 	char				*file;
 	t_list				*cmd;
+	t_node				*node;
 }						t_redir;
 
 typedef struct s_pair_value
@@ -51,7 +51,6 @@ typedef union u_node_value
 	char				char_value;
 	t_list				*cmd;
 	t_list				*redir;
-	const char			*error;
 }						t_node_value;
 
 struct					s_node

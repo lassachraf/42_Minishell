@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/12 20:14:38 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/13 14:26:28 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,14 @@ ENVIRONMENT		:=	environment/env_utils.c				\
 					environment/env_helpers.c
 
 EXECUTING		:=	executing/executer.c				\
-					executing/here_doc.c
+					executing/here_doc.c          \
+					executing/convert_env.c				\
+					executing/execve_tools.c\
+					executing/here_doc_tools.c\
+					executing/redir_tools.c\
+					executing/tools.c\
+					executing/tools_1.c\
+					executing/tools_2.c
 
 EXPANDING		:=	expanding/expander.c				\
 					expanding/word_helper.c				\

@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/12 19:21:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 14:09:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../includes/minishell.h"
 
-t_redir	*do_red(t_token **tokens)
+t_redir	*do_red(t_token **tokens) // 
 {
 	t_redir *new;
 
@@ -38,13 +38,16 @@ t_node	*parse_or(t_token **tokens);
 t_node	*parse_and(t_token **tokens);
 t_node	*parse_block(t_token **tokens);
 
-t_node *parse_cmd(t_token **tokens) //  ((ls && cat ) || cat ) && ps  --> ( AND )
+t_node *parse_cmd(t_token **tokens) // (1 && 2) > 1 && 3
 {
 	t_list *cmd_list;
 	t_list *red_list;
 	t_list *new;
 	t_redir *red;
+	t_node *block;
 
+	// () > 1
+	block = NULL;
 	cmd_list = NULL;
 	red_list = NULL;
 	while(*tokens && ((*tokens)->type != END && (*tokens)->type != PIPE && (*tokens)->type != OR && (*tokens)->type != AND && (*tokens)->type != R_PAREN))
@@ -69,16 +72,19 @@ t_node *parse_cmd(t_token **tokens) //  ((ls && cat ) || cat ) && ps  --> ( AND 
 		else if((*tokens)->type == L_PAREN)
 		{
 			(*tokens) = (*tokens)->next;
-			return (parse_block(tokens)); 
+			block = parse_block(tokens); // 1 && 2
+			return(block);
 		}
 		(*tokens) = (*tokens)->next;
 	}
+	// if(block && !red_list)
+	// 	return (block);
 	if(!red_list)
 		return(string_node_new(cmd_list));
 	else
 	{
 		red->cmd = cmd_list;
-		return (redir_node_new(red_list));
+		return(redir_node_new(red_list));
 	}
 }
 
@@ -139,42 +145,61 @@ t_node	*parse_and(t_token **tokens)
 t_node *find_last_left(t_node *node)
 {
 	t_node *left;
-	while(node) // 1->2->3->4->5
+	while(node) // 1->2->3->4->leaf
 	{
+		if(node->type != PAIR_NODE)
+			return (node);
 		left = node;
 		node = node->data.pair.left;
 	}
 	return(left);
 }
 
-t_node	*parse_block(t_token **tokens) // (ls || ps) && clear
+void set_left_redir(t_node **left, t_node **right)
+{
+	t_list *last;
+	t_redir *red;
+
+	last = ft_lstlast((*right)->data.redir);
+	red = (t_redir *)last->content;
+	red->node = *left;
+}
+t_node	*parse_block(t_token **tokens) // (ls -a) > 1 || (ls -la | cat) > 1
 {
 	t_node *left;
 	t_node *right;
 	t_node *tmp;
 
 	left = parse_and(tokens);
-	if((*tokens)->type == R_PAREN)
+	if(tokens && *tokens && (*tokens)->type == R_PAREN)
 	{
 		(*tokens) = (*tokens)->next;
 		
 		right = parse_block(tokens);
 		if(right)
 		{
-			if(!right->data.pair.left)
-				right->data.pair.left = left;
-			else
+			if(right->type == PAIR_NODE)
 			{
-				tmp = find_last_left(right);
-				tmp->data.pair.left = left;
+				if(!right->data.pair.left)
+					right->data.pair.left = left;
+				else
+				{
+					tmp = find_last_left(right);
+					if(tmp->type == PAIR_NODE)
+						tmp->data.pair.left = left;
+					else if(tmp->type == REDIR_NODE)
+						set_left_redir(&left, &tmp);
+				}
 			}
+			else
+				set_left_redir(&left, &right);
 			return(right);
 		}
 	}
 	return(left);
 }
 
-t_node	*parsing(void) // ((ls && cat ) || cat ) && ps
+t_node	*parsing(void) // (ls -a) > 1
 {
 	t_node	*res;
 
@@ -184,4 +209,3 @@ t_node	*parsing(void) // ((ls && cat ) || cat ) && ps
 		gc_free_all(g_minishell);
 	return(res);
 }
-

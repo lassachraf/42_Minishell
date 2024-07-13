@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 12:25:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 15:53:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,80 +46,63 @@ void	print_root(t_type type, int x)
 	}
 }
 
-void	printAST(t_node *node, int x, t_type type)
+void printAST(t_node* node , int x , t_type type) 
 {
-	t_type	tmp;
-	t_redir	*new;
-	t_node	*temp;
+    t_type tmp;
+	t_list *list;
 
-	temp = node;
-	if (!temp)
-		return ;
-	tmp = ERROR;
-	if (temp->type == STRING_NODE)
+    if (!node) return;
+    tmp  = ERROR;
+    if (node->type == STRING_NODE) // leaf
+    {
+        print_root(type, x);
+		list = node->data.cmd;
+        while (list)
+        {
+            printf("'%s' ", (char*)list->content);
+            list = list->next;
+        }
+        printf("\n");
+    }
+	else if(node->type == PAIR_NODE) // root
 	{
-		print_root(type, x);
-		while (temp->data.cmd)
-		{
-			printf("'%s' ", (char *)temp->data.cmd->content);
-			temp->data.cmd = temp->data.cmd->next;
-		}
-		printf("\n");
-	}
-	else if (temp->type == PAIR_NODE)
-	{
-		print_root(type, x);
-		if (temp->data.pair.type == PIPE)
-		{
-			printf("\n*** PIPE ***\n");
-			tmp = PIPE;
-		}
-		else if (temp->data.pair.type == OR)
-		{
-			printf("\n*** OR ***\n");
-			tmp = OR;
-		}
-		else if (temp->data.pair.type == AND)
-		{
-			printf("\n*** AND ***\n");
-			tmp = AND;
-		}
-		else if (temp->data.pair.type == L_PAREN)
-		{
-			printf("L_PAREN\n");
-			tmp = L_PAREN;
-		}
-		// if(node->data.pair.type <= 3)
-		// {
-		printAST(temp->data.pair.left, 1, tmp);
-		printAST(temp->data.pair.right, 0, tmp);
-		// }
-		// else
-		// {
-		//     printAST(node->data.pair.left, 1 , tmp);
-		//     printAST(node->data.pair.right, 0 , tmp);
-		// }
-	}
-	else if (temp->type == REDIR_NODE)
-	{
-		print_root(type, x);
-		while (temp->data.redir)
-		{
-			new = temp->data.redir->content;
-			printf("REDIR NODE , name: '%s'\n", new->file);
-			while (new->cmd)
-			{
-				printf("'%s' ", (char *)new->cmd->content);
-				new->cmd = new->cmd->next;
-			}
-			printf("\n");
-			temp->data.redir = temp->data.redir->next;
-		}
-	}
-	else if (temp->type == ERROR_NODE)
-	{
-		printf("add '%p', -ERROR -------> '%s", temp, temp->data.error);
-	}
+		print_root(type, x); // 4832948 , 234234
+        if(node->data.pair.type == PIPE)
+        {
+            printf("------------------->PIPE<----------------------\n");
+            tmp = PIPE;
+        }
+        else if (node->data.pair.type == OR)
+        {
+            printf("------------------->OR<----------------------\n");
+            tmp = OR;
+        } 
+        else if (node->data.pair.type == AND)
+        {
+            printf("------------------->AND<----------------------\n");
+            tmp = AND;
+        }
+            printAST(node->data.pair.left, 1 , tmp);
+            printAST(node->data.pair.right, 0 , tmp);
+    }
+    else if (node->type == REDIR_NODE) // leaf
+    {
+        print_root(type, x);
+        while(node->data.redir)
+        {
+            t_redir *new = node->data.redir->content;
+            printf("REDIR NODE , name: '%s'\n",new->file);
+            while (new->cmd)
+            {
+                printf("'%s' ", (char*)new->cmd->content);
+                new->cmd = new->cmd->next;
+            }
+            printf("\n");
+			if(new->node)
+				printAST(new->node, 121,231);
+            node->data.redir = node->data.redir->next;
+        }
+    }
 }
 
 void	print_tokens(t_token *tokens)
@@ -155,8 +138,7 @@ int	init_minishell(char **env)
 	g_minishell = malloc(sizeof(t_minishell));
 	if (!g_minishell)
 		return (0);
-	g_minishell->gc = NULL;
-	g_minishell->dq_flag = 0;
+	ft_bzero(g_minishell, sizeof(t_minishell));
 	g_minishell->stdin = dup(0);
 	g_minishell->stdout = dup(1);
 	if (env && *env)
@@ -167,25 +149,14 @@ int	init_minishell(char **env)
 	else
 	{
 		g_minishell->our_env = special_dup_env();
-		ft_env(g_minishell->our_env);
 	}
 	add_env_var(g_minishell->our_env, "?", "0");
 	set_as_invisible(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "?");
 	set_env_var(g_minishell->our_env, "_", "]");
 	set_as_unexported(g_minishell->our_env, "_");
-	signal(SIGINT, ft_sigint_handler);
+	signals();
 	return (1);
-}
-
-int	get_exit_status(void)
-{
-	char	*value;
-	int		exit_status;
-
-	value = get_env_var(g_minishell->our_env, "?");
-	exit_status = ft_atoi(value);
-	return (exit_status);
 }
 
 void	ft_readline(void)
@@ -193,11 +164,13 @@ void	ft_readline(void)
 	int	exit_status;
 
 	exit_status = 0;
+	g_minishell->docs = 0;
+	g_minishell->exit_s = 0;
 	g_minishell->line = readline(ORANGE PROMPT RESET);
 	gc_add(g_minishell, g_minishell->line);
 	if (!g_minishell->line)
 	{
-		exit_status = get_exit_status();
+		exit_status = g_minishell->exit_s;
 		ft_putstr_fd("exit\n", 1);
 		clear_env(g_minishell->our_env);
 		gc_free_all(g_minishell);
@@ -206,32 +179,44 @@ void	ft_readline(void)
 	}
 	if (g_minishell->line[0])
 		add_history(g_minishell->line);
-}
+}	
 
 int	main(int achraf, char **bader, char **env)
 {
 	(void)achraf, (void)bader;
+	char *exit_stat;
 	if (!init_minishell(env))
 		return (1);
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
+		signals();
 		ft_readline();
+		// fprintf(stderr, "-------------> %d\n", g_minishell->exit_s);
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;
-		signal(SIGQUIT, ft_sigquit_handler);
-		printAST(g_minishell->ast, 4334,34);
-		// executer(g_minishell->ast);
-		signal(SIGQUIT, SIG_IGN);
-		while (waitpid(-1, NULL, 0) != -1)
+		signal(SIGINT, SIG_IGN);
+		if(scan_and_set(g_minishell->ast))
+		{
+			signal(SIGQUIT, hand);
+			signal(SIGINT, hand2);
+			executer(g_minishell->ast);
+		}
+		// fprintf(stderr, "** Before :: `%d` **\n", g_minishell->exit_s);
+		while (wait_and_get() != -1)
 			;
+		// fprintf(stderr, "** After :: `%d` **\n", g_minishell->exit_s);
 		gc_free_all(g_minishell);
 		dup2(g_minishell->stdout, 1);
 		dup2(g_minishell->stdin, 0);
+		unlink_docs(g_minishell->docs);
+		exit_stat = ft_itoa(g_minishell->exit_s);
+		// fprintf(stderr, "-------------> %s\n", exit_stat);
+		set_env_var(g_minishell->our_env, "?", exit_stat);
+		free(exit_stat);
 	}
 	cleanup_minishell();
 	return (0);

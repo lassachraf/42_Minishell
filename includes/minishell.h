@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 09:19:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 14:49:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define MAX_FILES_PER_LINE 6
 
-# define READLINE_LIBRARY
+# define PATH "/var/tmp/"
 # define RED "\033[1;31m"
 # define ORANGE "\033[1;33m"
 # define RESET "\033[0m"
@@ -57,6 +57,7 @@ typedef struct s_minishell
 	int				nb_tokens;
 	int				dq_flag;
 	int				exit_s;
+	int				docs;
 	int				stdin;
 	int				stdout;
 }					t_minishell;
@@ -66,7 +67,6 @@ extern t_minishell	*g_minishell;
 void				increment_shlvl(void);
 int					get_exit_status(void);
 char				**env_to_envp(t_env *env);
-int					here_doc(char *limiter);
 char				**list_to_argv(t_list *list);
 void				printAST(t_node *node, int x, t_type type);
 t_env				*special_dup_env(void);
@@ -167,6 +167,38 @@ void				delete_env_var(t_env **env, char *key);
 // Main function that execute the user input.
 void				executer(t_node *node);
 
+int					here_doc(char *limiter , int doc_num);
+int  				env_size(t_env *env);
+char 				**env_to_envp(t_env *env);
+char 				**list_to_argv(t_list *list);
+void				open_pipe(int *pfd);
+int					dup_2(int old_fd, int new_fd);
+void				fd_duper( int *pfd , int mode);
+char				*get_command(char *argv);
+char				*add_slash_cmd(char *path, char *cmd);
+int 				do_here_docs(t_list *red_list ,int doc_num);
+int 				input_to_dup(t_list *red_list);
+int 				output_to_dup(t_list *red_list);
+void				run_doc_cmd(t_list *red_list);
+int 				open_redir(t_redir *redir);
+int 				open_and_set(t_list *red_list);
+int					print_err(char *message, char *word);
+void				check_split(char **cmd, char *word);
+int					strings_count(char **str);
+void				free_double(char **ptr);
+char				*founded_cmd(char *argv, char **paths, char **cmd);
+char				**get_env_paths(char **env);
+char				*get_fullpath(char *argv, char **env);
+int					check_cmd(char *argv, char **env);
+void				call_execev(char **env, char *argv , char **cmd);
+int					ft_malloc_error(char **tab, size_t i);
+int 				wait_and_get(void);
+void 				do_cmd(t_node *ast);
+void 				do_pipe(t_node *cmd , int mode , int *pfd);
+void 				execute_cmd(t_node *node);
+int scan_and_set(t_node *node);
+int execute_docs(t_list *red_list);
+void unlink_docs(int docs);
 /* Expanding */
 
 // Main function to do expand.
@@ -230,9 +262,6 @@ t_node				*pair_node_new(t_node *left, t_node *right, t_type type);
 // Function that create a new string node.
 t_node				*string_node_new(t_list *list);
 
-// Function that create a new error node.
-t_node				*error_node_new(const char *msg);
-
 // Function that create a new redirection node.
 t_node				*redir_node_new(t_list *red_list);
 
@@ -258,6 +287,9 @@ void				ft_sigint_handler(int sig);
 void				signals(void);
 
 void	ft_sigquit_handler(int sig);
+
+void hand(int sig);
+void hand2(int sig);
 
 /* Syntax */
 
@@ -299,5 +331,6 @@ void				print_errors(char *message);
 
 /* Debugging ones */
 void				print_tokens(t_token *token);
+
 
 #endif /* MINISHELL_H */

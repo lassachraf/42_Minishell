@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 18:18:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 15:29:00 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 		if (nb_args(args) > 2)
 		{
 			print_errors("cd : too many arguments.");
-			return (set_env_var(g_minishell->our_env, "?", "1"), 0);
+			g_minishell->exit_s = 1;
+			return (0);
 		}
 		else
 			ft_cd(mini, args[1]);
@@ -80,12 +81,15 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 	{
 		if (nb_args(args) > 2)
 		{
+			printf("exit\n");
 			print_errors("exit : too many arguments.");
-			return (set_env_var(g_minishell->our_env, "?", "1"), 0);
+			g_minishell->exit_s = 1;
+			return (0);
 		}
 		else
 			ft_exit(args[1]);
 	}
+	g_minishell->exit_s = 0;
 	return (1);
 }
 
@@ -108,5 +112,5 @@ void	execute_builtins(t_minishell *mini, char **args)
 		if (args[1])
 			ft_unset(args[1]);
 	}
-	g_minishell->exit_s = 0;
+	// g_minishell->exit_s = 0;
 }
