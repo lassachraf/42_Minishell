@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 09:19:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/13 12:25:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,8 @@ int	main(int achraf, char **bader, char **env)
 		if (!g_minishell->ast)
 			continue ;
 		signal(SIGQUIT, ft_sigquit_handler);
-		executer(g_minishell->ast);
+		printAST(g_minishell->ast, 4334,34);
+		// executer(g_minishell->ast);
 		signal(SIGQUIT, SIG_IGN);
 		while (waitpid(-1, NULL, 0) != -1)
 			;
