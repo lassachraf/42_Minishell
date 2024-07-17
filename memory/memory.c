@@ -12,13 +12,13 @@
 
 #include "../includes/minishell.h"
 
-void    free_tree(t_node **tree)
+void	free_tree(t_node **tree)
 {
-    t_redir	*new;
+	t_redir	*new;
 	t_list	*tmp;
 
 	new = NULL;
-    while ((*tree)->data.redir)
+	while ((*tree)->data.redir)
 	{
 		new = (*tree)->data.redir->content;
 		tmp = (*tree)->data.redir->next;

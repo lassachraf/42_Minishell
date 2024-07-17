@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 15:29:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:35:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,4 @@ void	execute_builtins(t_minishell *mini, char **args)
 		if (args[1])
 			ft_unset(args[1]);
 	}
-	// g_minishell->exit_s = 0;
 }

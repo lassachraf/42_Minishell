@@ -6,19 +6,19 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 14:49:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 11:26:54 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define MAX_FILES_PER_LINE 6
+# define PATH	"/var/tmp/"
 
-# define PATH "/var/tmp/"
-# define RED "\033[1;31m"
-# define ORANGE "\033[1;33m"
-# define RESET "\033[0m"
+# define RED	"\033[1;31m"
+# define ORANGE	"\033[1;33m"
+# define RESET	"\033[0m"
+
 # define PROMPT "badashell$> "
 
 # include "../libft/libft.h"
@@ -63,17 +63,7 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
-
-void				increment_shlvl(void);
-int					get_exit_status(void);
-char				**env_to_envp(t_env *env);
-char				**list_to_argv(t_list *list);
-void				printAST(t_node *node, int x, t_type type);
-t_env				*special_dup_env(void);
-char				*custome_path(char *path);
-void				add_token_middle(t_token **tokens, t_token *new_token,
-						t_token *prev_token);
-
+						
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -114,10 +104,11 @@ void				print_env(t_env *env);
 // Function that sort the env to be set to export.
 t_env				*sort_env(t_env *env);
 
+// Function that expand tild "~".
+char				*custome_path(char *path);
+
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
-
-// Setters.c
 
 // Set the env variable as exported.
 void				set_as_exported(t_env *env, char *var);
@@ -133,13 +124,10 @@ void				set_as_invisible(t_env *env, char *var);
 
 /* Cleaning */
 
-// Function that cleanup minishell for each prompt.
-void				cleanup(void);
-
 // Function that cleanup minishell.
 void				cleanup_minishell(void);
 
-//
+// Function that clear the AST.
 void				clear_ast(t_node *tree);
 
 /* Environments */
@@ -162,47 +150,132 @@ void				clear_env(t_env *env);
 // Function that remove an element from the env.
 void				delete_env_var(t_env **env, char *key);
 
+// In case env is unset, this function set the env.
+t_env				*special_dup_env(void);
+
 /* Executing */
 
 // Main function that execute the user input.
 void				executer(t_node *node);
 
+// Main function that handle here_doc.
 int					here_doc(char *limiter , int doc_num);
+
+// Helper function for handling here_doc.
+void				do_here_doc(char *buf, char *limiter, int fd);
+
+// Function that return the size of the env.
 int  				env_size(t_env *env);
+
+// Function that return the env to a double pointer char.
 char 				**env_to_envp(t_env *env);
+
+// Function that return the list of command to a double pointer char.
 char 				**list_to_argv(t_list *list);
+
+// Function that open pipes fds.
 void				open_pipe(int *pfd);
+
+// Function that duplicate an old fd to the new one.
 int					dup_2(int old_fd, int new_fd);
-void				fd_duper( int *pfd , int mode);
+
+// Function that duplicate fd with a special mode.
+void				fd_duper(int *pfd , int mode);
+
+// Function that get the command.
 char				*get_command(char *argv);
+
+// Function that join the command with it's path.
 char				*add_slash_cmd(char *path, char *cmd);
+
+// Function that IDK XD.
 int 				do_here_docs(t_list *red_list ,int doc_num);
+
+// Function that IDK XD.
 int 				input_to_dup(t_list *red_list);
+
+// Function that IDK XD.
 int 				output_to_dup(t_list *red_list);
+
+// Function that IDK XD.
 void				run_doc_cmd(t_list *red_list);
-int 				open_redir(t_redir *redir);
+
+// Function that IDK XD.
+int 				open_redir(t_redir *redir, int mode);
+
+// Function that IDK XD.
 int 				open_and_set(t_list *red_list);
+
+// Function that print errors with an argument.
 int					print_err(char *message, char *word);
+
+// Function that check split returned value.
 void				check_split(char **cmd, char *word);
+
+// Function that IDK XD.
 int					strings_count(char **str);
+
+// Function that free a double pointer.
 void				free_double(char **ptr);
+
+// Function that check split returned value.
 char				*founded_cmd(char *argv, char **paths, char **cmd);
+
+// Function that get the path from the environment.
 char				**get_env_paths(char **env);
+
+// Function that check split returned value.
 char				*get_fullpath(char *argv, char **env);
+
+// Function that check for the cmd.
 int					check_cmd(char *argv, char **env);
+
+// Function that call and execute execve.
 void				call_execev(char **env, char *argv , char **cmd);
+
+// Function that is called when maslloc failed.
 int					ft_malloc_error(char **tab, size_t i);
+
+// Function that IDK XD.
 int 				wait_and_get(void);
+
+// Function that IDK XD.
 void 				do_cmd(t_node *ast);
+
+// Function that do pipe process.
 void 				do_pipe(t_node *cmd , int mode , int *pfd);
+
+// Function that execute a command.
 void 				execute_cmd(t_node *node);
-int scan_and_set(t_node *node);
-int execute_docs(t_list *red_list);
-void unlink_docs(int docs);
+
+// Function that IDK XD.
+int					scan_and_set(t_node *node);
+
+// Function that IDK XD.
+int					execute_docs(t_list *red_list);
+
+// Function that unlink here documents.
+void				unlink_docs(int docs);
+
+// Function that read and fill here_doc buffer.
+void				read_buf(char **buf);
+
+// Function that IDK XD.
+int					write_or_break(int fd, char *limiter, char *buf);
+
+// Function that print the AST "DEBUGGING"
+void				printAST(t_node* node , int x , t_type type);
+
 /* Expanding */
 
 // Main function to do expand.
 void				expander(void);
+
+// Function that expand inside the expanding.
+void				here_doc_expanding(char **s);
+
+// FUnction that help expanding words.
+char				*helper_expander(char *s);
 
 // Function that get the variable and search for it in the environment.
 char				*get_var(char *s, int *i);
@@ -211,10 +284,7 @@ char				*get_var(char *s, int *i);
 int					check_env(char *var);
 
 // Function that remove the whitespaces tokens from the list of tokens.
-void				remove_whitespace(t_token **tokens);
-
-// Funtion that prepare the commands "tokens" to be executed.
-void				post_expander(void);
+void				remove_whitespaces(t_token **tokens);
 
 // Function that count the length of the whole command after expanding.
 void				handle_dollar(char *s, int *i, int *len);
@@ -222,21 +292,8 @@ void				handle_dollar(char *s, int *i, int *len);
 // Function that expand the asterisk.
 void				asterisk_expand(t_token **tokens, t_token *curr);
 
-// Function that help processing the files from directory stream.
-void				process_files(t_token **tokens, t_token *prev,
-						char *pattern);
-
-// Function that help processing the directories.
-void				process_dirs(DIR *dir, char **result, const char *pattern);
-
-// Function that sort the files or the directories.
-void				sort_strings(char **strings, size_t count);
-
 // Function that match the pattern.
 int					match_pattern(const char *pattern, const char *filename);
-
-// Function that append result to the value.
-void				append_to_result(char **result, char *str, int newline);
 
 /* Memory */
 
@@ -276,20 +333,22 @@ t_node				*parse_block(t_token **tokens);
 // Function that parse a command.
 t_node				*parse_cmd(t_token **tokens);
 
-void				remove_token(t_token **head, t_token *token);
-
 /* Signals */
 
-// Function that initalizes the signales.
-void				ft_sigint_handler(int sig);
-
-// Function that handle signals.
+// Function that initalizes the signals.
 void				signals(void);
 
-void	ft_sigquit_handler(int sig);
+// Function that handle SIGINT signal.
+void				ft_sigint_handler(int sig);
 
-void hand(int sig);
-void hand2(int sig);
+// Function that handle signals for here_doc.
+void				here_doc_sig(int sig);
+
+// Function that handle sigquit before execution. 
+void				ft_sigquit(int sig);
+
+// Function that handle sigquit before execution. 
+void				ft_sigint(int sig);
 
 /* Syntax */
 

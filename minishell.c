@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 15:53:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 08:51:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,17 +181,29 @@ void	ft_readline(void)
 		add_history(g_minishell->line);
 }	
 
+void	clean_and_set(void)
+{
+	char	*exit_stat;
+
+	gc_free_all(g_minishell);
+	dup2(g_minishell->stdout, 1);
+	dup2(g_minishell->stdin, 0);
+	unlink_docs(g_minishell->docs);
+	exit_stat = ft_itoa(g_minishell->exit_s);
+	set_env_var(g_minishell->our_env, "?", exit_stat);
+	free(exit_stat);
+}
+
 int	main(int achraf, char **bader, char **env)
 {
 	(void)achraf, (void)bader;
-	char *exit_stat;
+	
 	if (!init_minishell(env))
 		return (1);
 	while (1)
 	{
 		signals();
 		ft_readline();
-		// fprintf(stderr, "-------------> %d\n", g_minishell->exit_s);
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
@@ -201,22 +213,13 @@ int	main(int achraf, char **bader, char **env)
 		signal(SIGINT, SIG_IGN);
 		if(scan_and_set(g_minishell->ast))
 		{
-			signal(SIGQUIT, hand);
-			signal(SIGINT, hand2);
+			signal(SIGQUIT, ft_sigquit);
+			signal(SIGINT, ft_sigint);
+			// printAST(g_minishell->ast, 2234,23423);
 			executer(g_minishell->ast);
 		}
-		// fprintf(stderr, "** Before :: `%d` **\n", g_minishell->exit_s);
-		while (wait_and_get() != -1)
-			;
-		// fprintf(stderr, "** After :: `%d` **\n", g_minishell->exit_s);
-		gc_free_all(g_minishell);
-		dup2(g_minishell->stdout, 1);
-		dup2(g_minishell->stdin, 0);
-		unlink_docs(g_minishell->docs);
-		exit_stat = ft_itoa(g_minishell->exit_s);
-		// fprintf(stderr, "-------------> %s\n", exit_stat);
-		set_env_var(g_minishell->our_env, "?", exit_stat);
-		free(exit_stat);
+		while (wait_and_get() != -1);
+		clean_and_set();
 	}
 	cleanup_minishell();
 	return (0);

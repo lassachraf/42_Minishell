@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 14:34:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:35:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	ft_exit(char *args)
 	exit_status = g_minishell->exit_s;
 	if (args)
 	{
-		// don't have to 
 		exit_status = ft_atoi(args);
 	}
 	ft_putstr_fd("exit\n", 1);

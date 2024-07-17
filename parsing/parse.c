@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/13 14:09:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:09:17 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_node *parse_cmd(t_token **tokens) // (1 && 2) > 1 && 3
 	}
 }
 
-t_node	*parse_pipe(t_token **tokens) // (ls && ps)
+t_node	*parse_pipe(t_token **tokens) // (ls && ps) // $sdads | ls
 {
 	t_node *left;
 	t_type type;
@@ -199,6 +199,33 @@ t_node	*parse_block(t_token **tokens) // (ls -a) > 1 || (ls -la | cat) > 1
 	return(left);
 }
 
+void set_null_as_true(t_node **res)
+{
+	t_list *true_c;
+	char *str;
+	char *path;
+
+	path = get_fullpath("true", env_to_envp(g_minishell->our_env));
+	gc_add(g_minishell, path);
+	if(get_env_var(g_minishell->our_env, "PATH") && path)
+	{
+		str = ft_strdup("true");
+		gc_add(g_minishell, str);
+		true_c = ft_lstnew(str);
+		gc_add(g_minishell, true_c);
+		if(*res && (*res)->type == PAIR_NODE)
+		{
+			if(!(*res)->data.pair.left)
+				(*res)->data.pair.left = string_node_new(true_c);
+			else if((*res)->data.pair.left->type == PAIR_NODE)
+				set_null_as_true(&(*res)->data.pair.left);
+			if(!(*res)->data.pair.right)
+				(*res)->data.pair.right = string_node_new(true_c);
+			else if((*res)->data.pair.right->type == PAIR_NODE)
+				set_null_as_true(&(*res)->data.pair.right);
+		}
+	}
+}
 t_node	*parsing(void) // (ls -a) > 1
 {
 	t_node	*res;
@@ -207,5 +234,6 @@ t_node	*parsing(void) // (ls -a) > 1
 	res = parse_block(&g_minishell->tokens);
 	if (!res)
 		gc_free_all(g_minishell);
+	set_null_as_true(&res);
 	return(res);
 }

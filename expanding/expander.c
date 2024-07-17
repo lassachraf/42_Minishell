@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 19:13:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:03:40 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ t_token	*word_helper(t_token *tokens)
 		new_value = helper_expander(tokens->value);
 		check_for_value(&tokens, new_value);
 	}
-	return (tokens->next);
+	return (tokens);
 }
 
 void	expanding(void)
@@ -248,9 +248,13 @@ void	expanding(void)
 			tokens = tokens->next;
 			while (tokens && tokens->type != S_QUOTE)
 				tokens = tokens->next;
+			tokens = tokens->next;
 		}
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '~'))
+		{
 			tokens->value = custome_path(tokens->value);
+			tokens = tokens->next;
+		}
 		else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
 		{
 			if (!(tokens->prev && (tokens->prev->type == S_QUOTE

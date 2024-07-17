@@ -1,16 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.h                                        :+:      :+:    :+:   */
+/*   expand_here_doc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/27 12:24:37 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 10:57:49 by alassiqu         ###   ########.fr       */
+/*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
+/*   Updated: 2024/07/17 08:40:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTION_H
-# define EXECUTION_H
+#include "../includes/minishell.h"
 
-#endif
+void	here_doc_expanding(char **s)
+{
+	*s = helper_expander(*s);
+    gc_add(g_minishell, s);
+}

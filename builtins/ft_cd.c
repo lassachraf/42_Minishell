@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 09:08:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:07:13 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*custome_path(char *path)
 	if (!new_path)
 		print_errors("Allocation failed !");
 	gc_add(g_minishell, new_path);
-	if (!ft_strncmp(path, "~", 1))
+	if (!ft_strncmp(path, "~", ft_strlen(path)) || !ft_strncmp(path, "~/", 2))
 	{
 		i = -1;
 		while (home[++i])
@@ -54,6 +54,8 @@ char	*custome_path(char *path)
 			new_path[i++] = path[j];
 		new_path[i] = 0;
 	}
+	else
+		return (path);
 	return (new_path);
 }
 

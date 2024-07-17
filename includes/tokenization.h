@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 19:16:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 11:14:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,8 @@ int					is_quote(char c);
 
 // The main function that tokenizes the input string.
 t_token				*tokenizer(void);
+
+// Function that add a token in the midlle of a list.
+void				add_token_middle(t_token **tokens, t_token *new_token, t_token *prev_token);
 
 #endif /* TOKENIZATION_H */

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 14:12:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:53:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	match_pattern(const char *pattern, const char *filename)
 		|| (*pattern == *filename));
 }
 
-// // ambiguous redirect
-
 int	check_ambiguous(t_token *curr)
 {
 	DIR				*dir;
@@ -49,11 +47,12 @@ int	check_ambiguous(t_token *curr)
 	match_count = 0;
 	dir = opendir(".");
 	if (!dir)
-		return (100);
+		return (-1);
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (entry->d_name[0] != '.' && match_pattern(curr->value, entry->d_name))
+		if (entry->d_name[0] != '.'
+			&& match_pattern(curr->value, entry->d_name))
 		{
 			match_count++;
 		}
@@ -89,25 +88,33 @@ int	asterisk_functionality(t_token **tokens, t_token *curr)
 	return (i);
 }
 
+void	adjust_token(t_token **curr, char *new)
+{
+	char	*str;
+
+	str = ft_strdup(new);
+	(*curr)->value = ft_strjoin(str, (*curr)->value);
+	gc_add(g_minishell, (*curr)->value);
+	free(str);
+	(*curr) = (*curr)->next;
+}
+
 void	asterisk_expand(t_token **tokens, t_token *curr)
 {
-	int	i;
+	int		i;
 
-	if (curr->prev && curr->prev->type >= RR_REDIR && curr->prev->type <= R_REDIR)
+	if (curr->prev && curr->prev->type >= RR_REDIR
+		&& curr->prev->type <= R_REDIR)
 	{
 		i = check_ambiguous(curr);
 		if (i > 1)
 		{
-			curr->value = ft_strdup("*2");
-			gc_add(g_minishell, curr->value);
-			curr = curr->next;
+			adjust_token(&curr, "*2");
 			return ;
 		}
 		else if (i == 0)
 		{
-			curr->value = ft_strdup("*0");
-			gc_add(g_minishell, curr->value);
-			curr = curr->next;
+			adjust_token(&curr, "*0");
 			return ;
 		}
 		else

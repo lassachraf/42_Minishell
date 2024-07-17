@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:38:34 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 19:05:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:18:49 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	syntax_second_phase(t_token *token)
 		}
 		else if (!is_right_valid1(token->next->type))
 		{
-			ft_putstr_fd(RED "badashell1$ : ", 2);
+			ft_putstr_fd(RED "badashell$ : ", 2);
 			ft_putstr_fd("syntax error near unexpected token `", 2);
 			ft_putstr_fd(token->next->value, 2);
 			ft_putstr_fd("`\n" RESET, 2);

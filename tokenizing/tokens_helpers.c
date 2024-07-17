@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 19:24:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:39:23 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ void	remove_quotes(t_token **tokens)
 				join_tokens(tokens, &current);
 			else if (current->next && special_case(current->prev, current,
 					current->next))
+			{
 				handle_special_case(tokens, &current);
+			}
 			else
 			{
 				tmp = current->next;
