@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 10:48:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:37:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ char	*get_fullpath(char *argv, char **env)
 	char	*fullpath;
 	int		i;
 
-	if (!*argv)
+	if (!argv || !env || !*env || !*argv || ft_isspace(*argv))
 		return (NULL);
-	i = 0;
 	fullpath = NULL;
+	i = 0;
 	paths = get_env_paths(env);
 	paths_num = strings_count(paths);
 	cmd = ft_split(argv, ' ');
@@ -61,21 +61,22 @@ int	check_cmd(char *argv, char **env)
 	char	*cmd;
 
 	cmd = get_fullpath(argv, env);
+	gc_add(g_minishell, cmd);
 	if (!cmd && *argv == '.')
 		cmd = get_command(argv);
 	if (*argv != '\0' && (*argv == '/' || *argv == '.'
 			|| !get_env_var(g_minishell->our_env, "PATH")) && access(cmd, F_OK))
-		return (print_err("no such file or directory", argv), free(cmd), 127);
+		return (print_err("no such file or directory", argv), 127);
 	else if (ft_strlen(argv) == 1 && argv[0] == '.')
 	{
 		print_err("filename argument required\n.: usage: . filename [arguments]",
 			NULL);
-		return (free(cmd), 2);
+		return (2);
 	}
-	else if (access(cmd, F_OK))
-		return (print_err("command not found", argv), free(cmd), 127);
+	else if (access(cmd, F_OK)) // 
+		return (print_err("command not found", argv), 127);
 	else if (access(cmd, X_OK))
-		return (print_err("permission denied", argv), free(cmd), 126);
+		return (print_err("permission denied", argv), 126);
 	return (0);
 }
 

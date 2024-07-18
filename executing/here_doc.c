@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 11:08:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 22:45:54 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,18 @@ int	write_or_break(int fd, char *limiter, char *buf)
 	return (1);
 }
 
-void	read_buf(char **buf)
+void	read_buf(char **buf, int expand)
 {
 	*buf = readline("> ");
 	if (*buf)
 	{
 		gc_add(g_minishell, *buf);
-		if (ft_strchr(*buf, '$'))
+		if (ft_strchr(*buf, '$') && expand)
 			here_doc_expanding(buf);
 	}
 }
 
-int	here_doc(char *limiter, int doc_num)
+int	here_doc(char *limiter, int doc_num, int expand)
 {
 	char	*buf;
 	int		id;
@@ -90,7 +90,7 @@ int	here_doc(char *limiter, int doc_num)
 	id = fork();
 	if (!id)
 	{
-		do_here_doc(buf, limiter, fd);
+		do_here_doc(buf, limiter, fd, expand);
 		exit(0);
 	}
 	else

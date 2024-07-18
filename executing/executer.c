@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 09:24:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:50:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	execute_and_or(t_node *node) // cat || ps
 	{
 		executer(node->data.pair.left);
 		wait_and_get();
-		if (!g_minishell->exit_s && g_minishell->exit_s != 2)
+		if (!g_minishell->exit_s)
 		{
 			dup2(g_minishell->stdin, 0);
 			dup2(g_minishell->stdout, 1);
@@ -121,7 +121,7 @@ void	execute_pair(t_node *node) // ls | $dfs | cat
 					if (g_minishell->exit_s && g_minishell->exit_s != 2)
 						executer(node->data.pair.left->data.pair.right);
 							// RUN RIGHT OF OR if LEFT FALSE
-					while (waitpid(-1, NULL, 0) != -1)
+					while (waitpid(-1, NULL, 0) != -1);
 
 						exit(g_minishell->exit_s);
 				}

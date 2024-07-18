@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 11:26:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:11:42 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,10 @@ t_env				*special_dup_env(void);
 void				executer(t_node *node);
 
 // Main function that handle here_doc.
-int					here_doc(char *limiter , int doc_num);
+int					here_doc(char *limiter , int doc_num, int expand);
 
 // Helper function for handling here_doc.
-void				do_here_doc(char *buf, char *limiter, int fd);
+void				do_here_doc(char *buf, char *limiter, int fd, int expand);
 
 // Function that return the size of the env.
 int  				env_size(t_env *env);
@@ -258,13 +258,13 @@ int					execute_docs(t_list *red_list);
 void				unlink_docs(int docs);
 
 // Function that read and fill here_doc buffer.
-void				read_buf(char **buf);
+void				read_buf(char **buf, int expand);
 
 // Function that IDK XD.
 int					write_or_break(int fd, char *limiter, char *buf);
 
 // Function that print the AST "DEBUGGING"
-void				printAST(t_node* node , int x , t_type type);
+void				printAST(t_node* node, int x, t_type type);
 
 /* Expanding */
 

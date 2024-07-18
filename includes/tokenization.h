@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 11:14:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 22:18:34 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_type			type;
+	int				next_space;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;

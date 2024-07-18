@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 09:50:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:26:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*get_command(char *argv)
 	int		i;
 
 	i = 0;
-	while (argv[i] != ' ' && argv[i] != '\0')
+	while (!ft_isspace(argv[i]) && argv[i] != '\0')
 		i++;
 	cmd = malloc(i + 1);
 	gc_add(g_minishell, cmd);

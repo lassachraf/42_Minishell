@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:13:52 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 10:58:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:14:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,26 @@ int	general_check(void)
 	return (0);
 }
 
+void	precise_whitespaces(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == WHITESPACE)
+		{
+			if (tokens->prev)
+				tokens->prev->next_space = 1;
+		}
+		tokens = tokens->next;
+	}
+}
+
 int	syntax(void)
 {
 	t_token	*token;
 
+	precise_whitespaces(g_minishell->tokens);
 	remove_whitespaces(&g_minishell->tokens);
+	print_tokens(g_minishell->tokens);
 	token = g_minishell->tokens;
 	while (token)
 	{

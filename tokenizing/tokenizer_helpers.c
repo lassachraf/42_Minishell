@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 17:29:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/17 22:20:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_token	*new_token(char *value, t_type type)
 	new_token->value = value;
 	gc_add(g_minishell, new_token->value);
 	new_token->type = type;
+	new_token->next_space = 0;
 	new_token->prev = NULL;
 	new_token->next = NULL;
 	return (new_token);
