@@ -6,55 +6,55 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 10:05:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:34:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	fix_embgous(t_redir *new)
+int	is_embgous(t_redir *new)
 {
-	if (!new->file)
+	t_list *asterisk;
+	int		size;
+
+	size = 0;
+	if (ft_strchr(new->file, '$'))
 	{
-		printf("ERROR\n");
-		return (0);
+		print_err("ambiguous redirect", new->file);
+		g_minishell->exit_s = 1;
+		return (1);
 	}
-	if (new->file[0] == '*')
+	if(ft_strchr(new->file, '*'))
 	{
-		if (new->file[1] == '2')
+		asterisk = asterisk_functionality(new->file);
+		size = ft_lstsize(asterisk);
+		if(size == 1 || !size)
 		{
-			new->file = ft_substr(new->file, 2, ft_strlen(new->file));
-			gc_add(g_minishell, new->file);
-			return (2);
+			if (access(new->file, F_OK) == -1 && new->type != R_REDIR)
+				print_err("no such file or directory", new->file);
+			else if (!access(new->file, F_OK))
+				print_err("permission denied", new->file);
+			else
+				return (0);
 		}
-		else if (new->file[1] == '0')
-		{
-			new->file = ft_substr(new->file, 2, ft_strlen(new->file));
-			gc_add(g_minishell, new->file);
-			return (1);
-		}
+		else if (size > 1)
+			print_err("ambiguous redirect", new->file);
+		g_minishell->exit_s = 1;
+		return (1);
 	}
 	return (0);
 }
 
-int	open_redir(t_redir *redir, int mode)
+int	open_redir(t_redir *redir)
 {
-	redir->fd = open(redir->file, redir->mode, 0644);
-	if (redir->fd < 0)
+	if(!is_embgous(redir))
 	{
-		if (!mode || mode == 1)
-		{
-			if (access(redir->file, F_OK) == -1)
-				print_err("no such file or directory", redir->file);
-			else
-				print_err("permission denied", redir->file);
-		}
-		else if (mode == 2)
-			print_err("ambiguous redirect", redir->file);
-		g_minishell->exit_s = 1;
-		return (0);
+		redir->fd = open(redir->file, redir->mode, 0644);
+		if (redir->fd < 0)
+			return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 int	open_and_set(t_list *red_list)
@@ -66,7 +66,7 @@ int	open_and_set(t_list *red_list)
 		new = red_list->content;
 		if (new->type != LL_REDIR)
 		{
-			if (!open_redir(new, fix_embgous(new)))
+			if (!open_redir(new))
 				return (0);
 		}
 		red_list = red_list->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 17:12:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:44:14 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int	process_joining(t_env *sorted_env, char **args, int i)
 	char	**split;
 
 	split = custome_split(ft_split(args[i], '='));
-	printf("split[0]='%s'\n", split[0]);
-	printf("split[1]='%s'\n", split[1]);
 	if (check_identifier(split, 0) == -1)
 		return (clear_env(sorted_env), free_split(split), -1);
 	if (get_env_var(g_minishell->our_env, split[0]))

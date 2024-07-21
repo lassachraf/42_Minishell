@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 09:21:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 18:51:54 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**list_to_argv(t_list *list)
 	int		len;
 
 	i = 0;
-	if (!list)
+	if (!list || !list->content)
 		return (NULL);
 	size = ft_lstsize(list);
 	argv = malloc(sizeof(char *) * (size + 1));

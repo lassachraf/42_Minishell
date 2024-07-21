@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 17:52:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 20:48:36 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,13 +255,15 @@ void	expanding(void)
 			tokens->value = custome_path(tokens->value);
 			tokens = tokens->next;
 		}
-		else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
-		{
-			if (!(tokens->prev && (tokens->prev->type == S_QUOTE
-						|| tokens->prev->type == D_QUOTE)))
-				asterisk_expand(&g_minishell->tokens, tokens);
-			tokens = tokens->next;
-		}
+		// else if (tokens->type == WORD && ft_strchr(tokens->value, '*'))
+		// {
+		// 	if (!(tokens->prev && (tokens->prev->type == S_QUOTE
+		// 				|| tokens->prev->type == D_QUOTE)))
+		// 		asterisk_expand(&g_minishell->tokens, tokens);
+		// 	tokens = tokens->next;
+		// }
+		// else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
+		// 	tokens = word_helper(tokens);
 		else
 			tokens = tokens->next;
 	}

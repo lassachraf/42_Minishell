@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 11:14:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/21 22:48:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ int					is_special(char c);
 
 // Function that checks if the character is a separator.
 int					is_separator(char *s);
-
-// Function that skips the whitespaces.
-void				skip_spaces(char **line);
 
 // Function that check for a special case.
 int					special_case(t_token *prev, t_token *curr, t_token *next);

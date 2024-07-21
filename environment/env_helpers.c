@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 10:48:09 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:40:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ char	*get_env_var(t_env *env, char *var)
 		return (NULL);
 }
 
+void	free_line_of_env(t_env *current)
+{
+	free(current->value);
+	free(current->key);
+	free(current);
+}
+
 void	delete_env_var(t_env **env, char *key)
 {
 	t_env	*current;
@@ -53,7 +60,13 @@ void	delete_env_var(t_env **env, char *key)
 		return ;
 	current = *env;
 	previous = NULL;
-	while (current && ft_strncmp(current->key, key, ft_strlen(key)) != 0)
+	if(!ft_strncmp((*env)->key, key, ft_strlen(key)))
+	{
+		g_minishell->our_env = (*env)->next;
+		free_line_of_env(*env);
+		return;
+	}
+	while (current && ft_strncmp(current->key, key, ft_strlen(key)))
 	{
 		previous = current;
 		current = current->next;
@@ -64,9 +77,7 @@ void	delete_env_var(t_env **env, char *key)
 		*env = current->next;
 	else
 		previous->next = current->next;
-	free(current->key);
-	free(current->value);
-	free(current);
+	free_line_of_env(current);
 }
 
 void	clear_env(t_env *env)

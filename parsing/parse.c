@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/18 17:26:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:32:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../includes/minishell.h"
 
-t_redir	*do_red(t_token **tokens) // 
+t_redir	*do_red(t_token **tokens)
 {
 	t_redir *new;
 
@@ -30,8 +30,16 @@ t_redir	*do_red(t_token **tokens) //
 		new->mode = O_CREAT | O_RDWR | O_APPEND;
 	(*tokens) = (*tokens)->next;
 	if (ft_strchr((*tokens)->value, '$'))
-			here_doc_expanding(&(*tokens)->value);
-	new->file = (*tokens)->value;
+	{
+		char *tmp = (*tokens)->value;
+		(*tokens)->value = helper_expander((*tokens)->value);
+		if ((*tokens)->value)
+			new->file = (*tokens)->value;
+		else
+			new->file = tmp;
+	}
+	else
+		new->file = (*tokens)->value;
 	return (new);
 }
 
@@ -203,29 +211,31 @@ t_node	*parse_block(t_token **tokens) // (ls -a) > 1 || (ls -la | cat) > 1
 
 void set_null_as_true(t_node **res)
 {
-	t_list *true_c;
-	char *str;
-	char *path;
-
-	path = get_fullpath("true", env_to_envp(g_minishell->our_env));
-	gc_add(g_minishell, path);
-	if(get_env_var(g_minishell->our_env, "PATH") && path)
+	t_list *list;
+	t_list *a_new;
+	if (!res || !*res)
+		return;
+	list = NULL;
+	if((*res)->type == PAIR_NODE)
 	{
-		str = ft_strdup("true");
-		gc_add(g_minishell, str);
-		true_c = ft_lstnew(str);
-		gc_add(g_minishell, true_c);
-		if(*res && (*res)->type == PAIR_NODE)
+		if((*res)->data.pair.left->type == PAIR_NODE)
+			set_null_as_true(&(*res)->data.pair.left);
+		if((*res)->data.pair.right->type == PAIR_NODE)
+			set_null_as_true(&(*res)->data.pair.right);
+	}
+	else if((*res)->type == STRING_NODE)
+	{
+		while((*res)->data.cmd)
 		{
-			if(!(*res)->data.pair.left)
-				(*res)->data.pair.left = string_node_new(true_c);
-			else if((*res)->data.pair.left->type == PAIR_NODE)
-				set_null_as_true(&(*res)->data.pair.left);
-			if(!(*res)->data.pair.right)
-				(*res)->data.pair.right = string_node_new(true_c);
-			else if((*res)->data.pair.right->type == PAIR_NODE)
-				set_null_as_true(&(*res)->data.pair.right);
+			if((*res)->data.cmd->content)
+			{
+				a_new = ft_lstnew((*res)->data.cmd->content);
+				gc_add(g_minishell, a_new);
+				ft_lstadd_back(&list, a_new);
+			}
+			(*res)->data.cmd = (*res)->data.cmd->next;
 		}
+			(*res)->data.cmd = list;
 	}
 }
 t_node	*parsing(void) // (ls -a) > 1
@@ -236,6 +246,5 @@ t_node	*parsing(void) // (ls -a) > 1
 	res = parse_block(&g_minishell->tokens);
 	if (!res)
 		gc_free_all(g_minishell);
-	set_null_as_true(&res);
 	return(res);
 }

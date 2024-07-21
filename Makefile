@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+         #
+#    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/18 11:14:24 by baouragh         ###   ########.fr        #
+#    Updated: 2024/07/21 18:57:35 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ BUILTINS		:=	builtins/ft_env.c 					\
 					builtins/export_utils.c				\
 					builtins/ft_pwd.c 					\
 					builtins/ft_unset.c					\
-					builtins/setters.c
+					builtins/setters.c					\
+					builtins/printing.c
 
 ENVIRONMENT		:=	environment/env_utils.c				\
 					environment/env_helpers.c

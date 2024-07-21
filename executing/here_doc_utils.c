@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 13:06:09 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:29:30 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	do_here_doc(char *buf, char *limiter, int fd, int *pipe)
 	int old_count;
 	char *lines;
 
-	old_count = g_minishell->lines + 1;
+	old_count = g_minishell->lines;
 	while (1)
 	{
 		signal(SIGINT, here_doc_sig);

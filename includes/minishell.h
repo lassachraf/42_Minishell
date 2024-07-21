@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/19 10:06:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/21 22:48:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ typedef struct s_minishell
 extern t_minishell	*g_minishell;
 
 t_list	*asterisk_functionality(char *s);
-
+void 	set_null_as_true(t_node **res);
+void 	print_ast(const char *prefix,  t_node* root, bool isLeft);
+void 	add_list_into_list(t_list **lst, t_list *asterisk);
+	
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -204,7 +207,7 @@ int 				output_to_dup(t_list *red_list);
 void				run_doc_cmd(t_list *red_list);
 
 // Function that IDK XD.
-int 				open_redir(t_redir *redir, int mode);
+int 				open_redir(t_redir *redir);
 
 // Function that IDK XD.
 int 				open_and_set(t_list *red_list);

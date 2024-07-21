@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/18 17:17:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 20:44:29 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,23 @@ void	execute_redires(t_list *red_list)
 	run_doc_cmd(red_list);
 }
 
-void	execute_cmd(t_node *node)
+void add_list_into_list(t_list **lst, t_list *asterisk) //ls *
+{
+	t_list *save_next;
+
+	if(!lst || !*lst || !asterisk)
+		return;
+	save_next = (*lst)->next;
+	(*lst)->content = asterisk->content;
+	(*lst)->next = asterisk->next;
+	ft_lstlast(*lst)->next = save_next;
+}
+
+void	execute_cmd(t_node *node) //
 {
 	int	id;
 	t_list *lst;
+	t_list *asterisk;
 	
 	if (!node)
 		return ;
@@ -40,8 +53,16 @@ void	execute_cmd(t_node *node)
 	{
 		if (ft_strchr((char*)lst->content, '$'))
 			here_doc_expanding((char**)&lst->content);
+		else if(ft_strchr((char*)lst->content, '*'))
+		{
+			asterisk = asterisk_functionality((char*)lst->content);
+			add_list_into_list(&lst, asterisk);
+		}
 		lst = lst->next;
 	}
+	set_null_as_true(&node);
+	if(!node->data.cmd)
+		return;
 	id = 0;
 	if (ft_is_builtin(node->data.cmd->content))
 	{
@@ -57,7 +78,7 @@ void	execute_cmd(t_node *node)
 	}
 }
 
-void	execute_and_or(t_node *node)
+void	execute_and_or(t_node *node) // cat || ps
 {
 	if (node->data.pair.type == OR)
 	{

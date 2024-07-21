@@ -1,12 +1,34 @@
-To the point export command must rewrite reviewd 
-step 1 : export var1+=ls
-. // 
-. // 
-. // 
-step n : export var1+=n(ls)
-but if (export var1+=) should do nothing with the value of that var
-but if (export var1=) must resuting to empty sting not (NUll).
-export va1="mohammed     mad" with tab => white space or normal space
-Make sure the global varibale or boolen value for signal testing is restating fixed !!
-export var="ls pwd" failed with only using space in between words
-'unset' 'SYSTEMD_EXEC_PID' sigfault from first and you should not unset _ the end of env
+// WRITE THE ERRORS THAT YOU FACED HERE
+
+ls > $vkdfl : should be an ambiguous error.
+>>> FIXED, but should see if it affects something else.
+
+
+
+
+
+
+
+
+
+
+// THIS IS THE PART OF EACH ONE OF US :
+
+// baouragh :
+
+
+
+
+// alassiqu :
+
+: 1 :	if export var= , the env should be "var=" instead of "var=(NULL)"	>>>>> DONE
+: 2 :	if export var+= , should do nothing with the value of that var		>>>>> DONE
+: 3 :	echo $var && var has more spaces should be replaced by one space	>>>>> DONE
+: 4 :	if unset the head, should replace the head cleanly					>>>>> DONE
+: 5 :	handle the ambiguous "ls > $gvjfkd"									>>>>> DONE
+: 6 :																		>>>>> NOTYET
+: 7 :																		>>>>> NOTYET
+: 8 :																		>>>>> NOTYET
+: 9 :																		>>>>> NOTYET
+
+: 10 :																		>>>>> NOTYET

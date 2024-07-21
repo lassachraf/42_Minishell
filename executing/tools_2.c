@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/18 10:23:54 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/19 20:46:23 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,17 @@ void	do_cmd(t_node *ast)
 	int		id;
 	char	**cmd;
 	char	**env;
-	t_list *lst;
 
 	if (!ast)
 		return ;
 	id = 0;
-	lst = ast->data.cmd;
-	while(lst)
-	{
-		if (ft_strchr((char*)lst->content, '$'))
-			here_doc_expanding((char**)&lst->content);
-		lst = lst->next;
-	}
 	if (ft_is_builtin(ast->data.cmd->content))
 		execute_builtins(g_minishell, list_to_argv(ast->data.cmd));
 	else
 	{
 		cmd = list_to_argv(ast->data.cmd);
 		if (!cmd)
-			return ;
+			exit(0);
 		env = env_to_envp(g_minishell->our_env);
 		if (!env)
 			return ;
@@ -71,6 +63,8 @@ void	do_cmd(t_node *ast)
 void	do_pipe(t_node *cmd, int mode, int *pfd)
 {
 	int	id;
+	t_list *lst;
+	t_list *asterisk;
 
 	id = fork();
 	if (id < 0)
@@ -81,6 +75,21 @@ void	do_pipe(t_node *cmd, int mode, int *pfd)
 	if (id == 0)
 	{
 		fd_duper(pfd, mode);
+		lst = cmd->data.cmd;
+		while(lst)
+		{
+			if (ft_strchr((char*)lst->content, '$'))
+				here_doc_expanding((char**)&lst->content);
+			else if(ft_strchr((char*)lst->content, '*'))
+			{
+				asterisk = asterisk_functionality((char*)lst->content);
+				add_list_into_list(&lst, asterisk);
+			}
+			lst = lst->next;
+		}
+		set_null_as_true(&cmd);
+		if(!cmd->data.cmd)
+			exit(0);
 		do_cmd(cmd);
 	}
 	else

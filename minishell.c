@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 12:48:54 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:16:22 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,15 @@ t_minishell	*g_minishell;
 #define W_WHITE   "\033[37m"      /* White */
 
 
-void print_ast(const char *prefix,  t_node* root, bool isLeft)
+void	print_ast(const char *prefix,  t_node* root, bool isLeft)
 {
-	char *dup;
-	char *join;
-    if(!root) return ;
+	char	*dup;
+	char	*join;
 
+    if(!root)
+		return ;
 	printf(W_GREEN"%s", prefix);
-	
-    // cout << ;
 	printf("%s", (isLeft ? "├──" : "└──" ));
-
-    // cout << WHITE;
 	printf(W_WHITE"");
 
 	if (root->type == PAIR_NODE) {
@@ -152,6 +149,7 @@ void	ft_readline(void)
 	int	exit_status;
 
 	exit_status = 0;
+			g_minishell->lines++;
 	g_minishell->docs = 0;
 	g_minishell->exit_s = 0;
 	g_minishell->line = readline(ORANGE PROMPT RESET);
@@ -190,7 +188,6 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	while (1)
 	{
-		g_minishell->lines++;
 		signals();
 		ft_readline();
 		g_minishell->tokens = tokenizer();
