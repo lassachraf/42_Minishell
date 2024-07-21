@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 09:36:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:09:01 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ t_env	*special_dup_env(void)
 	pwd = (t_env *)malloc(sizeof(t_env));
 	shlvl = (t_env *)malloc(sizeof(t_env));
 	underscore = (t_env *)malloc(sizeof(t_env));
+	gc_add(g_minishell, shlvl);
+	gc_add(g_minishell, underscore);
 	if (!pwd || !shlvl || !underscore)
 		return (NULL);
 	pwd->key = ft_strdup("PWD");

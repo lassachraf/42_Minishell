@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 10:06:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 10:23:54 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 int	wait_and_get(void)
 {
 	int	fail;
+	int x;
+	char *exit;
 
-	// char	*exit;
+
 	fail = -1;
-	fail = wait(&g_minishell->exit_s);
-	// printf("%d\n",g_minishell->exit_s );
-	if (WIFEXITED(g_minishell->exit_s))
-		g_minishell->exit_s = WEXITSTATUS(g_minishell->exit_s);
-	// printf(">>>>>>>>>>>> %d\n",g_minishell->exit_s);
-	// exit = ft_itoa(g_minishell->exit_s);
-	// if(!exit)
-	// 	return(print_errors("ERROR WITH FT_ITOA\n"), fail);
-	// set_env_var(g_minishell->our_env, "?", exit);
-	// free(exit);
-	return (fail);
+	fail = wait(&x);
+	if(g_minishell->exit_s == 130)
+	{
+		exit = ft_itoa(g_minishell->exit_s);
+		set_env_var(g_minishell->our_env, "?", exit);
+		return (free(exit) ,-1);
+	}
+	if (WIFEXITED(x))
+		g_minishell->exit_s = WEXITSTATUS(x);
+	exit = ft_itoa(g_minishell->exit_s);
+	set_env_var(g_minishell->our_env, "?", exit);
+	return (free(exit) ,fail);
 }
 
 void	do_cmd(t_node *ast)
@@ -36,11 +39,19 @@ void	do_cmd(t_node *ast)
 	int		id;
 	char	**cmd;
 	char	**env;
+	t_list *lst;
 
-	id = 0;
 	if (!ast)
 		return ;
-	else if (ft_is_builtin(ast->data.cmd->content))
+	id = 0;
+	lst = ast->data.cmd;
+	while(lst)
+	{
+		if (ft_strchr((char*)lst->content, '$'))
+			here_doc_expanding((char**)&lst->content);
+		lst = lst->next;
+	}
+	if (ft_is_builtin(ast->data.cmd->content))
 		execute_builtins(g_minishell, list_to_argv(ast->data.cmd));
 	else
 	{

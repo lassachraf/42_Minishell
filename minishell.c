@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 22:24:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:48:54 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	print_tokens(t_token *tokens)
 	{
 		printf("value => '%s'\n", token->value);
 		printf("type => '%u'\n", token->type);
-		printf("space => '%d'\n", token->next_space);
 		token = token->next;
 	}
 }
@@ -191,6 +190,7 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	while (1)
 	{
+		g_minishell->lines++;
 		signals();
 		ft_readline();
 		g_minishell->tokens = tokenizer();

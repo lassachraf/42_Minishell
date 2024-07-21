@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 12:11:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 10:06:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,15 @@ typedef struct s_minishell
 	int				dq_flag;
 	int				exit_s;
 	int				docs;
+	int				lines;
 	int				stdin;
 	int				stdout;
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
-						
+
+t_list	*asterisk_functionality(char *s);
+
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -159,10 +162,10 @@ t_env				*special_dup_env(void);
 void				executer(t_node *node);
 
 // Main function that handle here_doc.
-int					here_doc(char *limiter , int doc_num, int expand);
+int					here_doc(char *limiter , int doc_num);
 
 // Helper function for handling here_doc.
-void				do_here_doc(char *buf, char *limiter, int fd, int expand);
+void				do_here_doc(char *buf, char *limiter, int fd, int *pipe);
 
 // Function that return the size of the env.
 int  				env_size(t_env *env);
@@ -258,13 +261,11 @@ int					execute_docs(t_list *red_list);
 void				unlink_docs(int docs);
 
 // Function that read and fill here_doc buffer.
-void				read_buf(char **buf, int expand);
+void				read_buf(char **buf);
 
 // Function that IDK XD.
-int					write_or_break(int fd, char *limiter, char *buf);
+int					write_or_break(int fd, char *limiter, char *buf, int count);
 
-// Function that print the AST "DEBUGGING"
-void				printAST(t_node* node, int x, t_type type);
 
 /* Expanding */
 

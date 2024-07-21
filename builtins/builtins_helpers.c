@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:50:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 18:48:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:07:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,11 @@ void	joining_words(char **split)
 	set_as_exported(g_minishell->our_env, split[0]);
 	temp = get_env_var(g_minishell->our_env, split[0]);
 	if (split[1])
+	{
 		new = ft_strjoin(temp, split[1]);
-	gc_add(g_minishell, new);
-	set_env_var(g_minishell->our_env, split[0], new);
+		gc_add(g_minishell, new);
+		set_env_var(g_minishell->our_env, split[0], new);
+	}
+	else
+		return ;
 }

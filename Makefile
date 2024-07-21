@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/17 17:45:08 by marvin           ###   ########.fr        #
+#    Updated: 2024/07/18 11:14:24 by baouragh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ LIBFT_PATH		:= libft/
 LIBFT			:= libft/libft.a
 
 CC				:= cc
-CFLAGS			:=  -fsanitize=address -g3
+# CFLAGS			:= -Wall -Wextra -Werror
+CFLAGS			:= -Wall -Wextra -Werror -fsanitize=address -g3
 RM				:= rm -f
 
 BUILTINS		:=	builtins/ft_env.c 					\

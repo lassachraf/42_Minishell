@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 22:43:53 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:59:30 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	do_here_docs(t_list *red_list, int doc_num)
 		if (new->type == LL_REDIR)
 		{
 			g_minishell->docs++;
-			new->fd = here_doc(new->file, doc_num, new->expand);
+			new->fd = here_doc(new->file, doc_num);
 			if (new->fd < 0)
 				return (0);
 		}
@@ -78,6 +78,7 @@ void	run_doc_cmd(t_list *red_list)
 
 int	scan_and_set(t_node *node)
 {
+	g_minishell->exit_s = 0;
 	if (!node)
 		return (1);
 	if (node->type == PAIR_NODE)

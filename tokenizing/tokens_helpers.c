@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 15:19:15 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:15:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@ void	handle_special_case(t_token **tokens, t_token **current)
 {
 	t_token	*tmp;
 
-	if ((*current)->prev && (*current)->prev->type == WORD)
-	{
-		tmp = (*current)->next;
-		remove_token(tokens, (*current));
-		(*current) = tmp;
-		return ;
-	}
 	tmp = (*current)->next;
 	remove_token(tokens, (*current));
 	(*current) = tmp;
@@ -53,6 +46,7 @@ void	join_tokens(t_token **tokens, t_token **current)
 	t_token	*tmp;
 	char	*value;
 
+	printf("join tokens >>>>>>>>>> here\n");
 	value = ft_strjoin((*current)->prev->value, (*current)->next->value);
 	(*current)->prev->value = value;
 	gc_add(g_minishell, value);
@@ -81,7 +75,9 @@ void	remove_quotes(t_token **tokens)
 			if (current->prev && current->next && current->prev->type == WORD
 				&& ft_strchr(current->prev->value, '=')
 				&& current->next->type == WORD)
+			{
 				join_tokens(tokens, &current);
+			}
 			else if (current->next && special_case(current->prev, current,
 					current->next))
 			{

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 12:22:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:52:54 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,6 @@ void	expanding(void)
 				asterisk_expand(&g_minishell->tokens, tokens);
 			tokens = tokens->next;
 		}
-		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
-			tokens = word_helper(tokens);
 		else
 			tokens = tokens->next;
 	}

@@ -1,0 +1,12 @@
+To the point export command must rewrite reviewd 
+step 1 : export var1+=ls
+. // 
+. // 
+. // 
+step n : export var1+=n(ls)
+but if (export var1+=) should do nothing with the value of that var
+but if (export var1=) must resuting to empty sting not (NUll).
+export va1="mohammed     mad" with tab => white space or normal space
+Make sure the global varibale or boolen value for signal testing is restating fixed !!
+export var="ls pwd" failed with only using space in between words
+'unset' 'SYSTEMD_EXEC_PID' sigfault from first and you should not unset _ the end of env

@@ -6,17 +6,17 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 15:20:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 10:09:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	here_doc_expanding(char **s) // , int flag
+void	here_doc_expanding(char **s)
 {
-    // if (flag)
-    // {
-        *s = helper_expander(*s);
-        gc_add(g_minishell, s);
-    // }
+	if (ft_strchr(*s, '$'))
+		*s = helper_expander(*s);
+	// else if (ft_strchr(*s, '*'))
+	// 	*s = ;
+		
 }

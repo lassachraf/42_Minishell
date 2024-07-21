@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 22:39:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:26:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ t_redir	*do_red(t_token **tokens) //
 	else if(new->type == RR_REDIR)
 		new->mode = O_CREAT | O_RDWR | O_APPEND;
 	(*tokens) = (*tokens)->next;
+	if (ft_strchr((*tokens)->value, '$'))
+			here_doc_expanding(&(*tokens)->value);
 	new->file = (*tokens)->value;
-	new->expand = (*tokens)->next_space;
 	return (new);
 }
 

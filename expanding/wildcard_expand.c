@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 10:53:01 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/19 10:09:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,33 @@ int	check_ambiguous(t_token *curr)
 	}
 	closedir(dir);
 	return (match_count);
-}
+} 
 
-int	asterisk_functionality(t_token **tokens, t_token *curr)
+t_list	*asterisk_functionality(char *s)
 {
 	DIR				*dir;
 	struct dirent	*entry;
+	t_list			*lst;
 	int				i;
 
+	lst = NULL;
 	dir = opendir(".");
 	if (!dir)
-		return (-1);
+		return (NULL);
 	i = 0;
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (entry->d_name[0] != '.' && match_pattern(curr->value,
+		if (entry->d_name[0] != '.' && match_pattern(s,
 				entry->d_name))
-		{
-			add_token_middle(tokens, new_token(ft_strdup(entry->d_name), WORD),
-				curr->prev);
+		{			
+			ft_lstadd_back(&lst, ft_lstnew(entry->d_name));
 			i++;
 		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
-	return (i);
+	return (lst);
 }
 
 void	adjust_token(t_token **curr, char *new)
@@ -99,29 +100,31 @@ void	adjust_token(t_token **curr, char *new)
 	(*curr) = (*curr)->next;
 }
 
-void	asterisk_expand(t_token **tokens, t_token *curr)
-{
-	int		i;
+// void	asterisk_expand(t_token **tokens, t_token *curr)
+// {
+// 	int		i;
 
-	if (curr->prev && curr->prev->type >= RR_REDIR
-		&& curr->prev->type <= R_REDIR)
-	{
-		i = check_ambiguous(curr);
-		if (i > 1)
-		{
-			adjust_token(&curr, "*2");
-			return ;
-		}
-		else if (i == 0)
-		{
-			adjust_token(&curr, "*0");
-			return ;
-		}
-		else
-			i = asterisk_functionality(tokens, curr);
-	}
-	else
-		i = asterisk_functionality(tokens, curr);
-	if (i)
-		remove_token(tokens, curr);
-}
+// 	print_tokens(g_minishell->tokens);
+// 	if (curr->prev && curr->prev->type >= RR_REDIR
+// 		&& curr->prev->type <= R_REDIR)
+// 	{
+// 		i = check_ambiguous(curr);
+// 		if (i > 1)
+// 		{
+// 			adjust_token(&curr, "*2");
+// 			return ;
+// 		}
+// 		else if (i == 0)
+// 		{
+// 			adjust_token(&curr, "*0");
+// 			return ;
+// 		}
+// 		else
+// 			i = asterisk_functionality(tokens, curr);
+// 	}
+// 	else
+// 		i = asterisk_functionality(tokens, curr);
+// 	if (i)
+// 		remove_token(tokens, curr);
+// 	print_tokens(g_minishell->tokens);
+// }
