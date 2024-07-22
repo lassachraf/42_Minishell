@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 17:37:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/22 17:52:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ char	*get_fullpath(char *argv, char **env)
 int	check_cmd(char *argv, char **env)
 {
 	char	*cmd;
+	struct stat statbuf;
 
+	stat(argv, &statbuf);
 	cmd = get_fullpath(argv, env);
 	gc_add(g_minishell, cmd);
 	if (!cmd && *argv == '.')
@@ -77,6 +79,8 @@ int	check_cmd(char *argv, char **env)
 		return (print_err("command not found", argv), 127);
 	else if (access(cmd, X_OK))
 		return (print_err("permission denied", argv), 126);
+	if (S_ISDIR(statbuf.st_mode) == true)
+		return (print_err("Is a directory", argv), 1);
 	return (0);
 }
 
@@ -89,13 +93,7 @@ void	call_execev(char **env, char *argv, char **cmd)
 	check_split(cmd, argv);
 	founded_path = get_fullpath(argv, env);
 	execve(founded_path, cmd, env);
-	if (*argv == '/' || *argv == '.')
-	{
-		print_err("Is a directory", argv);
-		exit(126);
-	}
-	else
-		print_err("EXEVE FAILED ", NULL);
+	print_err("EXEVE FAILED ", NULL);
 }
 
 int	ft_malloc_error(char **tab, size_t i)

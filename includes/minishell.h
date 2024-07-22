@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/22 14:21:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:36:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # define PROMPT "badashell$> "
 
+#include <sys/stat.h>
 # include "../libft/libft.h"
 # include "builtins.h"
 # include "execution.h"

@@ -18,8 +18,8 @@ export data="ps      dt"
 // THIS IS THE PART OF EACH ONE OF US :
 
 // baouragh :
-1 : fix number of lines in here_doc 
-2 : check out ambigeous errors 
+1 : fix number of lines in here_doc DONE!
+2 : check out ambigeous errors DONE!
 
 
 
