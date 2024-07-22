@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/22 17:50:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:45:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ int	is_ambiguous(t_redir *new)
 
 	size = 0;
 	asterisk = NULL;
+	printf("%s\n",new->file);
 	if (ft_strchr(new->file, '$')) // $*
 	{
 		val = helper_expander(new->file);
-		size = count_words(val); // num of names
-		// adjust name of file if size = 1
+		size = count_words(val);
+		printf("there is >>>> %d word\n", size);
 		if(size == 1 || !size)
 		{
 			if(size)
@@ -101,7 +102,7 @@ int	is_ambiguous(t_redir *new)
 		else
 			return (print_err("ambiguous redirect", new->file), 1);
 	}
-	else// normal 
+	else
 		return (check_name(new));
 	return (0);
 }
