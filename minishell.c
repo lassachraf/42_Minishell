@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/21 21:16:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:32:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	init_minishell(char **env)
 	add_env_var(g_minishell->our_env, "?", "0");
 	set_as_invisible(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "?");
-	set_env_var(g_minishell->our_env, "_", "]");
+	set_env_var(g_minishell->our_env, "_", "]") ;
 	set_as_unexported(g_minishell->our_env, "_");
 	signals();
 	return (1);
@@ -149,7 +149,7 @@ void	ft_readline(void)
 	int	exit_status;
 
 	exit_status = 0;
-			g_minishell->lines++;
+	g_minishell->lines++;
 	g_minishell->docs = 0;
 	g_minishell->exit_s = 0;
 	g_minishell->line = readline(ORANGE PROMPT RESET);

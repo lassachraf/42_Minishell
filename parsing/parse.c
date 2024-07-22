@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/21 21:32:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:53:10 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,10 +235,10 @@ void set_null_as_true(t_node **res)
 			}
 			(*res)->data.cmd = (*res)->data.cmd->next;
 		}
-			(*res)->data.cmd = list;
+		(*res)->data.cmd = list;
 	}
 }
-t_node	*parsing(void) // (ls -a) > 1
+t_node	*parsing(void)
 {
 	t_node	*res;
 

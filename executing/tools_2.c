@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/19 20:46:23 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:35:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	do_pipe(t_node *cmd, int mode, int *pfd)
 
 int	execute_docs(t_list *red_list)
 {
-	if (do_here_docs(red_list, g_minishell->docs) == 0)
+	if (do_here_docs(red_list) == 0)
 		return (0);
 	return (1);
 }
@@ -111,6 +111,7 @@ int	execute_docs(t_list *red_list)
 void	unlink_docs(int docs)
 {
 	char	*name;
+	char	*path;
 	char	*join;
 
 	if (!docs)
@@ -118,9 +119,11 @@ void	unlink_docs(int docs)
 	while (docs >= 0)
 	{
 		join = ft_itoa(docs);
-		name = ft_strjoin(PATH, join);
+		path = build_file_name(join);
+		name = ft_strjoin(PATH, path);
 		unlink(name);
 		free(join);
+		free(path);
 		free(name);
 		docs--;
 	}

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/21 22:48:01 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:21:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ t_list	*asterisk_functionality(char *s);
 void 	set_null_as_true(t_node **res);
 void 	print_ast(const char *prefix,  t_node* root, bool isLeft);
 void 	add_list_into_list(t_list **lst, t_list *asterisk);
-	
+char	*build_file_name(char *join);
+int	ft_isnum(int c);
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -195,7 +196,7 @@ char				*get_command(char *argv);
 char				*add_slash_cmd(char *path, char *cmd);
 
 // Function that IDK XD.
-int 				do_here_docs(t_list *red_list ,int doc_num);
+int 				do_here_docs(t_list *red_list);
 
 // Function that IDK XD.
 int 				input_to_dup(t_list *red_list);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/19 20:48:36 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:48:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 	}
 	else if (!ft_strncmp(expand + 1, "$", 1) || ft_isspace(expand[1])
 		|| (!ft_isalnum(expand[1]) && ft_strncmp(&expand[1], "_", 1)
-			&& ft_strncmp(&expand[1], "?", 1)) || !ft_isalnum(expand[1]))
+		&& ft_strncmp(&expand[1], "?", 1)) || !ft_isalnum(expand[1]) || ft_isnum(expand[1]))
 	{
 		new[(*j)++] = s[(*i)++];
 		new[(*j)++] = s[(*i)++];

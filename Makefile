@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/21 18:57:35 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/22 12:54:21 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIBFT			:= libft/libft.a
 
 CC				:= cc
 # CFLAGS			:= -Wall -Wextra -Werror
-CFLAGS			:= -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS			:= -Wall -Wextra -Werror #-fsanitize=address -g3
 RM				:= rm -f
 
 BUILTINS		:=	builtins/ft_env.c 					\
@@ -30,8 +30,7 @@ BUILTINS		:=	builtins/ft_env.c 					\
 					builtins/export_utils.c				\
 					builtins/ft_pwd.c 					\
 					builtins/ft_unset.c					\
-					builtins/setters.c					\
-					builtins/printing.c
+					builtins/setters.c
 
 ENVIRONMENT		:=	environment/env_utils.c				\
 					environment/env_helpers.c

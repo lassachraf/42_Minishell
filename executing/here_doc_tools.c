@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/18 11:59:30 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:20:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	do_here_docs(t_list *red_list, int doc_num)
+int	do_here_docs(t_list *red_list)
 {
 	t_redir	*new;
 
@@ -22,7 +22,7 @@ int	do_here_docs(t_list *red_list, int doc_num)
 		if (new->type == LL_REDIR)
 		{
 			g_minishell->docs++;
-			new->fd = here_doc(new->file, doc_num);
+			new->fd = here_doc(new->file, g_minishell->docs);
 			if (new->fd < 0)
 				return (0);
 		}

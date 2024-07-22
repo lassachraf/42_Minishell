@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/21 21:34:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:08:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_embgous(t_redir *new)
+int	is_ambiguous(t_redir *new)
 {
 	t_list *asterisk;
 	int		size;
@@ -35,7 +35,11 @@ int	is_embgous(t_redir *new)
 			else if (!access(new->file, F_OK))
 				print_err("permission denied", new->file);
 			else
+			{
+				if(size)
+					new->file = (char *)asterisk->content;
 				return (0);
+			}
 		}
 		else if (size > 1)
 			print_err("ambiguous redirect", new->file);
@@ -47,7 +51,7 @@ int	is_embgous(t_redir *new)
 
 int	open_redir(t_redir *redir)
 {
-	if(!is_embgous(redir))
+	if(!is_ambiguous(redir))
 	{
 		redir->fd = open(redir->file, redir->mode, 0644);
 		if (redir->fd < 0)

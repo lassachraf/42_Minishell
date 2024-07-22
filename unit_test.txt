@@ -3,19 +3,23 @@
 ls > $vkdfl : should be an ambiguous error.
 >>> FIXED, but should see if it affects something else.
 
+$fvkjds $dflks ls $sdfb -la $fsdbsb : should run >>> ls -la .(zlakhdr test)
 
+also for heredoc files, it should be with different file name 
+>>> ttyname + number of file + check if there is already a file increment the number.
 
+create function that get the path of the terminal and create a name for the file from it	>> DONE
+merge it with code																			>> NOTYET
 
-
-
-
-
+export data="ps      dt"
+> $data : should be an ambiguous
 
 
 // THIS IS THE PART OF EACH ONE OF US :
 
 // baouragh :
-
+1 : fix number of lines in here_doc 
+2 : check out ambigeous errors 
 
 
 
@@ -26,9 +30,10 @@ ls > $vkdfl : should be an ambiguous error.
 : 3 :	echo $var && var has more spaces should be replaced by one space	>>>>> DONE
 : 4 :	if unset the head, should replace the head cleanly					>>>>> DONE
 : 5 :	handle the ambiguous "ls > $gvjfkd"									>>>>> DONE
-: 6 :																		>>>>> NOTYET
-: 7 :																		>>>>> NOTYET
+: 6 :	heredoc file names													>>>>> DONE "TO CHECK WITH BADER"
+: 7 :	expanding special character the same way (?, !, @, #, ^, &, *, $)	>>>>> DONE
 : 8 :																		>>>>> NOTYET
 : 9 :																		>>>>> NOTYET
+
 
 : 10 :																		>>>>> NOTYET

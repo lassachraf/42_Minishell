@@ -3,25 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/18 13:20:09 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:57:42 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+char	*build_file_name(char *join)
+{
+	char	**split;
+	char	*name;
+	char	*tmp;
+	int		i;
+
+	split = ft_split(ttyname(0), '/');
+	name = NULL;
+	i = 0;
+	while (split[i])
+	{
+		tmp = name;
+		name = ft_strjoin(name, split[i]);
+		free(tmp);
+		i++;
+	}
+	tmp = name;
+	name = ft_strjoin(name, join);
+	free(tmp);
+	if (access(name, F_OK) != 0)
+		return (free_double(split), name);
+	else
+	{
+		tmp = name;
+		name = ft_strjoin(name, join);
+		return (free_double(split), free(tmp), name);
+	}
+	return (NULL);
+}
+
 int	open_hidden_file(int doc_num)
 {
 	char	*join;
+	char	*path;
 	char	*name;
 	int		fd;
 
 	join = ft_itoa(doc_num);
-	name = ft_strjoin(PATH, join);
-	fd = open(name, O_CREAT | O_RDWR | O_APPEND, 0777);
+	path = build_file_name(join);
+	name = ft_strjoin(PATH, path);
+	fd = open(name, O_CREAT | O_RDWR, 0777);
 	free(name);
+	free(path);
 	free(join);
 	if (fd < 0)
 	{
@@ -34,13 +68,16 @@ int	open_hidden_file(int doc_num)
 int	re_open_hidden_file(int doc_num)
 {
 	char	*join;
+	char	*path;
 	char	*name;
 	int		fd;
 
 	join = ft_itoa(doc_num);
-	name = ft_strjoin(PATH, join);
+	path = build_file_name(join);
+	name = ft_strjoin(PATH, path);
 	fd = open(name, O_RDONLY);
 	free(name);
+	free(path);
 	free(join);
 	if (fd < 0)
 	{
@@ -92,11 +129,12 @@ void	read_buf(char **buf)
 
 void get_lines_count(int *pipe)
 {
-	char	buf1[10];
+	char	buf[2048];
 
 	close(pipe[1]);
-	read(pipe[0], &buf1, 9);
-	g_minishell->lines = ft_atoi(buf1);
+	read(pipe[0], &buf, 2048);
+	g_minishell->lines = ft_atoi(buf);
+	printf("lines %d , %d\n",g_minishell->lines, ft_atoi(buf));
 }
 
 int	here_doc(char *limiter, int doc_num)
@@ -120,7 +158,8 @@ int	here_doc(char *limiter, int doc_num)
 	else
 	{
 		wait_and_get();
-		get_lines_count(pipe);
+		if(g_minishell->exit_s != 130)
+			get_lines_count(pipe);
 		if (!g_minishell->exit_s)
 		{
 			fd_hidden = re_open_hidden_file(doc_num);

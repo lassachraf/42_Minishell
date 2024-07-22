@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/19 20:44:29 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:52:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ void	execute_redires(t_list *red_list)
 	run_doc_cmd(red_list);
 }
 
-void add_list_into_list(t_list **lst, t_list *asterisk) //ls *
+void	add_list_into_list(t_list **lst, t_list *asterisk)
 {
 	t_list *save_next;
 
 	if(!lst || !*lst || !asterisk)
-		return;
+		return ;
 	save_next = (*lst)->next;
 	(*lst)->content = asterisk->content;
 	(*lst)->next = asterisk->next;
 	ft_lstlast(*lst)->next = save_next;
 }
 
-void	execute_cmd(t_node *node) //
+void	execute_cmd(t_node *node)
 {
 	int	id;
 	t_list *lst;
@@ -62,8 +62,12 @@ void	execute_cmd(t_node *node) //
 	}
 	set_null_as_true(&node);
 	if(!node->data.cmd)
+	{
+		set_env_var(g_minishell->our_env, "_", "");
 		return;
+	}
 	id = 0;
+	set_env_var(g_minishell->our_env, "_", (char *)ft_lstlast(node->data.cmd)->content);
 	if (ft_is_builtin(node->data.cmd->content))
 	{
 		execute_builtins(g_minishell, list_to_argv(node->data.cmd));
@@ -74,11 +78,13 @@ void	execute_cmd(t_node *node) //
 	{
 		id = fork();
 		if (!id)
+		{
 			do_cmd(node);
+		}
 	}
 }
 
-void	execute_and_or(t_node *node) // cat || ps
+void	execute_and_or(t_node *node)
 {
 	if (node->data.pair.type == OR)
 	{
@@ -106,59 +112,50 @@ void	execute_and_or(t_node *node) // cat || ps
 	}
 }
 
-void	execute_pair(t_node *node) // cat | ls
+void	execute_pair(t_node *node)
 {
 	int pfd[2];
 	int id;
 
-	if (node->data.pair.type == PIPE) // (cat -e && ps) | (cat -n && true)
+	if (node->data.pair.type == PIPE)
 	{
 		open_pipe(pfd);
 		if (node->data.pair.left && node->data.pair.left->type != STRING_NODE
-			&& node->data.pair.left->type != PIPE) // LEEEFT side of PIPE CASE
+			&& node->data.pair.left->type != PIPE)
 		{
 			if (node->data.pair.left->data.pair.type == AND)
 			{
 				id = fork();
 				if (!id)
 				{
-					close(pfd[0]);                                 
-						// read from pipe [pipe]
-					dup2(pfd[1], 1);                               
-						// write to [pipe]
+					close(pfd[0]);
+					dup2(pfd[1], 1);
 					executer(node->data.pair.left->data.pair.left);
-						// RUN LEFT OF AND
 					wait_and_get();
 					if (!g_minishell->exit_s)
 						executer(node->data.pair.left->data.pair.right);
-							// RUN RIGHT OF AND IF LEFT TRUE
 					while (waitpid(-1, NULL, 0) != -1)
 						;
-
 					exit(g_minishell->exit_s);
 				}
-				dup2(pfd[0], 0); // read from pipe [pipe]
+				dup2(pfd[0], 0);
 			}
-			else if (node->data.pair.left->data.pair.type == OR) // OR CASE
+			else if (node->data.pair.left->data.pair.type == OR)
 			{
 				id = fork();
 				if (!id)
 				{
-					close(pfd[0]);                                 
-						// read from pipe [pipe]
-					dup2(pfd[1], 1);                               
-						// write to [pipe]
+					close(pfd[0]);
+					dup2(pfd[1], 1);
 					executer(node->data.pair.left->data.pair.left);
-						// RUN LEFT OF OR
 					wait_and_get();
 					if (g_minishell->exit_s && g_minishell->exit_s != 130)
 						executer(node->data.pair.left->data.pair.right);
-							// RUN RIGHT OF OR if LEFT FALSE
 					while (waitpid(-1, NULL, 0) != -1)
-					;
-						exit(g_minishell->exit_s);
+						;
+					exit(g_minishell->exit_s);
 				}
-				dup2(pfd[0], 0); // read from pipe [pipe]
+				dup2(pfd[0], 0);
 			}
 			else if (node->data.pair.left->type == REDIR_NODE)
 			{
@@ -171,10 +168,8 @@ void	execute_pair(t_node *node) // cat | ls
 		}
 		else if (node->data.pair.left
 			&& node->data.pair.left->type == STRING_NODE)
-			do_pipe(node->data.pair.left, 0, pfd); // close(pfd[1]);
-
+			do_pipe(node->data.pair.left, 0, pfd);
 		if (node->data.pair.right && node->data.pair.right->type != STRING_NODE)
-			// RIGHT side of PIPE CASE   //   | (cat && do)
 		{
 			if (node->data.pair.right->data.pair.type == AND)
 			{

@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_expand.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:08:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 08:43:55 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:48:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_isnum(int c)
+{
+	return (c >= '0' && c <= '9');
+}
 
 int	handle_cases(char *expand, int *i, int *j, int *len)
 {
@@ -22,8 +27,8 @@ int	handle_cases(char *expand, int *i, int *j, int *len)
 	else if (!ft_strncmp(expand, "?", 1) || !ft_strncmp(expand, "_", 1))
 		*j = 1;
 	else if (!ft_strncmp(expand, "$", 1) || ft_isspace(*expand)
-		|| !ft_isalnum(*expand) || (!ft_isalnum(*expand) && ft_strncmp(expand,
-				"_", 1)))
+		|| !ft_isalnum(*expand) || (!ft_isalnum(*expand) 
+		&& ft_strncmp(expand, "_", 1)) || ft_isnum(*expand))
 	{
 		(*i) += 2;
 		return ((*len) += 2, -1);

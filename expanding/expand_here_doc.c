@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/21 19:26:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:26:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ char	*expand_without_space(char *s, int len)
 	i = 0;
 	j = 0;
 	gc_add(g_minishell, new);
-	while (s[i])
+	while (s && s[i])
 	{
 		if (ft_isspace(s[i]))
 		{
 			new[j++] = ' ';
-			while (s[i] && ft_isspace(s[i]))
+			while (s && s[i] && ft_isspace(s[i]))
 				i++;
 		}
 		else
@@ -46,6 +46,8 @@ char	*avoid_spaces(char *s)
 
 	i = 0;
 	len = 0;
+	if (!s)
+		return(NULL);
 	while (s[i])
 	{
 		if (ft_isspace(s[i]))
