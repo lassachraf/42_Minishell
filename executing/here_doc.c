@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/22 14:57:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:29:22 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	read_buf(char **buf)
 	if (*buf)
 	{
 		if (ft_strchr(*buf, '$'))
-			here_doc_expanding(buf);
+			*buf = helper_expander(*buf);
 		gc_add(g_minishell, *buf);
 	}
 }

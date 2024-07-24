@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/22 15:32:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:48:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void	ft_readline(void)
 	g_minishell->lines++;
 	g_minishell->docs = 0;
 	g_minishell->exit_s = 0;
-	g_minishell->line = readline(ORANGE PROMPT RESET);
+	g_minishell->line = readline(PROMPT);
 	gc_add(g_minishell, g_minishell->line);
 	if (!g_minishell->line)
 	{

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/22 15:52:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:46:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,51 @@ void	add_list_into_list(t_list **lst, t_list *asterisk)
 	ft_lstlast(*lst)->next = save_next;
 }
 
+t_list	*dollar_functionality(char **s)
+{
+	t_list	*lst;
+	char	**split;
+	int		i;
+
+	i = 0;
+	lst = NULL;
+	here_doc_expanding(s);
+	if (!*s)
+		return (*s = NULL, NULL);
+	split = ft_split(*s, ' ');
+	if (!split)
+		return (*s = NULL, NULL);
+	while (split[i])
+	{
+		ft_lstadd_back(&lst, ft_lstnew(split[i]));
+		i++;
+	}
+	return (lst);
+}
+
 void	execute_cmd(t_node *node)
 {
 	int	id;
-	t_list *lst;
-	t_list *asterisk;
+	t_list *cmd_lst;
+	t_list *list;
 	
 	if (!node)
 		return ;
-	lst = node->data.cmd;
-	while(lst)
+	cmd_lst = node->data.cmd;
+	while(cmd_lst)
 	{
-		if (ft_strchr((char*)lst->content, '$'))
-			here_doc_expanding((char**)&lst->content);
-		else if(ft_strchr((char*)lst->content, '*'))
+		if (ft_strchr((char*)cmd_lst->content, '$'))
 		{
-			asterisk = asterisk_functionality((char*)lst->content);
-			add_list_into_list(&lst, asterisk);
+			list = dollar_functionality((char **)&cmd_lst->content);
+			add_list_into_list(&cmd_lst, list);
+			// here_doc_expanding((char**)&cmd_lst->content);
 		}
-		lst = lst->next;
+		else if(ft_strchr((char*)cmd_lst->content, '*'))
+		{
+			list = asterisk_functionality((char*)cmd_lst->content);
+			add_list_into_list(&cmd_lst, list);
+		}
+		cmd_lst = cmd_lst->next;
 	}
 	set_null_as_true(&node);
 	if(!node->data.cmd)

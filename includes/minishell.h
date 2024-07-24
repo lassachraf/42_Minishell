@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/22 17:36:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:44:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
+t_list	*dollar_functionality(char **s);
 t_list	*asterisk_functionality(char *s);
 void 	set_null_as_true(t_node **res);
 void 	print_ast(const char *prefix,  t_node* root, bool isLeft);
