@@ -37,3 +37,16 @@ export data="ps      dt"
 
 
 : 10 :																		>>>>> NOTYET
+
+c4r5p8% bash
+alassiqu@c4r5p8:~$ exit 213123 fd
+exit
+bash: exit: too many arguments
+alassiqu@c4r5p8:~$ echo $?
+1
+alassiqu@c4r5p8:~$ exit fd 123123123
+exit
+bash: exit: fd: numeric argument required
+c4r5p8% echo $?
+2
+c4r5p8% 
