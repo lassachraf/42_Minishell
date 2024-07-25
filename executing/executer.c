@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/24 10:46:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:59:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	execute_cmd(t_node *node)
 		{
 			list = dollar_functionality((char **)&cmd_lst->content);
 			add_list_into_list(&cmd_lst, list);
-			// here_doc_expanding((char**)&cmd_lst->content);
 		}
 		else if(ft_strchr((char*)cmd_lst->content, '*'))
 		{

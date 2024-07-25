@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/22 14:26:32 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:51:20 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*avoid_spaces(char *s)
 	i = 0;
 	len = 0;
 	if (!s)
-		return(NULL);
+		return (NULL);
 	while (s[i])
 	{
 		if (ft_isspace(s[i]))

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 10:39:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:45:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,37 @@ int	check_env(char *var)
 	}
 	else
 		return (ft_strlen(get_env_var(g_minishell->our_env, var)));
+}
+
+void	handle_space(t_token *tokens, char *new_value)
+{
+	t_token	*current;
+	int		i;
+	int		j;
+	char	*chunk;
+	t_token	*new_tok;
+
+	current = tokens;
+	if (ft_count_words(new_value, ' ') < 2)
+	{
+		tokens->value = new_value;
+		return ;
+	}
+	i = 0;
+	remove_token(&g_minishell->tokens, current);
+	while (new_value[i])
+	{
+		if (!ft_isspace(new_value[i]))
+		{
+			j = i;
+			while (new_value[i] && !ft_isspace(new_value[i]))
+				i++;
+			chunk = ft_substr(new_value, j, (i - j));
+			new_tok = new_token(chunk, WORD);
+			add_token_middle(&g_minishell->tokens, new_tok, current->prev);
+			current = new_tok->next;
+		}
+		else
+			i++;
+	}
 }
