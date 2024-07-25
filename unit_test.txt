@@ -35,6 +35,7 @@ export data="ps      dt"
 : 8 :																		>>>>> NOTYET
 : 9 :																		>>>>> NOTYET
 
+(cat && ps) && (ls || cat -e) || (ls && ps) && echo $?
 
 : 10 :																		>>>>> NOTYET
 

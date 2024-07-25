@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 13:10:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:37:06 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void 	print_ast(const char *prefix,  t_node* root, bool isLeft);
 void 	add_list_into_list(t_list **lst, t_list *asterisk);
 char	*build_file_name(char *join);
 int	ft_isnum(int c);
+int	process_exit(char **args);
+int	nb_args(char **args);
 /* Builtins */
 
 // Function that change current working directory "cd".

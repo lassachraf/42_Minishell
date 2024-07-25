@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/25 13:12:44 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/07/25 14:35:34 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ LIBFT_PATH		:= libft/
 LIBFT			:= libft/libft.a
 
 CC				:= cc
-# CFLAGS			:= -Wall -Wextra -Werror
 CFLAGS			:= -Wall -Wextra -Werror -fsanitize=address -g3
 RM				:= rm -f
 
@@ -26,6 +25,7 @@ BUILTINS		:=	builtins/ft_env.c 					\
 					builtins/builtins_utils.c 			\
 					builtins/builtins_helpers.c			\
 					builtins/ft_exit.c 					\
+					builtins/exit_utils.c				\
 					builtins/ft_export.c 				\
 					builtins/export_utils.c				\
 					builtins/ft_pwd.c 					\
