@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/24 10:44:19 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:10:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void				ft_echo(char **args);
 void				ft_env(t_env *env);
 
 // Function that exit shell "exit".
-void				ft_exit(char *args);
+void				ft_exit(char *args, int print);
 
 // Function that export variable to the environment "export".
 void				ft_export(char **args, int nb_args);
