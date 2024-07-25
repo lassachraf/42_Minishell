@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 10:35:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:11:10 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,26 @@ int	builtins_exec_check(char **args)
 	return (0);
 }
 
-int	check_cd_and_exit(t_minishell *mini, char **args)
+void	print_exit_error(char *msg)
+{
+	ft_putstr_fd(RED "badashell$ : exit : ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd(" : numeric argument required.\n" RESET, 2);
+}
+
+int	sec_is_num(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && ft_isdigit(s[i]))
+		i++;
+	if (!s[i])
+		return (1);
+	return (0);
+}
+
+int	check_cd_and_exit(t_minishell *mini, char **args) // exit 5345 glsd
 {
 	if (!ft_strcmp(args[0], "cd"))
 	{
@@ -82,12 +101,21 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 		if (nb_args(args) > 2)
 		{
 			printf("exit\n");
-			print_errors("exit : too many arguments.");
-			g_minishell->exit_s = 1;
+			if (sec_is_num(args[1]))
+			{
+				print_errors("exit : too many arguments.");
+				g_minishell->exit_s = 1;
+			}
+			else
+			{
+				print_exit_error(args[1]);
+				g_minishell->exit_s = 2;
+				ft_exit("2", 0);
+			}
 			return (0);
 		}
 		else
-			ft_exit(args[1]);
+			ft_exit(args[1], 1);
 	}
 	g_minishell->exit_s = 0;
 	return (1);

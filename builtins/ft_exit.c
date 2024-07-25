@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 10:35:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:10:24 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_exit(char *args)
+void	ft_exit(char *args, int print)
 {
 	int	exit_status;
 
@@ -21,7 +21,8 @@ void	ft_exit(char *args)
 	{
 		exit_status = ft_atoi(args);
 	}
-	ft_putstr_fd("exit\n", 1);
+	if (print)
+		ft_putstr_fd("exit\n", 1);
 	clear_env(g_minishell->our_env);
 	gc_free_all(g_minishell);
 	free(g_minishell);
