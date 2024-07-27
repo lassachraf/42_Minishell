@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/25 17:59:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:33:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,24 @@ void	execute_redires(t_list *red_list)
 	run_doc_cmd(red_list);
 }
 
-void	add_list_into_list(t_list **lst, t_list *asterisk)
+void	add_list_into_list(t_list **lst, t_list *new)
 {
 	t_list *save_next;
 
-	if(!lst || !*lst || !asterisk)
+	if(!lst || !*lst || !new)
 		return ;
 	save_next = (*lst)->next;
-	(*lst)->content = asterisk->content;
-	(*lst)->next = asterisk->next;
+	(*lst)->content = new->content;
+	(*lst)->next = new->next;
 	ft_lstlast(*lst)->next = save_next;
 }
 
 t_list	*dollar_functionality(char **s)
 {
 	t_list	*lst;
+	t_list	*temp;
 	char	**split;
+	char	*tmp;
 	int		i;
 
 	i = 0;
@@ -56,18 +58,23 @@ t_list	*dollar_functionality(char **s)
 		return (*s = NULL, NULL);
 	while (split[i])
 	{
-		ft_lstadd_back(&lst, ft_lstnew(split[i]));
+		tmp = ft_strdup(split[i]);
+		gc_add(g_minishell, tmp);
+		temp = ft_lstnew(tmp);
+		gc_add(g_minishell, temp);
+		ft_lstadd_back(&lst, temp);
 		i++;
 	}
+	free_double(split);
 	return (lst);
 }
 
 void	execute_cmd(t_node *node)
 {
-	int	id;
 	t_list *cmd_lst;
 	t_list *list;
-	
+	int	id;
+
 	if (!node)
 		return ;
 	cmd_lst = node->data.cmd;
@@ -103,9 +110,7 @@ void	execute_cmd(t_node *node)
 	{
 		id = fork();
 		if (!id)
-		{
 			do_cmd(node);
-		}
 	}
 }
 
@@ -254,10 +259,10 @@ void	executer(t_node *node)
 {
 	if (!node)
 		return ;
-	if (node->type == STRING_NODE) // leaf
+	if (node->type == STRING_NODE)
 		execute_cmd(node);
-	else if (node->type == PAIR_NODE) // pair
+	else if (node->type == PAIR_NODE)
 		execute_pair(node);
-	else if (node->type == REDIR_NODE) // leaf
+	else if (node->type == REDIR_NODE)
 		execute_redires(node->data.redir);
 }

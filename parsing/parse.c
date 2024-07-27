@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/25 17:56:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:46:06 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_redir	*do_red(t_token **tokens)
 		new->mode = O_CREAT | O_RDWR | O_APPEND;
 	(*tokens) = (*tokens)->next;
 	new->file = (*tokens)->value;
+	new->hd_expand = (*tokens)->hd_expand;
 	return (new);
 }
 
@@ -228,12 +229,35 @@ void set_null_as_true(t_node **res)
 		(*res)->data.cmd = list;
 	}
 }
+
+void	join_words(t_token *tokens)
+{
+	t_token	*tmp;
+
+	while (tokens)
+	{
+		if (tokens->type == WORD && tokens->next_space == 0 
+			&& tokens->next && tokens->next->type == WORD)
+		{
+			tmp = tokens;
+			tokens = tokens->next;
+			tokens->value = ft_strjoin(tmp->value, tokens->value);
+			gc_add(g_minishell, tokens->value);
+			remove_token(&tokens, tmp);
+		}
+		else
+			tokens = tokens->next;
+	}
+}
+
+
 t_node	*parsing(void)
 {
 	t_node	*res;
 
 	expanding();
 	remove_quotes(&g_minishell->tokens);
+	join_words(g_minishell->tokens);
 	res = parse_block(&g_minishell->tokens);
 	if (!res)
 		gc_free_all(g_minishell);

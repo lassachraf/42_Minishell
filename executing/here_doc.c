@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/24 10:29:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:29:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ int	here_doc(char *limiter, int doc_num)
 	char	*buf;
 	int		id;
 	int		fd;
-	int		fd_hidden;
 	int 	pipe[2];
+	int		fd_hidden;
 
 	open_pipe(pipe);
 	buf = NULL;

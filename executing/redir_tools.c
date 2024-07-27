@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/22 18:45:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/26 14:32:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ bool check_name(t_redir *new)
 }
 
 
-int	is_ambiguous(t_redir *new)
+int	is_ambiguous(t_redir *new, int flag)
 {
 	t_list *asterisk;
 	char	*val;
@@ -72,11 +72,11 @@ int	is_ambiguous(t_redir *new)
 	size = 0;
 	asterisk = NULL;
 	printf("%s\n",new->file);
-	if (ft_strchr(new->file, '$')) // $*
+	if (ft_strchr(new->file, '$') && flag)
 	{
+		printf("yesss\n");
 		val = helper_expander(new->file);
 		size = count_words(val);
-		printf("there is >>>> %d word\n", size);
 		if(size == 1 || !size)
 		{
 			if(size)
@@ -88,11 +88,10 @@ int	is_ambiguous(t_redir *new)
 		else
 			return (print_err("ambiguous redirect", new->file), 1);
 	}
-	else if(ft_strchr(new->file, '*'))
+	else if(ft_strchr(new->file, '*') && flag)
 	{
-		asterisk = asterisk_functionality(new->file); // list of names
-		size = ft_lstsize(asterisk); // num of names
-		// adjust name of file if size = 1
+		asterisk = asterisk_functionality(new->file);
+		size = ft_lstsize(asterisk);
 		if(size == 1 || !size)
 		{
 			if(size)
@@ -109,7 +108,7 @@ int	is_ambiguous(t_redir *new)
 
 int	open_redir(t_redir *redir)
 {
-	if(!is_ambiguous(redir))
+	if(!is_ambiguous(redir, redir->hd_expand))
 	{
 		redir->fd = open(redir->file, redir->mode, 0644);
 		return (1);

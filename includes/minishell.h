@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 23:45:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:28:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int		process_exit(char **args);
 int		nb_args(char **args);
 void	expanding(void);
 void	handle_space(t_token *tokens, char *new_value);
+size_t	count_words(char *s);
+void	check_hd_expand(t_token *tokens);
 
 void	fill_dollar(char *s, int *i, char *new, int *j);
 /* Builtins */
@@ -282,7 +284,7 @@ int					write_or_break(int fd, char *limiter, char *buf, int count);
 /* Expanding */
 
 // Main function to do expand.
-void				expander(void);
+void				expanding(void);
 
 // Function that expand inside the expanding.
 void				here_doc_expanding(char **s);
@@ -296,14 +298,8 @@ char				*get_var(char *s, int *i);
 // Function that return the length of the variable after expanding.
 int					check_env(char *var);
 
-// Function that remove the whitespaces tokens from the list of tokens.
-void				remove_whitespaces(t_token **tokens);
-
 // Function that count the length of the whole command after expanding.
 void				handle_dollar(char *s, int *i, int *len);
-
-// Function that expand the asterisk.
-void				asterisk_expand(t_token **tokens, t_token *curr);
 
 // Function that match the pattern.
 int					match_pattern(const char *pattern, const char *filename);

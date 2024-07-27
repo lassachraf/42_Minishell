@@ -1,19 +1,6 @@
 // WRITE THE ERRORS THAT YOU FACED HERE
 
-ls > $vkdfl : should be an ambiguous error.
->>> FIXED, but should see if it affects something else.
-
-$fvkjds $dflks ls $sdfb -la $fsdbsb : should run >>> ls -la .(zlakhdr test)
-
-also for heredoc files, it should be with different file name 
->>> ttyname + number of file + check if there is already a file increment the number.
-
-create function that get the path of the terminal and create a name for the file from it	>> DONE
-merge it with code																			>> NOTYET
-
-export data="ps      dt"
-> $data : should be an ambiguous
-
+(cat && ps) && (ls || cat -e) || (ls && ps) && echo $?
 
 // THIS IS THE PART OF EACH ONE OF US :
 
@@ -32,22 +19,9 @@ export data="ps      dt"
 : 5 :	handle the ambiguous "ls > $gvjfkd"									>>>>> DONE
 : 6 :	heredoc file names													>>>>> DONE "TO CHECK WITH BADER"
 : 7 :	expanding special character the same way (?, !, @, #, ^, &, *, $)	>>>>> DONE
-: 8 :																		>>>>> NOTYET
-: 9 :																		>>>>> NOTYET
+: 8 :	Fix exit issues														>>>>> DONE
+: 9 :	echo "'"'"'cmd'"'"'"												>>>>> DONE
 
-(cat && ps) && (ls || cat -e) || (ls && ps) && echo $?
-
-: 10 :																		>>>>> NOTYET
-
-c4r5p8% bash
-alassiqu@c4r5p8:~$ exit 213123 fd
-exit
-bash: exit: too many arguments
-alassiqu@c4r5p8:~$ echo $?
-1
-alassiqu@c4r5p8:~$ exit fd 123123123
-exit
-bash: exit: fd: numeric argument required
-c4r5p8% echo $?
-2
-c4r5p8% 
+: 10 :	In here_doc, fix if there is quotes before redir file				>>>>> DONE
+: 11 :																		>>>>> DONE
+: 12 :																		>>>>> DONE

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/15 15:39:23 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:50:39 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,26 @@ void	handle_special_case(t_token **tokens, t_token **current)
 {
 	t_token	*tmp;
 
-	tmp = (*current)->next;
-	remove_token(tokens, (*current));
-	(*current) = tmp;
-	(*current)->value = ft_strdup("\0");
-	gc_add(g_minishell, (*current)->value);
-	(*current)->type = WORD;
-	(*current) = (*current)->next;
+	if ((*current)->prev && (*current)->prev->type == WORD
+		&& (*current)->prev->next_space == 0)
+	{
+		tmp = (*current)->next;
+		if ((*current)->next_space == 1 && (*current)->prev)
+			(*current)->prev->next_space = 1;
+		remove_token(tokens, (*current));
+		(*current) = tmp;
+		return ;
+	}
+	else
+	{
+		tmp = (*current)->next;
+		remove_token(tokens, (*current));
+		(*current) = tmp;
+		(*current)->value = ft_strdup("\0");
+		gc_add(g_minishell, (*current)->value);
+		(*current)->type = WORD;
+		(*current) = (*current)->next;
+	}
 }
 
 void	join_tokens(t_token **tokens, t_token **current)
@@ -77,12 +90,12 @@ void	remove_quotes(t_token **tokens)
 				join_tokens(tokens, &current);
 			else if (current->next && special_case(current->prev, current,
 					current->next))
-			{
 				handle_special_case(tokens, &current);
-			}
 			else
 			{
 				tmp = current->next;
+				if (current->next_space == 1 && current->prev)
+					current->prev->next_space = 1;
 				remove_token(tokens, current);
 				current = tmp;
 			}
@@ -102,9 +115,17 @@ void	remove_whitespaces(t_token **tokens)
 	{
 		if (current->type == WHITESPACE)
 		{
+			if (current->prev)
+				current->prev->next_space = 1;
 			tmp = current->next;
 			remove_token(tokens, current);
 			current = tmp;
+		}
+		else if (current->type == END)
+		{
+			if (current->prev)
+				current->prev->next_space = 1;
+			current = current->next;
 		}
 		else
 			current = current->next;

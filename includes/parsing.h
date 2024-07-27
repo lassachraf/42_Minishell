@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 14:15:39 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:00:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_redir
 	t_type				type;
 	int					mode;
 	int					fd;
+	int					hd_expand;
 	char				*file;
 	t_list				*cmd;
 	t_node				*node;
