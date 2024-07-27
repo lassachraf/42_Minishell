@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/27 15:29:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:39:06 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ void get_lines_count(int *pipe)
 	close(pipe[1]);
 	read(pipe[0], &buf, 2048);
 	g_minishell->lines = ft_atoi(buf);
-	printf("lines %d , %d\n",g_minishell->lines, ft_atoi(buf));
 }
 
 int	here_doc(char *limiter, int doc_num)

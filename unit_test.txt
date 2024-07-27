@@ -1,6 +1,24 @@
 // WRITE THE ERRORS THAT YOU FACED HERE
 
-(cat && ps) && (ls || cat -e) || (ls && ps) && echo $?
+cat is't woring wtfff !!
+-----------------------------
+badashell$> cat << ""fd
+>>>> here_doc expand == 0
+> $USER
+> ps
+> fd
+7
+lines 7 , 7
+badashell$ : cat : Is a directory
+
+badashell$> echo $USER | cat -n
+     1	alassiqu
+badashell$> echo $USER $PWD sdvsvd | cat -n
+badashell$ : cat : Is a directory
+badashell$> echo $USER $PWD sdvsvd | cat
+badashell$ : cat : Is a directory
+-----------------------------
+
 
 // THIS IS THE PART OF EACH ONE OF US :
 

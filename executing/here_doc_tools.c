@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/27 15:50:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:38:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	do_here_docs(t_list *red_list)
 			printf(">>>> here_doc expand == %d\n", new->hd_expand);
 			// BADER HADI HYA L FLAG LI KATBIYEN LIYA WACH N EXPANDER WLA LA,
 			// MA3REFTCH FIN N USIHA.
-			// IF new->hd_expand == 1 >> EXPAND, ELSE >> DO NOT EXPAND
+			// IF new->hd_expand == 1 >> EXPAND, ELSE >> DO NOT EXPAND.
 			new->fd = here_doc(new->file, g_minishell->docs);
 			if (new->fd < 0)
 				return (0);

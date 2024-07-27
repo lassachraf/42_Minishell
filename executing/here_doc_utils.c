@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/27 15:32:24 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 19:36:36 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	do_here_doc(char *buf, char *limiter, int fd, int *pipe)
 			break ;
 	}
 	lines = ft_itoa(g_minishell->lines);
-	printf("%s\n",lines);
 	write(pipe[1], lines, ft_strlen(lines));
 	free(lines);
 	close(pipe[0]);
