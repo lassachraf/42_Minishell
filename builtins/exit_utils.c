@@ -6,11 +6,12 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:34:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 14:34:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:45:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <limits.h>
 
 void	print_exit_error(char *msg)
 {
@@ -39,6 +40,7 @@ int	process_exit(char **args)
 		if (sec_is_num(args[1]))
 		{
 			print_errors("exit : too many arguments.");
+			set_env_var(g_minishell->our_env, "?", "1");
 			g_minishell->exit_s = 1;
 		}
 		else
@@ -51,5 +53,7 @@ int	process_exit(char **args)
 	}
 	else
 		ft_exit(args[1], 1);
+	set_env_var(g_minishell->our_env, "?", "0");
+	g_minishell->exit_s = 0;
 	return (1);
 }

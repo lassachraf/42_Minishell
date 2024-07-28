@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 17:26:58 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/28 02:39:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	fd_duper(int *pfd, int mode)
 	else
 	{
 		close(pfd[0]);
-		if (dup2(pfd[1], 1) == -1)
-			exit(EXIT_FAILURE);
+		// if (dup2(pfd[1], 1) == -1)
+		// 	exit(EXIT_FAILURE);
+		dup_2(pfd[1], 1);
 	}
 }
 

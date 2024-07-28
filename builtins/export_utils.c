@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:40:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/21 19:13:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:48:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	error_identifier(char **s)
 	if (s[1])
 		ft_putstr_fd(s[1], 2);
 	ft_putstr_fd("`: not a valid identifier.\n" RESET, 2);
+	set_env_var(g_minishell->our_env, "?", "2");
+	g_minishell->exit_s = 2;
 }
 
 int	check_identifier(char **s, int join_flag)

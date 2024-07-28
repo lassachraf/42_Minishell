@@ -6,11 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/22 17:52:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:06:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <errno.h>
+#include <stdio.h>
 
 char	**get_env_paths(char **env)
 {
@@ -24,7 +26,7 @@ char	**get_env_paths(char **env)
 		return (NULL);
 	res = ft_split(*env, ':');
 	check_split(res, *env);
-	ft_memmove(*res, ft_strchr(*res, '/'), ft_strlen(*res));
+	ft_strchr(*res, '/');
 	return (res);
 }
 
@@ -61,7 +63,10 @@ int	check_cmd(char *argv, char **env)
 	char	*cmd;
 	struct stat statbuf;
 
+	statbuf.st_mode = 0;
 	stat(argv, &statbuf);
+	if (S_ISDIR(statbuf.st_mode) == true && ft_strchr(argv, '/'))
+		return (print_err("Is a directory", argv), 1);
 	cmd = get_fullpath(argv, env);
 	gc_add(g_minishell, cmd);
 	if (!cmd && *argv == '.')
@@ -79,8 +84,6 @@ int	check_cmd(char *argv, char **env)
 		return (print_err("command not found", argv), 127);
 	else if (access(cmd, X_OK))
 		return (print_err("permission denied", argv), 126);
-	if (S_ISDIR(statbuf.st_mode) == true)
-		return (print_err("Is a directory", argv), 1);
 	return (0);
 }
 

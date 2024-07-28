@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/27 19:39:06 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 02:45:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	open_hidden_file(int doc_num)
 	free(join);
 	if (fd < 0)
 	{
-		perror("1 --> here_doc failed to get input");
+		perror("here_doc failed to get input");
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
@@ -81,7 +81,7 @@ int	re_open_hidden_file(int doc_num)
 	free(join);
 	if (fd < 0)
 	{
-		perror("2 --> here_doc failed to get input");
+		perror("here_doc failed to get input");
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
@@ -114,14 +114,14 @@ int	write_or_break(int fd, char *limiter, char *buf, int count)
 	return (1);
 }
 
-void	read_buf(char **buf)
+void	read_buf(char **buf, int expand_flag)
 {
 	g_minishell->lines++;
 	*buf = readline("> ");
 	gc_add(g_minishell, *buf);
 	if (*buf)
 	{
-		if (ft_strchr(*buf, '$'))
+		if (ft_strchr(*buf, '$') && expand_flag)
 			*buf = helper_expander(*buf);
 		gc_add(g_minishell, *buf);
 	}
@@ -136,7 +136,7 @@ void get_lines_count(int *pipe)
 	g_minishell->lines = ft_atoi(buf);
 }
 
-int	here_doc(char *limiter, int doc_num)
+int	here_doc(char *limiter, int doc_num, int expand_flag)
 {
 	char	*buf;
 	int		id;
@@ -151,7 +151,7 @@ int	here_doc(char *limiter, int doc_num)
 	id = fork();
 	if (!id)
 	{
-		do_here_doc(buf, limiter, fd, pipe);
+		do_here_doc(buf, limiter, fd, pipe, expand_flag);
 		exit(0);
 	}
 	else
@@ -162,8 +162,9 @@ int	here_doc(char *limiter, int doc_num)
 		if (!g_minishell->exit_s)
 		{
 			fd_hidden = re_open_hidden_file(doc_num);
+			close(fd);
 			return (fd_hidden);
 		}
 	}
-	return (-1);
+	return (close(fd), -1);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/27 19:36:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 00:19:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	do_here_doc(char *buf, char *limiter, int fd, int *pipe)
+void	do_here_doc(char *buf, char *limiter, int fd, int *pipe, int expand_flag)
 {
 	char	*lines;
 	int		old_count;
@@ -21,7 +21,7 @@ void	do_here_doc(char *buf, char *limiter, int fd, int *pipe)
 	while (1)
 	{
 		signal(SIGINT, here_doc_sig);
-		read_buf(&buf);
+		read_buf(&buf, expand_flag);
 		if (!write_or_break(fd, limiter, buf, old_count))
 			break ;
 	}

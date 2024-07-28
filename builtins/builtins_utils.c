@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 14:34:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:46:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	nb_options(char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (!ft_strncmp(args[i], "-", 1))
+		if (!ft_strncmp(args[i], "-", 1) && !ft_isdigit(*args[i + 1]))
 			return (0);
 		i++;
 	}
@@ -73,11 +73,11 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 		if (nb_args(args) > 2)
 		{
 			print_errors("cd : too many arguments.");
-			g_minishell->exit_s = 1;
-			return (0);
+			set_env_var(g_minishell->our_env, "?", "1");
+			return (g_minishell->exit_s = 1, -1);
 		}
 		else
-			ft_cd(mini, args[1]);
+			return (ft_cd(mini, args[1]), 0);
 	}
 	else
 	{
@@ -85,6 +85,7 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 		if (flag == 0)
 			return (0);
 	}
+	set_env_var(g_minishell->our_env, "?", "0");
 	g_minishell->exit_s = 0;
 	return (1);
 }

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/26 14:32:48 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/27 23:53:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
+#include <errno.h>
 size_t	count_words(char *s)
 {
 	size_t	words;
@@ -37,6 +37,7 @@ bool check_name(t_redir *new)
 {
 	struct stat statbuf;
 
+	statbuf.st_mode = 0;
 	stat(new->file, &statbuf);
 	if (S_ISDIR(statbuf.st_mode) == true)
 		return (print_err("Is a directory", new->file), 1);
@@ -69,12 +70,11 @@ int	is_ambiguous(t_redir *new, int flag)
 	char	*val;
 	int		size;
 
+	(void)flag;
 	size = 0;
 	asterisk = NULL;
-	printf("%s\n",new->file);
-	if (ft_strchr(new->file, '$') && flag)
+	if (ft_strchr(new->file, '$'))
 	{
-		printf("yesss\n");
 		val = helper_expander(new->file);
 		size = count_words(val);
 		if(size == 1 || !size)
@@ -88,7 +88,7 @@ int	is_ambiguous(t_redir *new, int flag)
 		else
 			return (print_err("ambiguous redirect", new->file), 1);
 	}
-	else if(ft_strchr(new->file, '*') && flag)
+	else if(ft_strchr(new->file, '*'))
 	{
 		asterisk = asterisk_functionality(new->file);
 		size = ft_lstsize(asterisk);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:23:51 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/09 09:04:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:47:29 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,6 @@ void	ft_pwd(t_env *env)
 		return ;
 	}
 	printf("%s\n", get_env_var(env, "PWD"));
+	set_env_var(g_minishell->our_env, "?", "0");
+	g_minishell->exit_s = 0;
 }

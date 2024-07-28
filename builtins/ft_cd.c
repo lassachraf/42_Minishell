@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/14 18:07:13 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:45:00 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	cd_error(char *path)
 	ft_putstr_fd(RED "badashell$: cd: `", 2);
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd("`: No such file or directory\n" RESET, 2);
+	g_minishell->exit_s = 1;
 }
 
 int	cd_home(t_minishell *mini)

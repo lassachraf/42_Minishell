@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:25:01 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 15:50:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:44:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ int	ft_check_option(char *s)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	if (s[0] != '-')
 		return (0);
-	i++;
 	if (!s[i])
 		return (0);
 	while (s[i] && s[i] == 'n')
@@ -29,7 +28,7 @@ int	ft_check_option(char *s)
 	return (0);
 }
 
-void	ft_echo(char **args) // echo $? --> 0
+void	ft_echo(char **args)
 {
 	int	i;
 	int	new_line;
@@ -50,4 +49,6 @@ void	ft_echo(char **args) // echo $? --> 0
 	}
 	if (new_line == 0)
 		ft_putstr_fd("\n", 1);
+	set_env_var(g_minishell->our_env, "?", "0");
+	g_minishell->exit_s = 0;
 }
