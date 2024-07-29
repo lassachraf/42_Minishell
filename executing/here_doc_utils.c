@@ -12,7 +12,8 @@
 
 #include "../includes/minishell.h"
 
-void	do_here_doc(char *buf, char *limiter, int fd, int *pipe, int expand_flag)
+void	do_here_doc(char *buf, char *limiter, int fd, int *pipe,
+		int expand_flag)
 {
 	char	*lines;
 	int		old_count;

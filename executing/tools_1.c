@@ -60,8 +60,8 @@ char	*get_fullpath(char *argv, char **env)
 
 int	check_cmd(char *argv, char **env)
 {
-	char	*cmd;
-	struct stat statbuf;
+	char		*cmd;
+	struct stat	statbuf;
 
 	statbuf.st_mode = 0;
 	stat(argv, &statbuf);
@@ -80,7 +80,7 @@ int	check_cmd(char *argv, char **env)
 			NULL);
 		return (2);
 	}
-	else if (access(cmd, F_OK)) // 
+	else if (access(cmd, F_OK)) //
 		return (print_err("command not found", argv), 127);
 	else if (access(cmd, X_OK))
 		return (print_err("permission denied", argv), 126);
