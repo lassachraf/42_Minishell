@@ -1,14 +1,11 @@
-// WRITE THE ERRORS THAT YOU FACED HERE
-
-(cat && ps) && (ls || cat -e) || (ls && ps) && echo $?
+** This a unit test for minishell project ** 
 
 // THIS IS THE PART OF EACH ONE OF US :
 
 // baouragh :
-1 : fix number of lines in here_doc DONE!
-2 : check out ambigeous errors DONE!
-3 : ft_exit must fix . (if num > LONG_MAX then -> error) , (if num < LONG_MIN then -> error) : check bash on this. >>>>>> NOT_YET
 
+1 : fix number of lines in here_doc DONE!
+2 : check out ambigeous errors      DONE!
 
 // alassiqu :
 
@@ -17,18 +14,14 @@
 : 3 :	echo $var && var has more spaces should be replaced by one space	>>>>> DONE
 : 4 :	if unset the head, should replace the head cleanly					>>>>> DONE
 : 5 :	handle the ambiguous "ls > $gvjfkd"									>>>>> DONE
-: 6 :	heredoc file names													>>>>> DONE "TO CHECK WITH BADER"
+: 6 :	heredoc file names													>>>>> DONE
 : 7 :	expanding special character the same way (?, !, @, #, ^, &, *, $)	>>>>> DONE
 : 8 :	Fix exit issues														>>>>> DONE
 : 9 :	echo "'"'"'cmd'"'"'"												>>>>> DONE
 
 : 10 :	In here_doc, fix if there is quotes before redir file				>>>>> DONE
-: 11 :																		>>>>> DONE
-: 12 :																		>>>>> DONE
+: 11 :	badashell$> export $fv543=pwd										>>>>> DONE
+: 12 :	badashell$> export r===ewre											>>>>> DONE
+: 13 :	exit arg >> LONG_MIN < arg < LONG_MAX								>>>>> DONE
 
-
-fixed exit status, still to fix this tests :
-badashell$> export $fv543=pwd
-badashell$> export r===ewre
- and maybe more !!!!
 
