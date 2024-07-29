@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 18:38:34 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/15 16:18:49 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:33:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	syntax_second_phase(t_token *token)
 			print_errors("syntax error near unexpected token `newline`");
 			return (-1);
 		}
-		else if (token->type == L_REDIR && token->next 
+		else if (token->type == L_REDIR && token->next
 			&& token->next->type == R_REDIR)
 		{
 			print_errors("syntax error near unexpected token `newline`");
