@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 08:49:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:34:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ void	signals(void)
 
 void	ft_sigquit(int sig)
 {
-	if(sig != SIGQUIT)
-		return;
+	if (sig != SIGQUIT)
+		return ;
 	printf("Quit (core dumped)\n");
 }
 
 void	ft_sigint(int sig)
 {
-	if(sig != SIGINT)
-		return;
+	if (sig != SIGINT)
+		return ;
 	g_minishell->exit_s = 130;
 	printf("\n");
 }
