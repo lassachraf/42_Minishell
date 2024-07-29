@@ -6,22 +6,21 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 21:48:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:14:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PATH	"/var/tmp/"
+# define PATH "/var/tmp/"
 
-# define RED	"\033[1;31m"
-# define ORANGE	"\033[1;33m"
-# define RESET	"\033[0m"
+# define RED "\033[1;31m"
+# define ORANGE "\033[1;33m"
+# define RESET "\033[0m"
 
 # define PROMPT "badashell$> "
 
-#include <sys/stat.h>
 # include "../libft/libft.h"
 # include "builtins.h"
 # include "execution.h"
@@ -36,6 +35,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -66,23 +66,44 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
-void pipe_left(t_node *node, int *pfd);
-void pipe_right(t_node *node, int *pfd);
-t_list	*dollar_functionality(char **s);
-t_list	*asterisk_functionality(char *s);
-void 	remove_null(t_node **res);
-void 	print_ast(const char *prefix,  t_node* root, bool isLeft);
-void 	add_list_into_list(t_list **lst, t_list *new);
-char	*build_file_name(char *join);
-int		ft_isnum(int c);
-int		process_exit(char **args);
-int		nb_args(char **args);
-void	expanding(void);
-void	handle_space(t_token *tokens, char *new_value);
-size_t	count_words(char *s);
-void	check_hd_expand(t_token *tokens);
+// Function that handle the left side of a pipe.
+void				pipe_left(t_node *node, int *pfd);
 
-void	fill_dollar(char *s, int *i, char *new, int *j);
+// Function that handle the right side of a pipe.
+void				pipe_right(t_node *node, int *pfd);
+
+// Function that remove null nodes.
+void				remove_null(t_node **res);
+
+// Function for debugging.
+void				print_ast(const char *prefix, t_node *root, bool isLeft);
+
+// Function that add a list inside another one.
+void				add_list_into_list(t_list **lst, t_list *new);
+
+// Function that create the name of here_doc file names.
+char				*build_file_name(char *join);
+
+// Function that check if the character is numerical.
+int					ft_isnum(int c);
+
+// Function that process and run exit builtin.
+int					process_exit(char **args);
+
+// Function that return number of argument.
+int					nb_args(char **args);
+
+// Funcion that handle space case in expanded tokens.
+void				handle_space(t_token *tokens, char *new_value);
+
+// Function that count how many word is in a string.
+size_t				count_words(char *s);
+
+// Function that checks if the here_doc should be expanded or not.
+void				check_hd_expand(t_token *tokens);
+
+// Function that fill return the new_value after expand.
+void				fill_dollar(char *s, int *i, char *new, int *j);
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -126,6 +147,18 @@ t_env				*sort_env(t_env *env);
 // Function that expand tild "~".
 char				*custome_path(char *path);
 
+// Function that find the first occurence of the delimiter.
+int					find_delimiter(const char *str, char delimiter);
+
+// Function that split a string using a delimiter.
+char				**split_string(char *str, char delimiter);
+
+// Function used while processing the export builtin.
+int					process_equal(char **args, int i);
+
+// Function that print the exit error case.
+void				print_exit_error(char *msg);
+
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
 
@@ -140,14 +173,6 @@ void				set_as_visible(t_env *env, char *var);
 
 // Set the env variable as invisible.
 void				set_as_invisible(t_env *env, char *var);
-
-/* Cleaning */
-
-// Function that cleanup minishell.
-void				cleanup_minishell(void);
-
-// Function that clear the AST.
-void				clear_ast(t_node *tree);
 
 /* Environments */
 
@@ -178,19 +203,20 @@ t_env				*special_dup_env(void);
 void				executer(t_node *node);
 
 // Main function that handle here_doc.
-int					here_doc(char *limiter , int doc_num, int expand_flag);
+int					here_doc(char *limiter, int doc_num, int expand_flag);
 
 // Helper function for handling here_doc.
-void				do_here_doc(char *buf, char *limiter, int fd, int *pipe, int expand_flag);
+void				do_here_doc(char *buf, char *limiter, int fd, int *pipe,
+						int expand_flag);
 
 // Function that return the size of the env.
-int  				env_size(t_env *env);
+int					env_size(t_env *env);
 
 // Function that return the env to a double pointer char.
-char 				**env_to_envp(t_env *env);
+char				**env_to_envp(t_env *env);
 
 // Function that return the list of command to a double pointer char.
-char 				**list_to_argv(t_list *list);
+char				**list_to_argv(t_list *list);
 
 // Function that open pipes fds.
 void				open_pipe(int *pfd);
@@ -199,7 +225,7 @@ void				open_pipe(int *pfd);
 int					dup_2(int old_fd, int new_fd);
 
 // Function that duplicate fd with a special mode.
-void				fd_duper(int *pfd , int mode);
+void				fd_duper(int *pfd, int mode);
 
 // Function that get the command.
 char				*get_command(char *argv);
@@ -208,22 +234,22 @@ char				*get_command(char *argv);
 char				*add_slash_cmd(char *path, char *cmd);
 
 // Function that IDK XD.
-int 				do_here_docs(t_list *red_list);
+int					do_here_docs(t_list *red_list);
 
 // Function that IDK XD.
-int 				input_to_dup(t_list *red_list);
+int					input_to_dup(t_list *red_list);
 
 // Function that IDK XD.
-int 				output_to_dup(t_list *red_list);
+int					output_to_dup(t_list *red_list);
 
 // Function that IDK XD.
 void				run_doc_cmd(t_list *red_list);
 
 // Function that IDK XD.
-int 				open_redir(t_redir *redir);
+int					open_redir(t_redir *redir);
 
 // Function that IDK XD.
-int 				open_and_set(t_list *red_list);
+int					open_and_set(t_list *red_list);
 
 // Function that print errors with an argument.
 int					print_err(char *message, char *word);
@@ -250,22 +276,22 @@ char				*get_fullpath(char *argv, char **env);
 int					check_cmd(char *argv, char **env);
 
 // Function that call and execute execve.
-void				call_execev(char **env, char *argv , char **cmd);
+void				call_execev(char **env, char *argv, char **cmd);
 
 // Function that is called when maslloc failed.
 int					ft_malloc_error(char **tab, size_t i);
 
 // Function that IDK XD.
-int 				wait_and_get(void);
+int					wait_and_get(void);
 
 // Function that IDK XD.
-void 				do_cmd(t_node *ast);
+void				do_cmd(t_node *ast);
 
 // Function that do pipe process.
-void 				do_pipe(t_node *cmd , int mode , int *pfd);
+void				do_pipe(t_node *cmd, int mode, int *pfd);
 
 // Function that execute a command.
-void 				execute_cmd(t_node *node);
+void				execute_cmd(t_node *node);
 
 // Function that IDK XD.
 int					scan_and_set(t_node *node);
@@ -282,7 +308,6 @@ void				read_buf(char **buf, int expand_flag);
 // Function that IDK XD.
 int					write_or_break(int fd, char *limiter, char *buf, int count);
 
-
 /* Expanding */
 
 // Main function to do expand.
@@ -291,8 +316,20 @@ void				expanding(void);
 // Function that expand inside the expanding.
 void				here_doc_expanding(char **s);
 
-// FUnction that help expanding words.
+// Function that return a list of nodes containing dollar expanding.
+t_list				*dollar_functionality(char **s);
+
+// Function that return a list of nodes containing asterisk expanding.
+t_list				*asterisk_functionality(char *s);
+
+// Function that help expanding words.
 char				*helper_expander(char *s);
+
+// Function that checks if the string contain spaces.
+int					contains_space(char *s);
+
+// Function that return the new value after expand.
+char				*new_value(char *s, int size);
 
 // Function that get the variable and search for it in the environment.
 char				*get_var(char *s, int *i);
@@ -316,6 +353,12 @@ void				gc_add(t_minishell *mini, void *ptr);
 
 // Function that free all addresses in the garbage collector.
 void				gc_free_all(t_minishell *mini);
+
+// Function that cleanup minishell.
+void				cleanup_minishell(void);
+
+// Function that clear the AST.
+void				clear_ast(t_node *tree);
 
 /* Nodes */
 
@@ -355,10 +398,10 @@ void				ft_sigint_handler(int sig);
 // Function that handle signals for here_doc.
 void				here_doc_sig(int sig);
 
-// Function that handle sigquit before execution. 
+// Function that handle sigquit before execution.
 void				ft_sigquit(int sig);
 
-// Function that handle sigquit before execution. 
+// Function that handle sigquit before execution.
 void				ft_sigint(int sig);
 
 /* Syntax */
@@ -401,6 +444,5 @@ void				print_errors(char *message);
 
 /* Debugging ones */
 void				print_tokens(t_token *token);
-
 
 #endif /* MINISHELL_H */
