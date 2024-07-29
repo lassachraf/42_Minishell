@@ -6,27 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/26 11:50:39 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:23:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	remove_token(t_token **head, t_token *token)
-{
-	if (!token->prev)
-	{
-		*head = (*head)->next;
-		if (*head)
-			(*head)->prev = NULL;
-	}
-	else
-	{
-		token->prev->next = token->next;
-		if (token->next)
-			token->next->prev = token->prev;
-	}
-}
 
 void	handle_special_case(t_token **tokens, t_token **current)
 {
@@ -74,10 +58,20 @@ void	join_tokens(t_token **tokens, t_token **current)
 	}
 }
 
+void	remove_it(t_token **tokens, t_token **current)
+{
+	t_token	*tmp;
+
+	tmp = (*current)->next;
+	if ((*current)->next_space == 1 && (*current)->prev)
+		(*current)->prev->next_space = 1;
+	remove_token(tokens, (*current));
+	(*current) = tmp;
+}
+
 void	remove_quotes(t_token **tokens)
 {
 	t_token	*current;
-	t_token	*tmp;
 
 	current = *tokens;
 	while (current)
@@ -93,11 +87,7 @@ void	remove_quotes(t_token **tokens)
 				handle_special_case(tokens, &current);
 			else
 			{
-				tmp = current->next;
-				if (current->next_space == 1 && current->prev)
-					current->prev->next_space = 1;
-				remove_token(tokens, current);
-				current = tmp;
+				remove_it(tokens, &current);
 			}
 		}
 		else
