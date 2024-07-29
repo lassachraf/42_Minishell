@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/22 12:57:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:17:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ void	delete_env_var(t_env **env, char *key)
 		return ;
 	current = *env;
 	previous = NULL;
-	if(!ft_strncmp((*env)->key, key, ft_strlen(key)))
+	if (!ft_strncmp((*env)->key, key, ft_strlen(key)))
 	{
 		g_minishell->our_env = (*env)->next;
 		free_line_of_env(*env);
-		return;
+		return ;
 	}
 	while (current && ft_strncmp(current->key, key, ft_strlen(key)))
 	{
