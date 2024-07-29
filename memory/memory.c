@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:20:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/13 14:38:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:50:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*ft_malloc(t_minishell *mini, size_t size)
 
 void	cleanup_minishell(void)
 {
-	gc_free_all(g_minishell);
 	clear_env(g_minishell->our_env);
+	gc_free_all(g_minishell);
 	free(g_minishell);
 }
