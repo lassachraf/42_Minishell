@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 21:46:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:19:15 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	nb_options(char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (!ft_strncmp(args[i], "-", 1) && !ft_isdigit(*args[i + 1]))
+		if (!ft_strncmp(args[i], "-", 1) && args[i + 1]
+			&& !ft_isdigit(*args[i + 1]))
 			return (0);
 		i++;
 	}
@@ -38,8 +39,7 @@ int	nb_options(char **args)
 
 int	builtins_exec_check(char **args)
 {
-	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1
-			|| !nb_options(args)))
+	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1 || !nb_options(args)))
 	{
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("badashell$ : env: can't run it with ", 2);
@@ -50,7 +50,7 @@ int	builtins_exec_check(char **args)
 		else if (nb_options(args))
 			ft_putstr_fd("options.\n" RESET, 2);
 		set_env_var(g_minishell->our_env, "?", "1");
-		return (1);
+		return (g_minishell->exit_s = 1, 1);
 	}
 	if ((!ft_strcmp(args[0], "export") || !ft_strcmp(args[0], "exit")
 			|| !ft_strcmp(args[0], "unset")) && nb_options(args) == 0)
@@ -59,7 +59,7 @@ int	builtins_exec_check(char **args)
 		ft_putstr_fd(args[0], 2);
 		ft_putstr_fd(": can't run it with options.\n" RESET, 2);
 		set_env_var(g_minishell->our_env, "?", "1");
-		return (1);
+		return (g_minishell->exit_s = 1, 1);
 	}
 	return (0);
 }

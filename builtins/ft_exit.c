@@ -6,11 +6,40 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 13:10:24 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:54:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	is_out_of_range(const char *str)
+{
+	const char	*pos_limit = "9223372036854775807";
+	const char	*neg_limit = "-9223372036854775808";
+	size_t		len;
+
+	len = strlen(str);
+	if (str[0] == '-')
+	{
+		if (len > 20)
+			return (1);
+		if (len == 20 && ft_strcmp(str, neg_limit) > 0)
+			return (1);
+	}
+	else
+	{
+		if (str[0] == '+')
+		{
+			len--;
+			str++;
+		}
+		if (len > 19)
+			return (1);
+		if (len == 19 && ft_strcmp(str, pos_limit) > 0)
+			return (1);
+	}
+	return (0);
+}
 
 void	ft_exit(char *args, int print)
 {
@@ -23,8 +52,11 @@ void	ft_exit(char *args, int print)
 	}
 	if (print)
 		ft_putstr_fd("exit\n", 1);
-	clear_env(g_minishell->our_env);
-	gc_free_all(g_minishell);
-	free(g_minishell);
+	if (is_out_of_range(args))
+	{
+		print_exit_error(args);
+		exit(2);
+	}
+	cleanup_minishell();
 	exit(exit_status);
 }

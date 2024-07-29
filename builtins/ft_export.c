@@ -6,38 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 17:55:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:45:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	process_equal(char **args, int i)
-{
-	char	**split;
-
-	split = ft_split(args[i], '=');
-	if (!split)
-		return (print_errors("Split failed in process equal"), -1);
-	if (check_identifier(split, 0) == -1)
-		return (free_split(split), -1);
-	if (get_env_var(g_minishell->our_env, split[0]))
-	{
-		set_as_visible(g_minishell->our_env, split[0]);
-		set_as_exported(g_minishell->our_env, split[0]);
-		if (split[1])
-			set_env_var(g_minishell->our_env, split[0], split[1]);
-	}
-	else
-	{
-		if (!split[1])
-			add_env_var(g_minishell->our_env, split[0], "\0");
-		else
-			add_env_var(g_minishell->our_env, split[0], split[1]);
-		set_as_exported(g_minishell->our_env, split[0]);
-	}
-	return (free_split(split), 0);
-}
 
 char	**custome_split(char **split)
 {
@@ -67,7 +40,10 @@ int	process_joining(char **args, int i)
 
 	split = custome_split(ft_split(args[i], '='));
 	if (check_identifier(split, 0) == -1)
-		return (free_split(split), -1);
+	{
+		set_env_var(g_minishell->our_env, "?", "1");
+		return (g_minishell->exit_s = 1, free_split(split), -1);
+	}
 	if (get_env_var(g_minishell->our_env, split[0]))
 	{
 		joining_words(split);
@@ -80,7 +56,24 @@ int	process_joining(char **args, int i)
 			add_env_var(g_minishell->our_env, split[0], split[1]);
 		set_as_exported(g_minishell->our_env, split[0]);
 	}
-	return (free_split(split), 0);
+	set_env_var(g_minishell->our_env, "?", "0");
+	return (g_minishell->exit_s = 0, free_split(split), 0);
+}
+
+int	case_of_no_value(char **args, int *i)
+{
+	if (check_identifier(&args[(*i)], 0) == -1)
+	{
+		set_env_var(g_minishell->our_env, "?", "1");
+		g_minishell->exit_s = 1;
+		return (1);
+	}
+	else if (!get_env_var(g_minishell->our_env, args[(*i)]))
+	{
+		add_env_var(g_minishell->our_env, args[(*i)], NULL);
+		set_as_invisible(g_minishell->our_env, args[(*i)]);
+	}
+	return (0);
 }
 
 void	process_each_arg(char **args, int i)
@@ -93,18 +86,19 @@ void	process_each_arg(char **args, int i)
 				return ;
 		}
 		else if (process_equal(args, i) == -1)
+		{
+			set_env_var(g_minishell->our_env, "?", "1");
+			g_minishell->exit_s = 1;
 			return ;
+		}
 	}
 	else
 	{
-		if (check_identifier(&args[i], 0) == -1)
+		if (case_of_no_value(args, &i))
 			return ;
-		else if (!get_env_var(g_minishell->our_env, args[i]))
-		{
-			add_env_var(g_minishell->our_env, args[i], NULL);
-			set_as_invisible(g_minishell->our_env, args[i]);
-		}
 	}
+	set_env_var(g_minishell->our_env, "?", "0");
+	g_minishell->exit_s = 0;
 }
 
 void	ft_export(char **args, int nb_args)

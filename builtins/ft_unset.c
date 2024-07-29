@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:04:16 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/21 20:38:09 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 09:42:02 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,6 @@ void	ft_unset(char *key)
 	env = g_minishell->our_env;
 	if (ft_strncmp(key, "_", ft_strlen(key)))
 		delete_env_var(&env, key);
+	set_env_var(g_minishell->our_env, "?", "0");
+	g_minishell->exit_s = 0;
 }
