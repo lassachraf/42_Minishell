@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:11:04 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/17 16:17:06 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/29 10:02:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int					ft_isspace(char c);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strstr(const char *haystack, const char *needle);
 char				*ft_strncpy(char *dest, char *src, unsigned int n);
+char				*ft_strndup(const char *s, size_t n);
 
 // Additional PART :)
 
