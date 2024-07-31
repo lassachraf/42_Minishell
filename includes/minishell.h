@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 14:14:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:49:43 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ void				executer(t_node *node);
 int					here_doc(char *limiter, int doc_num, int expand_flag);
 
 // Helper function for handling here_doc.
-void				do_here_doc(char *buf, char *limiter, int fd, int *pipe,
+void				do_here_doc(char *limiter, int fd, int *pipe,
 						int expand_flag);
 
 // Function that return the size of the env.
@@ -254,9 +254,6 @@ int					open_and_set(t_list *red_list);
 // Function that print errors with an argument.
 int					print_err(char *message, char *word);
 
-// Function that check split returned value.
-void				check_split(char **cmd, char *word);
-
 // Function that IDK XD.
 int					strings_count(char **str);
 
@@ -267,13 +264,13 @@ void				free_double(char **ptr);
 char				*founded_cmd(char *argv, char **paths, char **cmd);
 
 // Function that get the path from the environment.
-char				**get_env_paths(char **env);
+char				**get_env_paths(void);
 
 // Function that check split returned value.
-char				*get_fullpath(char *argv, char **env);
+char				*get_fullpath(char *argv);
 
 // Function that check for the cmd.
-int					check_cmd(char *argv, char **env);
+int					check_cmd(char *argv);
 
 // Function that call and execute execve.
 void				call_execev(char **env, char *argv, char **cmd);

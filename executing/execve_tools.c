@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/28 02:39:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/30 17:37:48 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void	open_pipe(int *pfd)
 int	dup_2(int old_fd, int new_fd)
 {
 	if (dup2(old_fd, new_fd) < 0)
+	{
+		perror("dup2: ");
 		return (-1);
+	}
 	close(old_fd);
 	return (0);
 }
@@ -39,9 +42,9 @@ void	fd_duper(int *pfd, int mode)
 	else
 	{
 		close(pfd[0]);
-		// if (dup2(pfd[1], 1) == -1)
-		// 	exit(EXIT_FAILURE);
+		fprintf(stderr,"HERE\n");
 		dup_2(pfd[1], 1);
+		fprintf(stderr,"HERE1\n");
 	}
 }
 

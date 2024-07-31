@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:11:04 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 10:02:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:49:03 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 // Mandatory PART :)
 
@@ -71,6 +72,7 @@ void				ft_putnbr_fd(int n, int fd);
 typedef struct s_list
 {
 	void			*content;
+	bool			wd_expand;
 	struct s_list	*next;
 }					t_list;
 

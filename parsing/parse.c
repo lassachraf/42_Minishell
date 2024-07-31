@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/28 09:03:30 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/31 02:41:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_node	*parse_cmd(t_token **tokens)
 			new = ft_lstnew((*tokens)->value);
 			if (!new)
 				return (NULL);
+			new->wd_expand = (*tokens)->wd_expand;
 			gc_add(g_minishell, new);
 			ft_lstadd_back(&cmd_list, new);
 		}
@@ -247,23 +248,25 @@ void	remove_null(t_node **res)
 		execlude_null(&(*res)->data.cmd);
 }
 
-void	join_words(t_token *tokens)
+void	join_words(t_token **tokens)
 {
-	t_token	*tmp;
+	t_token	*curr;
+	t_token	*temp;
 
-	while (tokens)
+	temp = *tokens;
+	while (temp)
 	{
-		if (tokens->type == WORD && tokens->next_space == 0 && tokens->next
-			&& tokens->next->type == WORD)
+		if (temp->type == WORD && temp->next_space == 0 && temp->next
+			&& temp->next->type == WORD)
 		{
-			tmp = tokens;
-			tokens = tokens->next;
-			tokens->value = ft_strjoin(tmp->value, tokens->value);
-			gc_add(g_minishell, tokens->value);
-			remove_token(&tokens, tmp);
+			curr = temp;
+			temp = temp->next;
+			temp->value = ft_strjoin(curr->value, temp->value);
+			gc_add(g_minishell, temp->value);
+			remove_token(tokens, curr);
 		}
 		else
-			tokens = tokens->next;
+			temp = temp->next;
 	}
 }
 
@@ -273,7 +276,9 @@ t_node	*parsing(void)
 
 	expanding();
 	remove_quotes(&g_minishell->tokens);
-	join_words(g_minishell->tokens);
+	// before joining, I should set the '$' tokens type >> TO_EXPAND or TO_NOT_EXPAND
+	join_words(&g_minishell->tokens);
+	print_tokens(g_minishell->tokens);
 	res = parse_block(&g_minishell->tokens);
 	if (!res)
 		gc_free_all(g_minishell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 14:34:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:08:13 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ft_sigquit(int sig)
 
 void	ft_sigint(int sig)
 {
+	printf("----> CTRL + C \n");
 	if (sig != SIGINT)
 		return ;
 	g_minishell->exit_s = 130;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/27 23:53:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/31 00:37:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ bool	check_name(t_redir *new)
 	if (S_ISDIR(statbuf.st_mode) == true)
 		return (print_err("Is a directory", new->file), 1);
 	if (new->fd == -1)
-		return (print_err("ambiguous redirect", new->file), 1);
-	if (new->type != L_REDIR) // > >>
+		return (print_err("Ambiguous redirect", new->file), 1);
+	if (new->type != L_REDIR)
 	{
 		if (!access(new->file, F_OK))
 		{
 			if (!access(new->file, W_OK))
 				return (0);
-			return (print_err("permission denied", new->file), 1);
+			return (print_err("Permission denied", new->file), 1);
 		}
 		return (0);
 	}
@@ -58,10 +58,10 @@ bool	check_name(t_redir *new)
 	{
 		if (!access(new->file, R_OK)) // <
 			return (0);
-		return (print_err("permission denied", new->file), 1);
+		return (print_err("Permission denied", new->file), 1);
 	}
 	else
-		return (print_err("no such file or directory", new->file), 1);
+		return (print_err("No such file or directory", new->file), 1);
 }
 
 int	is_ambiguous(t_redir *new, int flag)

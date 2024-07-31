@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/28 02:45:50 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/30 09:50:54 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	open_hidden_file(int doc_num)
 	if (fd < 0)
 	{
 		perror("here_doc failed to get input");
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
 	return (fd);
 }
@@ -82,7 +82,7 @@ int	re_open_hidden_file(int doc_num)
 	if (fd < 0)
 	{
 		perror("here_doc failed to get input");
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
 	return (fd);
 }
@@ -138,20 +138,18 @@ void	get_lines_count(int *pipe)
 
 int	here_doc(char *limiter, int doc_num, int expand_flag)
 {
-	char	*buf;
 	int		id;
 	int		fd;
 	int		pipe[2];
 	int		fd_hidden;
 
 	open_pipe(pipe);
-	buf = NULL;
 	fd_hidden = -1;
 	fd = open_hidden_file(doc_num);
 	id = fork();
 	if (!id)
 	{
-		do_here_doc(buf, limiter, fd, pipe, expand_flag);
+		do_here_doc(limiter, fd, pipe, expand_flag);
 		exit(0);
 	}
 	else

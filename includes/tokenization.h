@@ -6,12 +6,14 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 14:13:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/31 02:02:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZATION_H
 # define TOKENIZATION_H
+
+# include <stdbool.h>
 
 typedef enum e_type
 {
@@ -40,7 +42,8 @@ typedef struct s_token
 {
 	char			*value;
 	t_type			type;
-	int				hd_expand;
+	bool			hd_expand;
+	bool			wd_expand;
 	int				next_space;
 	struct s_token	*prev;
 	struct s_token	*next;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:34:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 21:45:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/31 00:41:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	process_exit(char **args)
 		printf("exit\n");
 		if (sec_is_num(args[1]))
 		{
-			print_errors("exit : too many arguments.");
+			print_errors("exit : too many arguments");
 			set_env_var(g_minishell->our_env, "?", "1");
 			g_minishell->exit_s = 1;
 		}

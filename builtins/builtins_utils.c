@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 14:19:15 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/31 00:43:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	builtins_exec_check(char **args)
 	if (!ft_strcmp(args[0], "env") && (nb_args(args) > 1 || !nb_options(args)))
 	{
 		ft_putstr_fd(RED, 2);
-		ft_putstr_fd("badashell$ : env: can't run it with ", 2);
+		ft_putstr_fd("badashell$ : env : can't run it with ", 2);
 		if (nb_args(args) > 1 && !nb_options(args))
 			ft_putstr_fd("args and options.\n" RESET, 2);
 		else if (nb_args(args) > 1)
@@ -92,6 +92,9 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 
 void	execute_builtins(t_minishell *mini, char **args)
 {
+	int	i;
+
+	i = 0;
 	if (builtins_exec_check(args))
 		return ;
 	if (!ft_strcmp(args[0], "echo"))
@@ -106,7 +109,7 @@ void	execute_builtins(t_minishell *mini, char **args)
 		ft_export(args, nb_args(args));
 	else if (!ft_strcmp(args[0], "unset"))
 	{
-		if (args[1])
-			ft_unset(args[1]);
+		while (args[++i])
+			ft_unset(args[i]);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 09:37:13 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/07/31 02:03:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,10 @@ void	print_tokens(t_token *tokens)
 	token = tokens;
 	while (token)
 	{
-		printf("type => '%u'\n", token->type);
-		printf("value => '%s'\n", token->value);
-		printf("hd_expand => '%d'\n", token->hd_expand);
+		printf("type => '%u', ", token->type);
+		printf("value => '%s', ", token->value);
+		printf("hd_expand => '%d', ", token->hd_expand);
+		printf("hd_expand => '%d', ", token->wd_expand);
 		printf("next_space => '%d'\n", token->next_space);
 		token = token->next;
 	}
@@ -158,7 +159,8 @@ void	ft_readline(void)
 	gc_add(g_minishell, g_minishell->line);
 	if (!g_minishell->line)
 	{
-		exit_status = g_minishell->exit_s;
+		g_minishell->exit_s = 0;
+		exit_status = 0;
 		ft_putstr_fd("exit\n", 1);
 		clear_env(g_minishell->our_env);
 		gc_free_all(g_minishell);
@@ -210,6 +212,8 @@ int	main(int argc, char **argv, char **env)
 		close(0);
 		while (wait_and_get() != -1);
 		clean_and_set();
+		if(g_minishell->exit_s == 130)
+			printf("\n");
 	}
 	cleanup_minishell();
 	return (0);

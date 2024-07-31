@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/28 18:06:55 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/31 00:38:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,35 @@
 #include <errno.h>
 #include <stdio.h>
 
-char	**get_env_paths(char **env)
+char	**get_env_paths(void)
 {
 	char	**res;
+	char	*tmp;
 
-	if (!env)
+	tmp = get_env_var(g_minishell->our_env, "PATH");
+	if(!tmp)
 		return (NULL);
-	while (*env && !ft_strnstr(*env, "PATH", 5))
-		env++;
-	if (!*env)
-		return (NULL);
-	res = ft_split(*env, ':');
-	check_split(res, *env);
-	ft_strchr(*res, '/');
+	res = ft_split(tmp, ':');
+	if(!res)
+		return(NULL);
 	return (res);
 }
 
-char	*get_fullpath(char *argv, char **env)
+bool get_path_data(char *argv, char	***paths, char	***cmd, int *paths_num)
+{
+	(*paths) = get_env_paths();
+	if (!(*paths))
+		return (0);
+	*paths_num = strings_count((*paths));
+	if(*paths_num == -1 || !*paths_num)
+		return (free_double((*paths)), 0);
+	*cmd = ft_split(argv, ' ');
+	if (!*cmd)
+		return (free_double((*paths)), 0);
+	return (1);
+}
+
+char	*get_fullpath(char *argv)
 {
 	int		paths_num;
 	char	**cmd;
@@ -38,15 +50,12 @@ char	*get_fullpath(char *argv, char **env)
 	char	*fullpath;
 	int		i;
 
-	if (!argv || !env || !*env || !*argv || ft_isspace(*argv))
+	if (!argv || !*argv || ft_isspace(*argv))
 		return (NULL);
 	fullpath = NULL;
 	i = 0;
-	paths = get_env_paths(env);
-	paths_num = strings_count(paths);
-	cmd = ft_split(argv, ' ');
-	if (!cmd)
-		return (free(paths), NULL);
+	if (!get_path_data(argv, &paths, &cmd, &paths_num))
+		return (NULL);
 	if (!(access(*cmd, F_OK)))
 	{
 		if ((*argv == '/' || *argv == '.') && !access(*cmd, X_OK))
@@ -58,7 +67,7 @@ char	*get_fullpath(char *argv, char **env)
 	return (free_double(cmd), free_double(paths), fullpath);
 }
 
-int	check_cmd(char *argv, char **env)
+int	check_cmd(char *argv)
 {
 	char		*cmd;
 	struct stat	statbuf;
@@ -66,21 +75,21 @@ int	check_cmd(char *argv, char **env)
 	statbuf.st_mode = 0;
 	stat(argv, &statbuf);
 	if (S_ISDIR(statbuf.st_mode) == true && ft_strchr(argv, '/'))
-		return (print_err("Is a directory", argv), 1);
-	cmd = get_fullpath(argv, env);
+		return (print_err("Is a directory", argv), 126);
+	cmd = get_fullpath(argv);
 	gc_add(g_minishell, cmd);
 	if (!cmd && *argv == '.')
 		cmd = get_command(argv);
 	if (*argv != '\0' && (*argv == '/' || *argv == '.'
 			|| !get_env_var(g_minishell->our_env, "PATH")) && access(cmd, F_OK))
-		return (print_err("no such file or directory", argv), 127);
+		return (print_err("No such file or directory", argv), 127);
 	else if (ft_strlen(argv) == 1 && argv[0] == '.')
 	{
 		print_err("filename argument required\n.: usage: . filename [arguments]",
 			NULL);
 		return (2);
 	}
-	else if (access(cmd, F_OK)) //
+	else if (access(cmd, F_OK) || (argv[0] == '.' &&  argv[1] == '.')) //
 		return (print_err("command not found", argv), 127);
 	else if (access(cmd, X_OK))
 		return (print_err("permission denied", argv), 126);
@@ -93,8 +102,7 @@ void	call_execev(char **env, char *argv, char **cmd)
 	int		len;
 
 	len = ft_strlen(argv);
-	check_split(cmd, argv);
-	founded_path = get_fullpath(argv, env);
+	founded_path = get_fullpath(argv);
 	execve(founded_path, cmd, env);
 	print_err("EXEVE FAILED ", NULL);
 }

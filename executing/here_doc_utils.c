@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 00:19:45 by marvin           ###   ########.fr       */
+/*   Updated: 2024/07/30 11:10:55 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	do_here_doc(char *buf, char *limiter, int fd, int *pipe,
-		int expand_flag)
+void	do_here_doc(char *limiter, int fd, int *pipe, int expand_flag)
 {
 	char	*lines;
 	int		old_count;
+	char	*buf;
 
+	buf = NULL;
 	old_count = g_minishell->lines;
 	while (1)
 	{

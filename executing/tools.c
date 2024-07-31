@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:10:33 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/17 09:00:42 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:59:35 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,6 @@ int	print_err(char *message, char *word)
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd("\n" RESET, 2);
 	return (0);
-}
-
-void	check_split(char **cmd, char *word)
-{
-	if (!cmd)
-	{
-		print_err("malloc failed in ft_split !!", word);
-		if (!word)
-			ft_putstr_fd("NULL\n", 2);
-		return ;
-	}
 }
 
 int	strings_count(char **str)
@@ -51,7 +40,7 @@ void	free_double(char **ptr)
 	int	i;
 
 	i = 0;
-	if (!ptr || !*ptr)
+	if (!ptr)
 		return ;
 	while (ptr[i])
 	{
