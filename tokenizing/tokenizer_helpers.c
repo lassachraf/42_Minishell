@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/26 10:59:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:15:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*new_token(char *value, t_type type)
+t_token	*new_token(char *value, t_type type, int wd)
 {
 	t_token	*new_token;
 
@@ -24,6 +24,7 @@ t_token	*new_token(char *value, t_type type)
 	gc_add(g_minishell, new_token->value);
 	new_token->type = type;
 	new_token->hd_expand = 0;
+	new_token->wd_expand = wd;
 	new_token->next_space = 0;
 	new_token->prev = NULL;
 	new_token->next = NULL;
@@ -57,7 +58,7 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 		value = ft_substr(*line, 0, 2);
 	else
 		value = ft_substr(*line, 0, 1);
-	token = new_token(value, type);
+	token = new_token(value, type, 1);
 	if (!token)
 		return (0);
 	add_token_back(tokens, token);
@@ -66,6 +67,28 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 		(*line)++;
 	return (1);
 }
+
+// t_token	*append_quotes(t_token **tokens, char **line, char c)
+// {
+// 	printf("quotes\n");
+// 	t_token	*new;
+// 	char	*value;
+// 	char	*tmp;
+// 	int		i;
+
+// 	i = 0;
+// 	tmp = (*line) + 1;
+// 	while ((*line)[i] && (*line)[i] != c)
+// 		i++;
+// 	value = ft_substr(tmp, 0, i);
+// 	(*line) += i + 1;
+// 	printf("line >> %s\n", (*line));
+// 	if (c == '\'')
+// 		new = new_token(value, WORD, 0);
+// 	else
+// 		new = new_token(value, WORD, 1);
+// 	return (add_token_back(tokens, new), NULL);
+// }
 
 int	append_identifier(t_token **tokens, char **line)
 {
@@ -76,19 +99,12 @@ int	append_identifier(t_token **tokens, char **line)
 
 	tmp = *line;
 	i = 0;
-	if (is_special(*tmp))
-	{
-		value = ft_substr(tmp, 0, 1);
-		new = choose_token(value, *tmp);
-		*line += 1;
-		return (add_token_back(tokens, new), 1);
-	}
 	while (tmp[i] && !is_separator(tmp + i) && !is_quote(*(tmp + i)))
 		i++;
 	value = ft_substr(tmp, 0, i);
 	if (!value)
 		return (0);
-	new = new_token(value, WORD);
+	new = new_token(value, WORD, 1);
 	if (!new)
 		return (0);
 	*line += i;
@@ -109,7 +125,7 @@ int	append_space(t_token **tokens, char **line)
 	value = ft_substr(*line, 0, i);
 	if (!value)
 		return (0);
-	token = new_token(value, WHITESPACE);
+	token = new_token(value, WHITESPACE, 1);
 	if (!token)
 		return (0);
 	add_token_back(tokens, token);

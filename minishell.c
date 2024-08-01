@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/31 02:03:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:58:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	print_ast(const char *prefix,  t_node* root, bool isLeft)
 		list = root->data.cmd;
         while (list)
         {
-            fprintf(stderr,"'%s' ", (char*)list->content);
+            fprintf(stderr,"|%s| ", (char*)list->content);
             list = list->next;
         }
         fprintf(stderr,"\n");
@@ -76,11 +76,11 @@ void	print_ast(const char *prefix,  t_node* root, bool isLeft)
         {
 			t_list *list;
             t_redir *new = lst->content;
-            fprintf(stderr,"REDIR NODE , name: '%s' ",new->file);
+            fprintf(stderr,"REDIR NODE , name: |%s| ",new->file);
 			list = new->cmd;
             while (list)
             {
-                fprintf(stderr,"'%s' ", (char*)list->content);
+                fprintf(stderr,"|%s| ", (char*)list->content);
                 list = list->next;
             }
             fprintf(stderr," ");
@@ -97,11 +97,11 @@ void	print_tokens(t_token *tokens)
 	token = tokens;
 	while (token)
 	{
-		printf("type => '%u', ", token->type);
-		printf("value => '%s', ", token->value);
-		printf("hd_expand => '%d', ", token->hd_expand);
-		printf("hd_expand => '%d', ", token->wd_expand);
-		printf("next_space => '%d'\n", token->next_space);
+		printf("type => |%u|, ", token->type);
+		printf("value => |%s|, ", token->value);
+		printf("hd_expand => |%d|, ", token->hd_expand);
+		printf("wd_expand => |%d|, ", token->wd_expand);
+		printf("next_space => |%d|\n", token->next_space);
 		token = token->next;
 	}
 }
@@ -197,6 +197,8 @@ int	main(int argc, char **argv, char **env)
 		g_minishell->tokens = tokenizer();
 		if (!g_minishell->tokens || syntax() == -1)
 			continue ;
+		print_tokens(g_minishell->tokens);
+		// exit(2);
 		g_minishell->ast = parsing();
 		if (!g_minishell->ast)
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:38:55 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 14:21:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:50:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ int	special_case(t_token *prev, t_token *curr, t_token *next)
 		&& curr->type == next->type)
 	{
 		if (!prev || (prev && prev->type >= WORD && prev->type <= OR))
-		{
 			return (1);
-		}
 		else
 			return (0);
 	}

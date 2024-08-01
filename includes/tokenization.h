@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/31 02:02:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:48:05 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int					special_case(t_token *prev, t_token *curr, t_token *next);
 /* Tokenizer_helpers */
 
 // Function that create and return a new token node.
-t_token				*new_token(char *value, t_type type);
+t_token				*new_token(char *value, t_type type, int wd);
 
 // Function that add a new token to the list of tokens.
 void				add_token_back(t_token **tokens, t_token *new_token);

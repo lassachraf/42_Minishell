@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/26 09:53:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:52:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	fill_tokens(t_token *current, char *new_value)
 			while (new_value[i] && !ft_isspace(new_value[i]))
 				i++;
 			chunk = ft_substr(new_value, j, (i - j));
-			new_tok = new_token(chunk, WORD);
+			new_tok = new_token(chunk, WORD, 1);
 			add_token_middle(&g_minishell->tokens, new_tok, current->prev);
 			current = new_tok->next;
 		}

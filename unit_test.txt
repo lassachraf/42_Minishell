@@ -25,3 +25,16 @@
 : 13 :	exit arg >> LONG_MIN < arg < LONG_MAX								>>>>> DONE
 
 
+///////////////////////// some single/double expanding ////////////////////////////
+
+c4r9p2% bash
+alassiqu@c4r9p2:~$ ''""""'""'$USER'""'""""''
+""alassiqu"": command not found
+alassiqu@c4r9p2:~$ ''""""'""$USER""'""""''
+""$USER"": command not found
+alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""'$USER'""'"'"'"''''''''''''''''''''''"""'"''"
+''""""'""alassiqu""'""""'': command not found
+alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""$USER""'"'"'"''''''''''''''''''''''"""'"''"
+''""""'""$USER""'""""'': command not found
+alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""$USER""'"'"'"''''''''''''''''''''''"""'"''"
+''""""'""$USER""'""""'': command not found

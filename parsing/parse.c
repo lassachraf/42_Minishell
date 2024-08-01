@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/31 02:41:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/01 19:58:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,8 @@ void	join_words(t_token **tokens)
 	t_token	*temp;
 
 	temp = *tokens;
+	printf("** join words token **\n");
+	print_tokens(temp);
 	while (temp)
 	{
 		if (temp->type == WORD && temp->next_space == 0 && temp->next
@@ -262,6 +264,10 @@ void	join_words(t_token **tokens)
 			curr = temp;
 			temp = temp->next;
 			temp->value = ft_strjoin(curr->value, temp->value);
+			if ((!curr->wd_expand || curr->wd_expand) && temp->wd_expand)
+				temp->wd_expand = 1;
+			printf("curr tok >> %s with exp >> %d\n", curr->value, curr->wd_expand);
+			printf("next tok >> %s with exp >> %d\n", temp->value, temp->wd_expand);
 			gc_add(g_minishell, temp->value);
 			remove_token(tokens, curr);
 		}
@@ -270,15 +276,33 @@ void	join_words(t_token **tokens)
 	}
 }
 
+void	check_tokens(t_token **tokens)
+{
+	t_token	*tmp;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+		if (tmp->type == S_QUOTE && tmp->next->type == WORD
+			&& ft_strchr(tmp->next->value, '$'))
+		{
+			tmp = tmp->next;
+			tmp->wd_expand = 0;
+			while (tmp && tmp->type != S_QUOTE)
+				tmp = tmp->next;
+		}
+		tmp = tmp->next;
+	}
+}
+
 t_node	*parsing(void)
 {
 	t_node	*res;
 
 	expanding();
-	remove_quotes(&g_minishell->tokens);
-	// before joining, I should set the '$' tokens type >> TO_EXPAND or TO_NOT_EXPAND
 	join_words(&g_minishell->tokens);
 	print_tokens(g_minishell->tokens);
+	// before joining, I should set the '$' tokens type >> TO_EXPAND or TO_NOT_EXPAND
 	res = parse_block(&g_minishell->tokens);
 	if (!res)
 		gc_free_all(g_minishell);
