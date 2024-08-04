@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:46:08 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/18 11:09:01 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/03 22:26:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,14 @@ t_env	*dup_env(char **env)
 	return (head);
 }
 
+void	add_4_element(t_env *head)
+{
+	add_env_var(head, "SHLVL", "1");
+	add_env_var(head, "_", "/usr/bin/env");
+	add_env_var(head, "OLDPWD", NULL);
+	set_as_invisible(head, "OLDPWD");
+}
+
 t_env	*special_dup_env(void)
 {
 	t_env	*head;
@@ -102,7 +110,6 @@ t_env	*special_dup_env(void)
 	pwd->export = true;
 	pwd->next = NULL;
 	head = pwd;
-	add_env_var(head, "SHLVL", "1");
-	add_env_var(head, "_", "/usr/bin/env");
+	add_4_element(head);
 	return (head);
 }

@@ -25,16 +25,34 @@
 : 13 :	exit arg >> LONG_MIN < arg < LONG_MAX								>>>>> DONE
 
 
-///////////////////////// some single/double expanding ////////////////////////////
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ grep fd
+^C
+alassiqu@c4r7p8:~/newone/last_v$ 
+exit
+alassiqu@c4r7p8:~/newone/last_v$ echo $?
+130
+alassiqu@c4r7p8:~/newone/last_v$ 
 
-c4r9p2% bash
-alassiqu@c4r9p2:~$ ''""""'""'$USER'""'""""''
-""alassiqu"": command not found
-alassiqu@c4r9p2:~$ ''""""'""$USER""'""""''
-""$USER"": command not found
-alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""'$USER'""'"'"'"''''''''''''''''''''''"""'"''"
-''""""'""alassiqu""'""""'': command not found
-alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""$USER""'"'"'"''''''''''''''''''''''"""'"''"
-''""""'""$USER""'""""'': command not found
-alassiqu@c4r9p2:~$ "''"'"""''''''''''''''''''''''"'"'"'""$USER""'"'"'"''''''''''''''''''''''"""'"''"
-''""""'""$USER""'""""'': command not found
+
+newline
+
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ bash
+alassiqu@c4r7p8:~/newone/last_v$ grep fd
+^C
+alassiqu@c4r7p8:~/newone/last_v$ 
+exit
+alassiqu@c4r7p8:~/newone/last_v$ echo $?
+130
+alassiqu@c4r7p8:~/newone/last_v$ 
+badashell$>exporta=ls && << $a cat -e && unset a 
+------------------------------> parse && , 3 
+------------------------------> parse && , 3 
+> $a
+warning: here-document at line 88 delimited by end-of-file (wanted `$a')
+
+

@@ -6,16 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:38:55 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/01 14:50:32 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:53:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	is_special(char c)
-{
-	return (c == '\'' || c == '"');
-}
 
 int	is_separator(char *s)
 {

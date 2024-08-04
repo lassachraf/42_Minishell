@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 13:23:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 00:41:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,28 @@ t_token	*word_helper(t_token *tokens)
 	new_value = NULL;
 	if (tokens->prev && tokens->prev->type == LL_REDIR)
 		return (tokens->next);
-	if (tokens->prev && tokens->prev->type == D_QUOTE)
-	{
-		g_minishell->dq_flag = 1;
-		new_value = helper_expander(tokens->value);
-		check_for_value(&tokens, new_value);
-	}
-	else
+	if (tokens->wd_expand)
 	{
 		new_value = helper_expander(tokens->value);
 		check_for_value(&tokens, new_value);
 	}
-	return (tokens);
+	return (tokens->next);
+}
+
+void	expand_dollar(void)
+{
+	t_token	*tokens;
+
+	tokens = g_minishell->tokens;
+	while (tokens)
+	{
+		if (tokens->value && is_separator(tokens->value))
+			break ;
+		if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
+			tokens = word_helper(tokens);
+		else
+			tokens = tokens->next;
+	}
 }
 
 void	expanding(void)
@@ -79,7 +89,6 @@ void	expanding(void)
 	tokens = g_minishell->tokens;
 	while (tokens)
 	{
-		g_minishell->dq_flag = 0;
 		if (tokens->type == S_QUOTE)
 		{
 			tokens = tokens->next;

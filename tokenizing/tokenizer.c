@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:41:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/01 17:58:53 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/03 23:56:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_token	*tokenizer_handler(char *line)
 		else
 			error = (!append_identifier(&tokens, &line) && 1);
 	}
-	add_token_back(&tokens, new_token(NULL, END, 1));
+	add_token_back(&tokens, new_token(NULL, END, 0));
 	return (tokens);
 }
 
@@ -65,7 +65,6 @@ t_token	*tokenizer(void)
 	t_token	*tokens;
 	char	*line;
 
-	g_minishell->nb_tokens = 0;
 	line = ft_strtrim(g_minishell->line, " \t\n\v\f\r");
 	gc_add(g_minishell, line);
 	tokens = tokenizer_handler(line);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:44:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/01 17:21:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:51:53 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ void	remove_quotes(t_token **tokens)
 			if (current->prev && current->next && current->prev->type == WORD
 				&& ft_strchr(current->prev->value, '=')
 				&& current->next->type == WORD)
-				join_tokens(tokens, &current); // for export case !!
+				join_tokens(tokens, &current);
 			else if (current->next && special_case(current->prev, current,
 					current->next))
-				handle_special_case(tokens, &current); // case of '' or ""
+				handle_special_case(tokens, &current);
 			else
 				remove_it(tokens, &current);
 		}

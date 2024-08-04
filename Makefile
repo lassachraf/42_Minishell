@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/07/29 14:32:11 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/04 02:10:51 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,9 +58,8 @@ EXPANDING		:=	expanding/dollar_expand.c			\
 MEMORY			:=	memory/garbage_collector.c			\
 					memory/memory.c
 
-NODES			:=	nodes/node.c
-
-PARSING			:=	parsing/parse.c
+PARSING			:=	parsing/parse.c						\
+					parsing/node.c
 
 SIGNALS			:=	signals/handle_signals.c
 
@@ -77,18 +76,20 @@ TOKENIZING		:=	tokenizing/tokenizer_free.c			\
 					tokenizing/tokenizer.c				\
 					tokenizing/tokens_helpers.c
 
+MAIN			:=	main_utils.c						\
+					minishell.c
+
 SRCS			:=	$(BUILTINS)							\
 					$(CLEANING)							\
 					$(ENVIRONMENT)						\
 					$(EXECUTING)						\
 					$(EXPANDING)						\
 					$(MEMORY)							\
-					$(NODES)							\
 					$(PARSING)							\
 					$(SIGNALS)							\
 					$(SYNTAXING)						\
 					$(TOKENIZING)						\
-					minishell.c
+					$(MAIN)
 
 OBJS			:=	$(SRCS:.c=.o)
 

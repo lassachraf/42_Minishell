@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:25:01 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 21:44:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/02 17:41:21 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,5 @@ void	ft_echo(char **args)
 	}
 	if (new_line == 0)
 		ft_putstr_fd("\n", 1);
-	set_env_var(g_minishell->our_env, "?", "0");
 	g_minishell->exit_s = 0;
 }

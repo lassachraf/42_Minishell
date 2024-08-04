@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:40:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/28 21:48:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 00:59:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void	print_env(t_env *env)
 
 void	error_identifier(char **s)
 {
-	ft_putstr_fd(RED "badashell$ : export: `", 2);
+	ft_putstr_fd(RED "badashell$ : export : `", 2);
 	if (s[0])
 		ft_putstr_fd(s[0], 2);
-	ft_putstr_fd("=", 2);
 	if (s[1])
+	{
+		ft_putstr_fd("=", 2);
 		ft_putstr_fd(s[1], 2);
-	ft_putstr_fd("`: not a valid identifier.\n" RESET, 2);
+	}
+	ft_putstr_fd("` : not a valid identifier.\n" RESET, 2);
 	set_env_var(g_minishell->our_env, "?", "2");
 	g_minishell->exit_s = 2;
 }

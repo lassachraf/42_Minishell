@@ -6,13 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/31 00:38:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:26:35 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <errno.h>
-#include <stdio.h>
 
 char	**get_env_paths(void)
 {
@@ -20,21 +18,21 @@ char	**get_env_paths(void)
 	char	*tmp;
 
 	tmp = get_env_var(g_minishell->our_env, "PATH");
-	if(!tmp)
+	if (!tmp)
 		return (NULL);
 	res = ft_split(tmp, ':');
-	if(!res)
-		return(NULL);
+	if (!res)
+		return (NULL);
 	return (res);
 }
 
-bool get_path_data(char *argv, char	***paths, char	***cmd, int *paths_num)
+bool	get_path_data(char *argv, char	***paths, char	***cmd, int *paths_num)
 {
 	(*paths) = get_env_paths();
 	if (!(*paths))
 		return (0);
 	*paths_num = strings_count((*paths));
-	if(*paths_num == -1 || !*paths_num)
+	if (*paths_num == -1 || !*paths_num)
 		return (free_double((*paths)), 0);
 	*cmd = ft_split(argv, ' ');
 	if (!*cmd)
@@ -89,10 +87,10 @@ int	check_cmd(char *argv)
 			NULL);
 		return (2);
 	}
-	else if (access(cmd, F_OK) || (argv[0] == '.' &&  argv[1] == '.')) //
-		return (print_err("command not found", argv), 127);
+	else if (access(cmd, F_OK) || (argv[0] == '.' && argv[1] == '.'))
+		return (print_err("Command not found", argv), 127);
 	else if (access(cmd, X_OK))
-		return (print_err("permission denied", argv), 126);
+		return (print_err("Permission denied", argv), 126);
 	return (0);
 }
 
@@ -103,7 +101,9 @@ void	call_execev(char **env, char *argv, char **cmd)
 
 	len = ft_strlen(argv);
 	founded_path = get_fullpath(argv);
+	printf(RED);
 	execve(founded_path, cmd, env);
+	printf(RESET);
 	print_err("EXEVE FAILED ", NULL);
 }
 

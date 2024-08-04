@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 15:51:55 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/04 00:41:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	process_joining(char **args, int i)
 	split = custome_split(ft_split(args[i], '='));
 	if (check_identifier(split, 0) == -1)
 	{
-		set_env_var(g_minishell->our_env, "?", "1");
 		return (g_minishell->exit_s = 1, free_split(split), -1);
 	}
 	if (get_env_var(g_minishell->our_env, split[0]))
@@ -64,7 +63,6 @@ int	case_of_no_value(char **args, int *i)
 {
 	if (check_identifier(&args[(*i)], 0) == -1)
 	{
-		set_env_var(g_minishell->our_env, "?", "1");
 		g_minishell->exit_s = 1;
 		return (1);
 	}
@@ -87,7 +85,6 @@ void	process_each_arg(char **args, int i)
 		}
 		else if (process_equal(args, i) == -1)
 		{
-			set_env_var(g_minishell->our_env, "?", "1");
 			g_minishell->exit_s = 1;
 			return ;
 		}
@@ -97,7 +94,6 @@ void	process_each_arg(char **args, int i)
 		if (case_of_no_value(args, &i))
 			return ;
 	}
-	set_env_var(g_minishell->our_env, "?", "0");
 	g_minishell->exit_s = 0;
 }
 

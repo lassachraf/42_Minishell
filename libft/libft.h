@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:11:04 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/30 11:49:03 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/02 17:54:36 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_list
 {
 	void			*content;
 	bool			wd_expand;
+	bool			is_block;
 	struct s_list	*next;
 }					t_list;
 

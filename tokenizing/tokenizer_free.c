@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/01 18:19:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:52:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ int	add_string(t_token **tokens, char **line, char quote_char)
 		return (1);
 	value = ft_substr(*line, 0, i);
 	if (quote_char == '\'')
-	{
-		printf("its a new token that it's value is `%s` and get 0 in expand\n", value);
 		new = new_token(value, WORD, 0);
-	}
 	else
 		new = new_token(value, WORD, 1);
 	add_token_back(tokens, new);
@@ -52,7 +49,6 @@ int	add_quote(t_token **tokens, char **line)
 	quote_char = **line;
 	(*line)++;
 	add_string(tokens, line, quote_char);
-	printf("** in add quote, curr charc is '%c' **\n", **line);
 	if (**line == quote_char)
 		(*line)++;
 	return (1);

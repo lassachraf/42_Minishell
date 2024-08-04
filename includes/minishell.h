@@ -3,30 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/30 10:49:43 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:13:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PATH "/var/tmp/"
+# define PATH	"/var/tmp/"
 
-# define RED "\033[1;31m"
-# define ORANGE "\033[1;33m"
-# define RESET "\033[0m"
+# define RED	"\033[1;31m"
+# define ORANGE	"\033[1;33m"
+# define RESET	"\033[0m"
 
-# define PROMPT "badashell$> "
+# define PROMPT	"badashell$> "
 
 # include "../libft/libft.h"
-# include "builtins.h"
-# include "execution.h"
-# include "memory.h"
-# include "parsing.h"
 # include "tokenization.h"
+# include "builtins.h"
+# include "parsing.h"
+# include "memory.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -38,72 +37,34 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
 
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
-	bool			visible;
 	bool			export;
+	bool			visible;
 	struct s_env	*next;
 }					t_env;
 
 typedef struct s_minishell
 {
-	char			*line;
-	t_token			*tokens;
+	pid_t			last_child;
 	t_env			*our_env;
+	t_token			*tokens;
+	int				exit_s;
+	int				stdout;
+	int				stdin;
+	char			*line;
+	int				lines;
+	int				docs;
 	t_node			*ast;
 	t_gc			*gc;
-	int				nb_tokens;
-	int				dq_flag;
-	int				exit_s;
-	int				docs;
-	int				lines;
-	int				stdin;
-	int				stdout;
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
 
-// Function that handle the left side of a pipe.
-void				pipe_left(t_node *node, int *pfd);
-
-// Function that handle the right side of a pipe.
-void				pipe_right(t_node *node, int *pfd);
-
-// Function that remove null nodes.
-void				remove_null(t_node **res);
-
-// Function for debugging.
-void				print_ast(const char *prefix, t_node *root, bool isLeft);
-
-// Function that add a list inside another one.
-void				add_list_into_list(t_list **lst, t_list *new);
-
-// Function that create the name of here_doc file names.
-char				*build_file_name(char *join);
-
-// Function that check if the character is numerical.
-int					ft_isnum(int c);
-
-// Function that process and run exit builtin.
-int					process_exit(char **args);
-
-// Function that return number of argument.
-int					nb_args(char **args);
-
-// Funcion that handle space case in expanded tokens.
-void				handle_space(t_token *tokens, char *new_value);
-
-// Function that count how many word is in a string.
-size_t				count_words(char *s);
-
-// Function that checks if the here_doc should be expanded or not.
-void				check_hd_expand(t_token *tokens);
-
-// Function that fill return the new_value after expand.
-void				fill_dollar(char *s, int *i, char *new, int *j);
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -129,35 +90,17 @@ void				ft_unset(char *key);
 
 /* Builtins utils */
 
-// Function that execute the builtins.
-void				execute_builtins(t_minishell *mini, char **args);
-
-// Function that checks if the command is a builtin or not.
-bool				ft_is_builtin(char *arg);
-
 // Fuction that duplcate the environment for export.
 t_env				*new_dup(t_env *env);
+
+// Function that execute the builtins.
+void				execute_builtins(t_minishell *mini, char **args);
 
 // Function that print the export.
 void				print_env(t_env *env);
 
 // Function that sort the env to be set to export.
 t_env				*sort_env(t_env *env);
-
-// Function that expand tild "~".
-char				*custome_path(char *path);
-
-// Function that find the first occurence of the delimiter.
-int					find_delimiter(const char *str, char delimiter);
-
-// Function that split a string using a delimiter.
-char				**split_string(char *str, char delimiter);
-
-// Function used while processing the export builtin.
-int					process_equal(char **args, int i);
-
-// Function that print the exit error case.
-void				print_exit_error(char *msg);
 
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
@@ -197,7 +140,7 @@ void				delete_env_var(t_env **env, char *key);
 // In case env is unset, this function set the env.
 t_env				*special_dup_env(void);
 
-/* Executing */
+/* Executing */ // Bader should do a review to this part!!
 
 // Main function that execute the user input.
 void				executer(t_node *node);
@@ -305,13 +248,52 @@ void				read_buf(char **buf, int expand_flag);
 // Function that IDK XD.
 int					write_or_break(int fd, char *limiter, char *buf, int count);
 
+///////////////////////////////////////
+// 
+
+// Function that expand words containing dollar.
+void				expand_dollar(void);
+
+// Function that handle the left side of a pipe.
+void				pipe_left(t_node *node, int *pfd, bool mode);
+
+// Function that handle the right side of a pipe.
+void				pipe_right(t_node *node, int *pfd, bool mode);
+
+// Function that remove null nodes.
+void				remove_null(t_node **res);
+
+// Function that add a list inside another one.
+void				add_list_into_list(t_list **lst, t_list *new);
+
+// Function that create the name of here_doc file names.
+char				*build_file_name(char *join);
+
+// Function that process and run exit builtin.
+int					process_exit(char **args);
+
+// Funcion that handle space case in expanded tokens.
+void				handle_space(t_token *tokens, char *new_value);
+
+// Function that count how many word is in a string.
+size_t				count_words(char *s);
+
+// Function that checks if the here_doc should be expanded or not.
+void				check_hd_expand(t_token *tokens);
+
+// Function that fill return the new_value after expand.
+void				fill_dollar(char *s, int *i, char *new, int *j);
+
 /* Expanding */
 
 // Main function to do expand.
 void				expanding(void);
 
-// Function that expand inside the expanding.
+// Function that expand in here-doc.
 void				here_doc_expanding(char **s);
+
+// Function that check if the character is numerical.
+int					ft_isnum(int c);
 
 // Function that return a list of nodes containing dollar expanding.
 t_list				*dollar_functionality(char **s);
@@ -328,9 +310,6 @@ int					contains_space(char *s);
 // Function that return the new value after expand.
 char				*new_value(char *s, int size);
 
-// Function that get the variable and search for it in the environment.
-char				*get_var(char *s, int *i);
-
 // Function that return the length of the variable after expanding.
 int					check_env(char *var);
 
@@ -339,6 +318,10 @@ void				handle_dollar(char *s, int *i, int *len);
 
 // Function that match the pattern.
 int					match_pattern(const char *pattern, const char *filename);
+
+// Function that add a token in the midlle of a list.
+void				add_token_middle(t_token **tokens, t_token *new_token,
+						t_token *prev_token);
 
 /* Memory */
 
@@ -356,33 +339,6 @@ void				cleanup_minishell(void);
 
 // Function that clear the AST.
 void				clear_ast(t_node *tree);
-
-/* Nodes */
-
-/* Nodes functions */
-
-// Function that create a new character node.
-t_node				*char_node_new(char c);
-
-// Function that create a pair of nodes.
-t_node				*pair_node_new(t_node *left, t_node *right, t_type type);
-
-// Function that create a new string node.
-t_node				*string_node_new(t_list *list);
-
-// Function that create a new redirection node.
-t_node				*redir_node_new(t_list *red_list);
-
-/* Parsing */
-
-// The main function for parsing the input and return our AST structure.
-t_node				*parsing(void);
-
-// Function that parse a block or a sequence.
-t_node				*parse_block(t_token **tokens);
-
-// Function that parse a command.
-t_node				*parse_cmd(t_token **tokens);
 
 /* Signals */
 
@@ -439,7 +395,20 @@ int					check_right_parenthesis(t_token *token);
 // Function that prints errors.
 void				print_errors(char *message);
 
+/* Main_utils */
+
+// Function that check if all the fds was closed.
+void				clean_fds(t_node *ast);
+
+// Function that clean all allocation memory used.
+void				clean_and_set(void);
+
+// Function that wait for the last child and get it's exit status.
+int					wait_last(void);
+
 /* Debugging ones */
+
 void				print_tokens(t_token *token);
+void				print_ast(const char *prefix, t_node *root, bool isLeft);
 
 #endif /* MINISHELL_H */

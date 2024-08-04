@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/01 18:15:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:56:22 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	add_token_back(t_token **tokens, t_token *new_token)
 	if (!*tokens)
 	{
 		*tokens = new_token;
-		g_minishell->nb_tokens += 1;
 		return ;
 	}
 	curr_node = *tokens;
@@ -46,7 +45,6 @@ void	add_token_back(t_token **tokens, t_token *new_token)
 		curr_node = curr_node->next;
 	curr_node->next = new_token;
 	new_token->prev = curr_node;
-	g_minishell->nb_tokens += 1;
 }
 
 int	append_separator(t_token **tokens, char **line, t_type type)
@@ -67,28 +65,6 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 		(*line)++;
 	return (1);
 }
-
-// t_token	*append_quotes(t_token **tokens, char **line, char c)
-// {
-// 	printf("quotes\n");
-// 	t_token	*new;
-// 	char	*value;
-// 	char	*tmp;
-// 	int		i;
-
-// 	i = 0;
-// 	tmp = (*line) + 1;
-// 	while ((*line)[i] && (*line)[i] != c)
-// 		i++;
-// 	value = ft_substr(tmp, 0, i);
-// 	(*line) += i + 1;
-// 	printf("line >> %s\n", (*line));
-// 	if (c == '\'')
-// 		new = new_token(value, WORD, 0);
-// 	else
-// 		new = new_token(value, WORD, 1);
-// 	return (add_token_back(tokens, new), NULL);
-// }
 
 int	append_identifier(t_token **tokens, char **line)
 {
@@ -125,7 +101,7 @@ int	append_space(t_token **tokens, char **line)
 	value = ft_substr(*line, 0, i);
 	if (!value)
 		return (0);
-	token = new_token(value, WHITESPACE, 1);
+	token = new_token(value, WHITESPACE, 0);
 	if (!token)
 		return (0);
 	add_token_back(tokens, token);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/01 19:58:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:43:05 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,112 +32,6 @@ t_redir	*do_red(t_token **tokens)
 	new->file = (*tokens)->value;
 	new->hd_expand = (*tokens)->hd_expand;
 	return (new);
-}
-
-t_node	*parse_pipe(t_token **tokens);
-t_node	*parse_or(t_token **tokens);
-t_node	*parse_and(t_token **tokens);
-t_node	*parse_block(t_token **tokens);
-
-t_node	*parse_cmd(t_token **tokens)
-{
-	t_list	*cmd_list;
-	t_list	*red_list;
-	t_list	*new;
-	t_redir	*red;
-	t_node	*block;
-
-	block = NULL;
-	cmd_list = NULL;
-	red_list = NULL;
-	while (*tokens && ((*tokens)->type != END && (*tokens)->type != PIPE
-			&& (*tokens)->type != OR && (*tokens)->type != AND
-			&& (*tokens)->type != R_PAREN))
-	{
-		if ((*tokens)->type >= 4 && (*tokens)->type <= 7)
-		{
-			red = do_red(tokens);
-			new = ft_lstnew(red);
-			if (!new)
-				return (NULL);
-			gc_add(g_minishell, new);
-			ft_lstadd_back(&red_list, new);
-		}
-		else if ((*tokens)->type == WORD)
-		{
-			new = ft_lstnew((*tokens)->value);
-			if (!new)
-				return (NULL);
-			new->wd_expand = (*tokens)->wd_expand;
-			gc_add(g_minishell, new);
-			ft_lstadd_back(&cmd_list, new);
-		}
-		else if ((*tokens)->type == L_PAREN)
-		{
-			(*tokens) = (*tokens)->next;
-			block = parse_block(tokens); // 1 && 2
-			return (block);
-		}
-		(*tokens) = (*tokens)->next;
-	}
-	if (!red_list)
-		return (string_node_new(cmd_list));
-	else
-	{
-		red->cmd = cmd_list;
-		return (redir_node_new(red_list));
-	}
-}
-
-t_node	*parse_pipe(t_token **tokens)
-{
-	t_node	*left;
-	t_type	type;
-
-	left = NULL;
-	if (*tokens && ((*tokens)->type == WORD || ((*tokens)->type >= 4
-				&& (*tokens)->type <= 7) || (*tokens)->type == L_PAREN))
-		left = parse_cmd(tokens);
-	if (*tokens && ((*tokens)->type == PIPE))
-	{
-		type = (*tokens)->type;
-		(*tokens) = (*tokens)->next;
-		return (pair_node_new(left, parse_pipe(tokens), type));
-	}
-	else
-		return (left);
-}
-
-t_node	*parse_or(t_token **tokens)
-{
-	t_node	*left;
-	t_type	type;
-
-	left = parse_pipe(tokens);
-	if (*tokens && (*tokens)->type == OR)
-	{
-		type = (*tokens)->type;
-		(*tokens) = (*tokens)->next;
-		return (pair_node_new(left, parse_or(tokens), type));
-	}
-	else
-		return (left);
-}
-
-t_node	*parse_and(t_token **tokens)
-{
-	t_node	*left;
-	t_type	type;
-
-	left = parse_or(tokens);
-	if (*tokens && (*tokens)->type == AND)
-	{
-		type = (*tokens)->type;
-		(*tokens) = (*tokens)->next;
-		return (pair_node_new(left, parse_and(tokens), type));
-	}
-	else
-		return (left);
 }
 
 t_node	*find_last_left(t_node *node)
@@ -184,25 +78,181 @@ void	adjust_right(t_node **right, t_node **left)
 				set_left_redir(&*left, &tmp);
 		}
 	}
-	else
+	else if((*right)->type == REDIR_NODE)
 		set_left_redir(&*left, &*right);
 }
 
-t_node	*parse_block(t_token **tokens)
+t_node	*parse_cmd(t_token **tokens)
+{
+	t_list	*cmd_list;
+	t_list	*red_list;
+	t_list	*new;
+	t_redir	*red;
+	t_node 	*redir;
+	t_node	*block;
+	bool	skip;
+
+	block = NULL;
+	cmd_list = NULL;
+	red_list = NULL;
+	redir = NULL;
+	while (*tokens && ((*tokens)->type != END && (*tokens)->type != PIPE
+			&& (*tokens)->type != OR && (*tokens)->type != AND
+			&& (*tokens)->type != R_PAREN))
+	{
+		skip = 1;
+		if ((*tokens)->type >= 4 && (*tokens)->type <= 7)
+		{
+			red = do_red(tokens);
+			new = ft_lstnew(red);
+			if (!new)
+				return (NULL);
+			gc_add(g_minishell, new);
+			ft_lstadd_back(&red_list, new);
+		}
+		else if ((*tokens)->type == WORD)
+		{
+			new = ft_lstnew((*tokens)->value);
+			if (!new)
+				return (NULL);
+			new->wd_expand = (*tokens)->wd_expand;
+			gc_add(g_minishell, new);
+			ft_lstadd_back(&cmd_list, new);
+		}
+		else if ((*tokens)->type == L_PAREN)
+		{
+			(*tokens) = (*tokens)->next;
+			block = parse_and(tokens);
+			if(block && block->type == PAIR_NODE)
+			{
+				fprintf(stderr ,"I AM PAIR NODE \n");
+				block->data.pair.is_block = 1;
+			}
+			else if(block && block->type == STRING_NODE)
+			{
+				fprintf(stderr ,"I AM STRING NODE \n");
+				block->data.cmd->is_block = 1;
+			}
+			else if(block && block->type == REDIR_NODE)
+			{
+				fprintf(stderr ,"I AM REDIR NODE \n");
+				block->data.redir->is_block = 1;
+			}
+			(*tokens) = (*tokens)->next;
+			while((*tokens)->type == WHITESPACE)
+				(*tokens) = (*tokens)->next;
+			if((*tokens)->type >= 4 && (*tokens)->type <= 7)
+			{
+				redir = parse_cmd(tokens); // > 1
+				// redir->data.redir->is_block = 1;
+				if(block && redir->type == REDIR_NODE)
+					return (set_left_redir(&block, &redir) ,redir);
+			}
+			else 
+				skip = 0;
+			return (block);
+		}
+		if(skip)
+			(*tokens) = (*tokens)->next;
+	}
+	if (!red_list)
+		return (string_node_new(cmd_list));
+	else
+	{
+		red->cmd = cmd_list;
+		return (redir_node_new(red_list));
+	}
+}
+
+t_node	*parse_pipe(t_token **tokens)
 {
 	t_node	*left;
 	t_node	*right;
+	t_type	type;
 
-	left = parse_and(tokens);
+	left = NULL;
+	right = NULL;
+	if (*tokens && ((*tokens)->type == WORD || ((*tokens)->type >= 4
+				&& (*tokens)->type <= 7) || (*tokens)->type == L_PAREN))
+		left = parse_cmd(tokens);
+	if (*tokens && ((*tokens)->type == PIPE))
+	{
+		type = (*tokens)->type;
+		(*tokens) = (*tokens)->next;
+		right = parse_pipe(tokens);
+		return (pair_node_new(left, right, type));
+	}
+	return(left);
+}
+
+t_node	*parse_or(t_token **tokens) // 0 || 1 && 2
+{
+	t_node	*left;
+	t_type	type;
+
+	left = parse_pipe(tokens);
+	if (*tokens && (*tokens)->type == OR)
+	{
+		fprintf(stderr ,"------------------------------> parse || \n");
+		type = (*tokens)->type;
+		(*tokens) = (*tokens)->next;
+		return (pair_node_new(left, parse_or(tokens), type));
+	}
+	else
+		return (left);
+}
+
+t_node	*parse_and(t_token **tokens) // 0 || 1 && 2
+{
+	t_node	*left;
+	t_node	*right;
+	t_type	type;
+
+	left = parse_or(tokens); // 0 || 1
+	if (*tokens && (*tokens)->type == AND)
+	{
+		fprintf(stderr ,"------------------------------> parse && , %d \n", (*tokens)->type);
+		type = (*tokens)->type;
+		(*tokens) = (*tokens)->next;
+		right = parse_and(tokens); // && --> 2
+		return (pair_node_new(left, right, type));
+	}
+	else
+		return (left);
+}
+
+
+t_node	*parse_block(t_token **tokens) //  0 || (1) && 2
+{
+	t_node	*left;
+	// t_node	*right;
+
+	// write(2, "PARSE()\n",ft_strlen("PARSE()\n"));
+	left = parse_and(tokens); // ---> ||
+	// print_ast("", left,false);
 	if (tokens && *tokens && (*tokens)->type == R_PAREN)
 	{
 		(*tokens) = (*tokens)->next;
-		right = parse_and(tokens);
-		if (right)
-		{
-			adjust_right(&right, &left);
-			return (right);
-		}
+		// right = parse_and(tokens); // && --> 2
+		// if (right)
+		// {
+		// 	if(right->type == PAIR_NODE)
+		// 	{
+		// 		if(right->data.pair.type == AND)
+		// 		{
+					// adjust_right(&right, &left);
+		// 			write(2, "AND\n",ft_strlen("AND\n"));
+		// 		}
+		// 		else
+		// 		{
+		// 			adjust_right(&left, &right);
+		// 			write(2, "OR\n",ft_strlen("OR\n"));
+		// 		}
+		// 	}
+		// 	else
+		// 		write(2, "NOT PAIR\n",ft_strlen("NOT PAIR\n"));
+		// 	return (right);
+		// }
 	}
 	return (left);
 }
@@ -254,8 +304,6 @@ void	join_words(t_token **tokens)
 	t_token	*temp;
 
 	temp = *tokens;
-	printf("** join words token **\n");
-	print_tokens(temp);
 	while (temp)
 	{
 		if (temp->type == WORD && temp->next_space == 0 && temp->next
@@ -264,10 +312,7 @@ void	join_words(t_token **tokens)
 			curr = temp;
 			temp = temp->next;
 			temp->value = ft_strjoin(curr->value, temp->value);
-			if ((!curr->wd_expand || curr->wd_expand) && temp->wd_expand)
-				temp->wd_expand = 1;
-			printf("curr tok >> %s with exp >> %d\n", curr->value, curr->wd_expand);
-			printf("next tok >> %s with exp >> %d\n", temp->value, temp->wd_expand);
+			temp->wd_expand = 0;
 			gc_add(g_minishell, temp->value);
 			remove_token(tokens, curr);
 		}
@@ -276,35 +321,17 @@ void	join_words(t_token **tokens)
 	}
 }
 
-void	check_tokens(t_token **tokens)
-{
-	t_token	*tmp;
-
-	tmp = *tokens;
-	while (tmp)
-	{
-		if (tmp->type == S_QUOTE && tmp->next->type == WORD
-			&& ft_strchr(tmp->next->value, '$'))
-		{
-			tmp = tmp->next;
-			tmp->wd_expand = 0;
-			while (tmp && tmp->type != S_QUOTE)
-				tmp = tmp->next;
-		}
-		tmp = tmp->next;
-	}
-}
-
 t_node	*parsing(void)
 {
-	t_node	*res;
+	t_node	*left;
 
+	left = NULL;
 	expanding();
+	expand_dollar();
+	remove_quotes(&g_minishell->tokens);
 	join_words(&g_minishell->tokens);
-	print_tokens(g_minishell->tokens);
-	// before joining, I should set the '$' tokens type >> TO_EXPAND or TO_NOT_EXPAND
-	res = parse_block(&g_minishell->tokens);
-	if (!res)
+	left = parse_block(&g_minishell->tokens);
+	if (!left)
 		gc_free_all(g_minishell);
-	return (res);
+	return (left);
 }

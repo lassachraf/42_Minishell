@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/29 17:08:45 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:23:55 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	run_doc_cmd(t_list *red_list)
 
 int	scan_and_set(t_node *node)
 {
-	g_minishell->exit_s = 0;
 	if (!node)
 		return (1);
 	if (node->type == PAIR_NODE)

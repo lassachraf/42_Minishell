@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/30 09:50:54 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:21:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@ char	*build_file_name(char *join)
 	int		i;
 
 	split = ft_split(ttyname(0), '/');
-	name = NULL;
 	i = 0;
 	while (split[i])
 	{
 		tmp = name;
-		name = ft_strjoin(name, split[i]);
+		name = ft_strjoin(name, split[i++]);
 		free(tmp);
-		i++;
 	}
 	tmp = name;
 	name = ft_strjoin(name, join);
@@ -138,7 +136,6 @@ void	get_lines_count(int *pipe)
 
 int	here_doc(char *limiter, int doc_num, int expand_flag)
 {
-	int		id;
 	int		fd;
 	int		pipe[2];
 	int		fd_hidden;
@@ -146,12 +143,10 @@ int	here_doc(char *limiter, int doc_num, int expand_flag)
 	open_pipe(pipe);
 	fd_hidden = -1;
 	fd = open_hidden_file(doc_num);
-	id = fork();
-	if (!id)
-	{
-		do_here_doc(limiter, fd, pipe, expand_flag);
-		exit(0);
-	}
+	g_minishell->last_child = fork();
+	if (!g_minishell->last_child)
+		return (do_here_doc(limiter, fd, pipe, expand_flag),
+			exit(0), 0);
 	else
 	{
 		wait_and_get();
