@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 02:13:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:19:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void				delete_env_var(t_env **env, char *key);
 // In case env is unset, this function set the env.
 t_env				*special_dup_env(void);
 
-/* Executing */ // Bader should do a review to this part!!
+/* Executing */
 
 // Main function that execute the user input.
 void				executer(t_node *node);
@@ -176,28 +176,28 @@ char				*get_command(char *argv);
 // Function that join the command with it's path.
 char				*add_slash_cmd(char *path, char *cmd);
 
-// Function that IDK XD.
+// Function that execute here-documents.
 int					do_here_docs(t_list *red_list);
 
-// Function that IDK XD.
+// Function that get fd that should be dupped as input.
 int					input_to_dup(t_list *red_list);
 
-// Function that IDK XD.
+// Function that get fd that should be dupped as input.
 int					output_to_dup(t_list *red_list);
 
-// Function that IDK XD.
+// Function that execute here-doc command.
 void				run_doc_cmd(t_list *red_list);
 
-// Function that IDK XD.
+// Function that open redirection after checking the ambiguous.
 int					open_redir(t_redir *redir);
 
-// Function that IDK XD.
+// Function that open and set the file of redirection.
 int					open_and_set(t_list *red_list);
 
 // Function that print errors with an argument.
 int					print_err(char *message, char *word);
 
-// Function that IDK XD.
+// Function that count how many string in the double pointer.
 int					strings_count(char **str);
 
 // Function that free a double pointer.
@@ -221,10 +221,10 @@ void				call_execev(char **env, char *argv, char **cmd);
 // Function that is called when maslloc failed.
 int					ft_malloc_error(char **tab, size_t i);
 
-// Function that IDK XD.
+// Function that wait and get the exit status of the child.
 int					wait_and_get(void);
 
-// Function that IDK XD.
+// Function that execute a command.
 void				do_cmd(t_node *ast);
 
 // Function that do pipe process.
@@ -233,26 +233,47 @@ void				do_pipe(t_node *cmd, int mode, int *pfd);
 // Function that execute a command.
 void				execute_cmd(t_node *node);
 
-// Function that IDK XD.
+// Function that scan for here-doc and open them.
 int					scan_and_set(t_node *node);
 
-// Function that IDK XD.
+// Function that help executing the here-docs.
 int					execute_docs(t_list *red_list);
 
 // Function that unlink here documents.
 void				unlink_docs(int docs);
 
 // Function that read and fill here_doc buffer.
-void				read_buf(char **buf, int expand_flag);
+void				read_buf(char **buf, char *limiter, int expand_flag);
 
-// Function that IDK XD.
+// Function that break if there's an error, else it write on the fd.
 int					write_or_break(int fd, char *limiter, char *buf, int count);
 
-///////////////////////////////////////
-// 
+// Function that search for $ if exist expand to its value.
+void				expand_list(t_list *cmd_lst);
 
-// Function that expand words containing dollar.
-void				expand_dollar(void);
+// Function that check file name of redirs under type > >> ones.
+bool				output_redirs(t_redir *new);
+
+// Function that check file name of all types exclude << one.
+bool				check_name(t_redir *new);
+
+// Function that IDK , HAVE A ISSUE MUST FIX !
+char				*build_file_name(char *join);
+
+// Function that open a file discriptor for a doc.
+int					open_hidden_file(int doc_num);
+
+// Function that excute redirections nodes .
+void				execute_redires(t_list *red_list);
+
+// Function that go trough a way of exe based on its node's type.
+void				selcet_and_excute(t_node *node, int type);
+
+// Function that execute a pair node | , || , &&.
+void				execute_pair(t_node *node);
+
+// Function that execute a pair nodes under types || , &&.
+void				execute_and_or(t_node *node);
 
 // Function that handle the left side of a pipe.
 void				pipe_left(t_node *node, int *pfd, bool mode);
@@ -291,6 +312,9 @@ void				expanding(void);
 
 // Function that expand in here-doc.
 void				here_doc_expanding(char **s);
+
+// Function that expand words containing dollar.
+void				expand_dollar(void);
 
 // Function that check if the character is numerical.
 int					ft_isnum(int c);
@@ -405,10 +429,5 @@ void				clean_and_set(void);
 
 // Function that wait for the last child and get it's exit status.
 int					wait_last(void);
-
-/* Debugging ones */
-
-void				print_tokens(t_token *token);
-void				print_ast(const char *prefix, t_node *root, bool isLeft);
 
 #endif /* MINISHELL_H */

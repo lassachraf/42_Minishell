@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 01:44:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:19:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	ft_sigint(int sig)
 	if (sig != SIGINT)
 		return ;
 	g_minishell->exit_s = 130;
-	ft_putstr_fd("\n", 2);
 }
 
 void	here_doc_sig(int sig)

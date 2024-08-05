@@ -6,22 +6,22 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 01:43:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:48:10 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-# define LEFT 0
-# define RIGHT 1
+# define LEFT	0
+# define RIGHT	1
+
 # include "../libft/libft.h"
 # include "tokenization.h"
 
 typedef enum e_node
 {
 	PAIR_NODE,
-	CHAR_NODE,
 	REDIR_NODE,
 	STRING_NODE
 }						t_node_type;
@@ -64,9 +64,6 @@ struct					s_node
 
 /* Nodes */
 
-// Function that create a new character node.
-t_node				*char_node_new(char c);
-
 // Function that create a pair of nodes.
 t_node				*pair_node_new(t_node *left, t_node *right, t_type type);
 
@@ -95,5 +92,32 @@ t_node				*parse_and(t_token **tokens);
 
 // Function that parse a command.
 t_node				*parse_cmd(t_token **tokens);
+
+// Prototype for do_red function
+t_redir				*do_red(t_token **tokens);
+
+// Prototype for set_left_redir function
+void				set_left_redir(t_node **left, t_node **right);
+
+// Prototype for add_redir function
+void				add_redir(t_token **tokens, t_list **red_list);
+
+// Prototype for add_cmd function
+void				add_cmd(t_token **tokens, t_list **cmd_list);
+
+// Prototype for parse_inside function
+t_node				*parse_inside(t_token **tokens);
+
+// Prototype for execlude_null function
+void				execlude_null(t_list **lst);
+
+// Prototype for remove_null function
+void				remove_null(t_node **res);
+
+// Prototype for join_words function
+void				join_words(t_token **tokens);
+
+// Prototype for is_parse_separator function
+bool				is_parse_separator(t_token **tokens);
 
 #endif /* PARSER_H */

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 02:26:35 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:22:03 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**get_env_paths(void)
 	return (res);
 }
 
-bool	get_path_data(char *argv, char	***paths, char	***cmd, int *paths_num)
+bool	get_path_data(char *argv, char ***paths, char ***cmd, int *paths_num)
 {
 	(*paths) = get_env_paths();
 	if (!(*paths))
@@ -83,8 +83,8 @@ int	check_cmd(char *argv)
 		return (print_err("No such file or directory", argv), 127);
 	else if (ft_strlen(argv) == 1 && argv[0] == '.')
 	{
-		print_err("filename argument required\n.: usage: . filename [arguments]",
-			NULL);
+		ft_putstr_fd("filename argument required\n", 2);
+		ft_putstr_fd(".: usage: . filename [arguments]", 2);
 		return (2);
 	}
 	else if (access(cmd, F_OK) || (argv[0] == '.' && argv[1] == '.'))
@@ -97,26 +97,10 @@ int	check_cmd(char *argv)
 void	call_execev(char **env, char *argv, char **cmd)
 {
 	char	*founded_path;
-	int		len;
 
-	len = ft_strlen(argv);
 	founded_path = get_fullpath(argv);
 	printf(RED);
 	execve(founded_path, cmd, env);
 	printf(RESET);
 	print_err("EXEVE FAILED ", NULL);
-}
-
-int	ft_malloc_error(char **tab, size_t i)
-{
-	size_t	j;
-
-	j = 0;
-	while (j <= i)
-	{
-		free(tab[j]);
-		j++;
-	}
-	free(tab);
-	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 02:16:08 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 09:29:27 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	fd_duper(int *pfd, int mode)
 	else
 	{
 		close(pfd[0]);
-		dup_2(pfd[1], 1);
+		dup2(pfd[1], 1);
 	}
 }
 

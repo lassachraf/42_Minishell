@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/03 22:57:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:59:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_exit(char *args, int print)
 	exit_status = g_minishell->exit_s;
 	if (print)
 		ft_putstr_fd("exit\n", 1);
-	if (!sec_is_num(args))
+	if (args && !sec_is_num(args))
 	{
 		print_exit_error(args);
 		exit(2);

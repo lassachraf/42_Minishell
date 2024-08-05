@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 02:03:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 02:13:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:15:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ int	wait_last(void)
 	fail = waitpid(g_minishell->last_child, &x, 0);
 	if (x == 131)
 		ft_putstr_fd("Quit (core dumped)\n", 2);
-	if (x == 130)
-		ft_putstr_fd("\n", 2);
 	if (WIFEXITED(x))
 		g_minishell->exit_s = WEXITSTATUS(x);
+	if (g_minishell->exit_s == 130 && g_minishell->line)
+		ft_putstr_fd("\n", 2);
 	exit = ft_itoa(g_minishell->exit_s);
 	set_env_var(g_minishell->our_env, "?", exit);
 	return (free(exit), fail);

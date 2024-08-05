@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/03 19:25:28 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:37:14 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ int	wait_and_get(void)
 
 void	do_cmd(t_node *ast)
 {
-	// int		id;
 	char	**cmd;
 	char	**env;
 
 	if (!ast)
 		exit(0);
-	g_minishell->last_child = 0;
 	if (ft_is_builtin(ast->data.cmd->content))
 		execute_builtins(g_minishell, list_to_argv(ast->data.cmd));
 	else
@@ -56,10 +54,6 @@ void	do_cmd(t_node *ast)
 
 void	do_pipe(t_node *cmd, int mode, int *pfd)
 {
-	// int		id;
-	t_list	*cmd_lst;
-	t_list	*list;
-
 	g_minishell->last_child = fork();
 	if (g_minishell->last_child < 0)
 	{
@@ -69,36 +63,13 @@ void	do_pipe(t_node *cmd, int mode, int *pfd)
 	if (g_minishell->last_child == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
-		fprintf(stderr,"%d\n",getpid());
 		fd_duper(pfd, mode);
-		cmd_lst = cmd->data.cmd;
-		while (cmd_lst)
-		{
-			if (ft_strchr((char *)cmd_lst->content, '$') && cmd_lst->wd_expand)
-			{
-				list = dollar_functionality((char **)&cmd_lst->content);
-				add_list_into_list(&cmd_lst, list);
-			}
-			else if (ft_strchr((char *)cmd_lst->content, '*'))
-			{
-				list = asterisk_functionality((char *)cmd_lst->content);
-				add_list_into_list(&cmd_lst, list);
-			}
-			cmd_lst = cmd_lst->next;
-		}
+		expand_list(cmd->data.cmd);
 		remove_null(&cmd);
 		if (!cmd->data.cmd)
 			exit(0);
 		do_cmd(cmd);
 		exit(0);
-	}
-	else
-	{
-		close(pfd[1]);
-		if(!mode)
-			dup2(pfd[0], 0);
-		else
-			close(pfd[0]);
 	}
 }
 

@@ -6,62 +6,11 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 02:21:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:11:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*build_file_name(char *join)
-{
-	char	**split;
-	char	*name;
-	char	*tmp;
-	int		i;
-
-	split = ft_split(ttyname(0), '/');
-	i = 0;
-	while (split[i])
-	{
-		tmp = name;
-		name = ft_strjoin(name, split[i++]);
-		free(tmp);
-	}
-	tmp = name;
-	name = ft_strjoin(name, join);
-	free(tmp);
-	if (access(name, F_OK) != 0)
-		return (free_double(split), name);
-	else
-	{
-		tmp = name;
-		name = ft_strjoin(name, join);
-		return (free_double(split), free(tmp), name);
-	}
-	return (NULL);
-}
-
-int	open_hidden_file(int doc_num)
-{
-	char	*join;
-	char	*path;
-	char	*name;
-	int		fd;
-
-	join = ft_itoa(doc_num);
-	path = build_file_name(join);
-	name = ft_strjoin(PATH, path);
-	fd = open(name, O_CREAT | O_RDWR, 0777);
-	free(name);
-	free(path);
-	free(join);
-	if (fd < 0)
-	{
-		perror("here_doc failed to get input");
-		return (-1);
-	}
-	return (fd);
-}
 
 int	re_open_hidden_file(int doc_num)
 {
@@ -112,15 +61,19 @@ int	write_or_break(int fd, char *limiter, char *buf, int count)
 	return (1);
 }
 
-void	read_buf(char **buf, int expand_flag)
+void	read_buf(char **buf, char *limiter, int expand_flag)
 {
 	g_minishell->lines++;
 	*buf = readline("> ");
 	gc_add(g_minishell, *buf);
 	if (*buf)
 	{
-		if (ft_strchr(*buf, '$') && expand_flag)
+		if (ft_strchr(*buf, '$') && expand_flag && ft_strcmp(*buf, limiter))
+		{
 			*buf = helper_expander(*buf);
+			if (!*buf)
+				*buf = ft_strdup("");
+		}
 		gc_add(g_minishell, *buf);
 	}
 }
@@ -136,17 +89,16 @@ void	get_lines_count(int *pipe)
 
 int	here_doc(char *limiter, int doc_num, int expand_flag)
 {
-	int		fd;
-	int		pipe[2];
-	int		fd_hidden;
+	int	fd;
+	int	pipe[2];
+	int	fd_hidden;
 
 	open_pipe(pipe);
 	fd_hidden = -1;
 	fd = open_hidden_file(doc_num);
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
-		return (do_here_doc(limiter, fd, pipe, expand_flag),
-			exit(0), 0);
+		return (do_here_doc(limiter, fd, pipe, expand_flag), exit(0), 0);
 	else
 	{
 		wait_and_get();

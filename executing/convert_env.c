@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/07/19 18:51:54 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:12:05 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,30 @@ char	**list_to_argv(t_list *list)
 	}
 	argv[i] = NULL;
 	return (argv);
+}
+
+void	selcet_and_excute(t_node *node, int type)
+{
+	int	id;
+
+	id = fork();
+	if (!id)
+	{
+		if (type == STRING_NODE)
+			execute_cmd(node);
+		else if (type == PAIR_NODE)
+			execute_pair(node);
+		else
+			execute_redires(node->data.redir);
+		wait_last();
+		while (waitpid(-1, NULL, 0) != -1)
+			;
+		exit(g_minishell->exit_s);
+	}
+	else
+	{
+		wait_last();
+		while (waitpid(-1, NULL, 0) != -1)
+			;
+	}
 }
