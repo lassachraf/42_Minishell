@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 16:12:05 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:56:46 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,14 @@ char	**list_to_argv(t_list *list)
 	return (argv);
 }
 
-void	selcet_and_excute(t_node *node, int type)
+void	select_and_excute(t_node *node, int type)
 {
 	int	id;
 
 	id = fork();
 	if (!id)
 	{
+		signal(SIGINT, SIG_DFL);
 		if (type == STRING_NODE)
 			execute_cmd(node);
 		else if (type == PAIR_NODE)

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 02:03:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 19:15:13 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:50:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	clean_and_set(void)
 {
 	char	*exit_stat;
 
-	clean_fds(g_minishell->ast);
 	dup2(g_minishell->stdout, 1);
 	dup2(g_minishell->stdin, 0);
 	gc_free_all(g_minishell);
@@ -55,12 +54,17 @@ int	wait_last(void)
 	char	*exit;
 
 	fail = -1;
+	exit = NULL;
 	fail = waitpid(g_minishell->last_child, &x, 0);
 	if (x == 131)
+	{
+		g_minishell->exit_s = x;
 		ft_putstr_fd("Quit (core dumped)\n", 2);
+		return (1);
+	}
 	if (WIFEXITED(x))
 		g_minishell->exit_s = WEXITSTATUS(x);
-	if (g_minishell->exit_s == 130 && g_minishell->line)
+	if (g_minishell->exit_s == 130 && x == 2)
 		ft_putstr_fd("\n", 2);
 	exit = ft_itoa(g_minishell->exit_s);
 	set_env_var(g_minishell->our_env, "?", exit);

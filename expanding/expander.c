@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 00:41:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:40:24 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,13 @@ void	expand_dollar(void)
 	{
 		if (tokens->value && is_separator(tokens->value))
 			break ;
-		if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
+		if (tokens->type == WORD && !ft_strcmp(tokens->value, "export"))
+		{
+			tokens = tokens->next;
+			if (export_help(&tokens))
+				break ;
+		}
+		else if (tokens->type == WORD && ft_strchr(tokens->value, '$'))
 			tokens = word_helper(tokens);
 		else
 			tokens = tokens->next;
@@ -105,3 +111,5 @@ void	expanding(void)
 			tokens = tokens->next;
 	}
 }
+
+// JOIN_TOKENS

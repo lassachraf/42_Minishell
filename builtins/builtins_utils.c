@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 00:55:09 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:29:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	builtins_exec_check(char **args)
 	return (0);
 }
 
-int	check_cd_and_exit(t_minishell *mini, char **args)
+int	check_cd_and_exit(t_minishell *mini, char **args, bool print)
 {
 	int	flag;
 
@@ -78,7 +78,7 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 	}
 	else
 	{
-		flag = process_exit(args);
+		flag = process_exit(args, print);
 		if (flag == 0)
 			return (0);
 	}
@@ -86,14 +86,14 @@ int	check_cd_and_exit(t_minishell *mini, char **args)
 	return (1);
 }
 
-void	execute_builtins(t_minishell *mini, char **args)
+void	execute_builtins(t_minishell *mini, char **args, bool print)
 {
 	if (builtins_exec_check(args))
 		return ;
 	if (!ft_strcmp(args[0], "echo"))
 		ft_echo(args);
 	else if (!ft_strcmp(args[0], "cd") || !ft_strcmp(args[0], "exit"))
-		check_cd_and_exit(mini, args);
+		check_cd_and_exit(mini, args, print);
 	else if (!ft_strcmp(args[0], "env"))
 		ft_env(mini->our_env);
 	else if (!ft_strcmp(args[0], "pwd"))

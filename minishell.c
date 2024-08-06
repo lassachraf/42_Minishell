@@ -6,13 +6,93 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 19:45:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:03:55 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
 t_minishell	*g_minishell;
+
+
+#define W_GREEN   "\033[32m"      /* Green */
+#define W_WHITE   "\033[37m"      /* White */
+
+void	print_ast(const char *prefix,  t_node* root, bool isLeft)
+{
+	char	*dup;
+	char	*join;
+
+    if(!root)
+		return ;
+	fprintf(stderr,W_GREEN"%s", prefix);
+	fprintf(stderr,"%s", (isLeft ? "├──" : "└──" ));
+	fprintf(stderr,W_WHITE"");
+
+	if (root->type == PAIR_NODE) {
+
+		if(root->data.pair.type == PIPE)
+        {
+			fprintf(stderr," | ,is BLOCK : %d\n",root->data.pair.is_block);
+      
+        }
+        else if (root->data.pair.type == OR)
+        {
+			fprintf(stderr," || ,is BLOCK : %d\n",root->data.pair.is_block);
+
+        } 
+        else if (root->data.pair.type == AND)
+        {
+			fprintf(stderr," && ,is BLOCK : %d\n",root->data.pair.is_block);
+        }
+		dup = strdup((isLeft ? "│   " : "    "));
+		join = ft_strjoin(prefix ,  dup);
+    	print_ast(  join ,  root->data.pair.left,  true);
+    	print_ast(  join ,   root->data.pair.right, false);	
+		free(dup);
+		free(join);	
+	} 
+	else if (root->type == STRING_NODE) 
+	{
+		t_list *list;
+		list = root->data.cmd;
+        while (list)
+        {
+			fprintf(stderr,"list is BLOCK : %d  --> ",list->is_block);
+            fprintf(stderr,"'%s' ", (char*)list->content);
+            list = list->next;
+        }
+        fprintf(stderr,"\n");
+	}
+	else if (root->type == REDIR_NODE) 
+	{
+		t_list *lst;
+		lst = root->data.redir;
+		fprintf(stderr,"REDIR_LIST is BLOCK : %d ",lst->is_block);
+		while(lst)
+        {
+			
+			t_list *list;
+            t_redir *new = lst->content;
+            fprintf(stderr,"REDIR NODE , name: '%s' ",new->file);
+			fprintf(stderr,"REDIR is BLOCK : %d\n",new->is_block);
+			list = new->cmd;
+            while (list)
+            {
+                fprintf(stderr,"'%s' ", (char*)list->content);
+                list = list->next;
+            }
+			if(new->node)
+			{
+				write(2,"\n",1);
+				print_ast("", new->node, false);
+			}
+            fprintf(stderr," ");
+            lst = lst->next;
+        }
+        fprintf(stderr,"\n");
+	}   
+}
 
 void	increment_shlvl(void)
 {
@@ -43,9 +123,7 @@ int	init_minishell(char **env)
 		increment_shlvl();
 	}
 	else
-	{
 		g_minishell->our_env = special_dup_env();
-	}
 	add_env_var(g_minishell->our_env, "?", "0");
 	set_as_invisible(g_minishell->our_env, "?");
 	set_as_unexported(g_minishell->our_env, "?");

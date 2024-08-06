@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 15:37:10 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 12:17:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:05:19 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*get_env_var(t_env *env, char *var)
 {
 	if (!var)
 		return (NULL);
-	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
+	while (env && ft_strcmp(env->key, var))
 		env = env->next;
 	if (env && ft_strlen(env->key) == ft_strlen(var))
 	{

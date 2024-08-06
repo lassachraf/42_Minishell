@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 19:19:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/05 20:15:34 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,6 @@ void	ft_sigint_handler(int sig)
 		set_env_var(g_minishell->our_env, "?", "131");
 		g_minishell->exit_s = 131;
 	}
-}
-
-void	ft_sigquit(int sig)
-{
-	if (sig != SIGQUIT)
-		return ;
-	ft_putstr_fd("Quit (core dumped)\n", 2);
-	g_minishell->exit_s = 131;
 }
 
 void	ft_sigint(int sig)

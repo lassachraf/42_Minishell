@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 19:48:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/05 15:24:42 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,13 @@ typedef struct s_pair_value
 typedef union u_node_value
 {
 	t_pair_value		pair;
-	char				char_value;
 	t_list				*cmd;
 	t_list				*redir;
 }						t_node_value;
 
 struct					s_node
 {
-	t_node_type			type;
+	t_node_type			type; // 
 	t_node_value		data;
 };
 

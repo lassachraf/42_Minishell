@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 15:37:14 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:55:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	wait_and_get(void)
 	return (free(exit), fail);
 }
 
-void	do_cmd(t_node *ast)
+void	do_cmd(t_node *ast, bool print)
 {
 	char	**cmd;
 	char	**env;
@@ -36,7 +36,7 @@ void	do_cmd(t_node *ast)
 	if (!ast)
 		exit(0);
 	if (ft_is_builtin(ast->data.cmd->content))
-		execute_builtins(g_minishell, list_to_argv(ast->data.cmd));
+		execute_builtins(g_minishell, list_to_argv(ast->data.cmd), print);
 	else
 	{
 		cmd = list_to_argv(ast->data.cmd);
@@ -68,7 +68,7 @@ void	do_pipe(t_node *cmd, int mode, int *pfd)
 		remove_null(&cmd);
 		if (!cmd->data.cmd)
 			exit(0);
-		do_cmd(cmd);
+		do_cmd(cmd, 0);
 		exit(0);
 	}
 }

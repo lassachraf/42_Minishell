@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 00:41:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:09:16 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	**custome_split(char **split)
 	{
 		len = pp - split[0];
 		new_str = (char *)malloc((len + 1) * sizeof(char));
+		gc_add(g_minishell, new_str);
 		if (new_str)
 		{
 			ft_strncpy(new_str, split[0], len);
@@ -31,6 +32,10 @@ char	**custome_split(char **split)
 			split[0] = new_str;
 		}
 	}
+	if (ft_strchr(split[0], '$'))
+		split[0] = helper_expander(split[0]);
+	if (ft_strchr(split[1], '$'))
+		split[1] = helper_expander(split[1]);
 	return (split);
 }
 
@@ -40,13 +45,9 @@ int	process_joining(char **args, int i)
 
 	split = custome_split(ft_split(args[i], '='));
 	if (check_identifier(split, 0) == -1)
-	{
-		return (g_minishell->exit_s = 1, free_split(split), -1);
-	}
+		return (g_minishell->exit_s = 1, -1);
 	if (get_env_var(g_minishell->our_env, split[0]))
-	{
 		joining_words(split);
-	}
 	else
 	{
 		if (!split[1])
@@ -56,7 +57,7 @@ int	process_joining(char **args, int i)
 		set_as_exported(g_minishell->our_env, split[0]);
 	}
 	set_env_var(g_minishell->our_env, "?", "0");
-	return (g_minishell->exit_s = 0, free_split(split), 0);
+	return (g_minishell->exit_s = 0, 0);
 }
 
 int	case_of_no_value(char **args, int *i)

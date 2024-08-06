@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 20:02:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/05 15:47:22 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,36 +31,36 @@ int	do_here_docs(t_list *red_list)
 	return (1);
 }
 
-int	input_to_dup(t_list *red_list)
+void	input_to_dup(t_list *red_list)
 {
 	t_redir	*new;
-	int		fd;
 
-	fd = -1;
 	while (red_list)
 	{
 		new = red_list->content;
 		if (new->type == L_REDIR || new->type == LL_REDIR)
-			fd = new->fd;
+		{
+			if (ft_strcmp(new->file, "/dev/stdin"))
+				dup_2(new->fd, 0);
+		}
 		red_list = red_list->next;
 	}
-	return (fd);
 }
 
-int	output_to_dup(t_list *red_list)
+void	output_to_dup(t_list *red_list)
 {
 	t_redir	*new;
-	int		fd;
 
-	fd = -1;
 	while (red_list)
 	{
 		new = red_list->content;
 		if (new->type == R_REDIR || new->type == RR_REDIR)
-			fd = new->fd;
+		{
+			if (ft_strcmp(new->file, "/dev/stdout"))
+				dup_2(new->fd, 1);
+		}
 		red_list = red_list->next;
 	}
-	return (fd);
 }
 
 void	run_doc_cmd(t_list *red_list)

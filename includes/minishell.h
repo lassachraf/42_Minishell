@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/05 09:19:01 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:31:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void				ft_unset(char *key);
 t_env				*new_dup(t_env *env);
 
 // Function that execute the builtins.
-void				execute_builtins(t_minishell *mini, char **args);
+void				execute_builtins(t_minishell *mini, char **args, bool print);
 
 // Function that print the export.
 void				print_env(t_env *env);
@@ -180,10 +180,10 @@ char				*add_slash_cmd(char *path, char *cmd);
 int					do_here_docs(t_list *red_list);
 
 // Function that get fd that should be dupped as input.
-int					input_to_dup(t_list *red_list);
+void				input_to_dup(t_list *red_list);
 
 // Function that get fd that should be dupped as input.
-int					output_to_dup(t_list *red_list);
+void				output_to_dup(t_list *red_list);
 
 // Function that execute here-doc command.
 void				run_doc_cmd(t_list *red_list);
@@ -225,7 +225,7 @@ int					ft_malloc_error(char **tab, size_t i);
 int					wait_and_get(void);
 
 // Function that execute a command.
-void				do_cmd(t_node *ast);
+void				do_cmd(t_node *ast, bool print);
 
 // Function that do pipe process.
 void				do_pipe(t_node *cmd, int mode, int *pfd);
@@ -267,7 +267,7 @@ int					open_hidden_file(int doc_num);
 void				execute_redires(t_list *red_list);
 
 // Function that go trough a way of exe based on its node's type.
-void				selcet_and_excute(t_node *node, int type);
+void				select_and_excute(t_node *node, int type);
 
 // Function that execute a pair node | , || , &&.
 void				execute_pair(t_node *node);
@@ -291,7 +291,7 @@ void				add_list_into_list(t_list **lst, t_list *new);
 char				*build_file_name(char *join);
 
 // Function that process and run exit builtin.
-int					process_exit(char **args);
+int					process_exit(char **args, bool print);
 
 // Funcion that handle space case in expanded tokens.
 void				handle_space(t_token *tokens, char *new_value);
@@ -311,7 +311,10 @@ void				fill_dollar(char *s, int *i, char *new, int *j);
 void				expanding(void);
 
 // Function that expand in here-doc.
-void				here_doc_expanding(char **s);
+void				avoid_expanding(char **s, bool avoid);
+
+// Function that help expand a case of export.
+int					export_help(t_token **tokens);
 
 // Function that expand words containing dollar.
 void				expand_dollar(void);
@@ -320,7 +323,7 @@ void				expand_dollar(void);
 int					ft_isnum(int c);
 
 // Function that return a list of nodes containing dollar expanding.
-t_list				*dollar_functionality(char **s);
+t_list				*dollar_functionality(char **s, bool avoid);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);
@@ -374,9 +377,6 @@ void				ft_sigint_handler(int sig);
 
 // Function that handle signals for here_doc.
 void				here_doc_sig(int sig);
-
-// Function that handle sigquit before execution.
-void				ft_sigquit(int sig);
 
 // Function that handle sigquit before execution.
 void				ft_sigint(int sig);
