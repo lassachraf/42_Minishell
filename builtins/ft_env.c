@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 19:44:34 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:11:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ void	ft_env(t_env *env)
 	while (env)
 	{
 		if (env->visible)
-			printf("%s=%s\n", env->key, env->value);
+		{
+			printf("%s=", env->key);
+			if (env->value)
+				printf("%s\n", env->value);
+		}
 		env = env->next;
 	}
 	g_minishell->exit_s = 0;

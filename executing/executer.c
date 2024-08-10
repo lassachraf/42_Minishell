@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/09 10:36:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:04:05 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,5 @@ void	executer(t_node *node)
 			execute_pair(node);
 	}
 	else if (node->type == REDIR_NODE)
-	{
-		if (node->data.redir->is_block)
-			select_and_excute(node, REDIR_NODE);
-		else
-			execute_redires(node->data.redir);
-	}
+		execute_redires(node->data.redir);
 }
