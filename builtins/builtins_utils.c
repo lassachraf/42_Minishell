@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/09 09:25:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:24:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ int	check_cd_and_exit(t_minishell *mini, char **args, bool print)
 
 void	execute_builtins(t_minishell *mini, char **args, bool print)
 {
+	int	i;
+
+	i = 0;
 	if (builtins_exec_check(args))
 		return ;
 	if (!ft_strcmp(args[0], "echo"))
@@ -102,7 +105,7 @@ void	execute_builtins(t_minishell *mini, char **args, bool print)
 		ft_export(args, nb_args(args));
 	else if (!ft_strcmp(args[0], "unset"))
 	{
-		if (args[1])
-			ft_unset(args[1]);
+		while (args[++i])
+			ft_unset(args[i]);
 	}
 }

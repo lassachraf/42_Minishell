@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 16:11:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:27:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	ft_env(t_env *env)
 			printf("%s=", env->key);
 			if (env->value)
 				printf("%s\n", env->value);
+			else
+				printf("\n");
 		}
 		env = env->next;
 	}
