@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 20:03:48 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 08:40:43 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ bool	output_redirs(t_redir *new)
 			return (0);
 		return (print_err("Permission denied", new->file), 1);
 	}
+	else if (new->file[0] == '\0')
+		return (print_err("No such file or directory", new->file), 1);
 	return (0);
 }
 

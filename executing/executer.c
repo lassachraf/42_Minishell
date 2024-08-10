@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/06 18:43:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 10:36:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	execute_and_or(t_node *node)
 	{
 		executer(node->data.pair.left);
 		wait_last();
-		while (waitpid(-1, NULL, 0) != -1)
-			;
+		wait_all();
 		if (g_minishell->exit_s && g_minishell->exit_s != 130)
 			executer(node->data.pair.right);
 	}
@@ -29,8 +28,7 @@ void	execute_and_or(t_node *node)
 	{
 		executer(node->data.pair.left);
 		wait_last();
-		while (waitpid(-1, NULL, 0) != -1)
-			;
+		wait_all();
 		if (!g_minishell->exit_s)
 			executer(node->data.pair.right);
 	}
@@ -79,10 +77,12 @@ void	pipe_right(t_node *node, int *pfd, bool mode)
 			executer(node);
 	}
 	else
+	{
 		do_pipe(node, mode, pfd);
+	}
 }
 
-void	execute_pair(t_node *node)  // (cat | ls && cat -n) | cat -e
+void	execute_pair(t_node *node)
 {
 	int	pfd[2];
 	int	fd_in;
@@ -98,6 +98,7 @@ void	execute_pair(t_node *node)  // (cat | ls && cat -n) | cat -e
 		dup2(fd_out, 1);
 		dup_2(pfd[0], 0);
 		pipe_right(node->data.pair.right, pfd, 1);
+		wait_last();
 		dup_2(fd_in, 0);
 		dup_2(fd_out, 1);
 	}

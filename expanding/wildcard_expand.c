@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/25 17:50:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:23:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,53 @@ int	check_ambiguous(char *s)
 	return (match_count);
 }
 
+int	to_lower(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
+
+int	ft_strcasecmp(const char *a, const char *b)
+{
+	char	res_a;
+	char	res_b;
+	char	lower_a;
+	char	lower_b;
+
+    while (*a && *b)
+	{
+        lower_a = to_lower((unsigned char)*a);
+        lower_b = to_lower((unsigned char)*b);
+        if (lower_a != lower_b)
+            return (unsigned char)lower_a - (unsigned char)lower_b;
+        a++;
+        b++;
+    }
+	res_a = to_lower((unsigned char)*a);
+	res_b = to_lower((unsigned char)*b);
+    return ((unsigned char)res_a - (unsigned char)res_b);
+}
+
+void insert_sorted(t_list **sorted, t_list *new_node)
+{
+    t_list *current;
+
+    if (*sorted == NULL || ft_strcasecmp((*sorted)->content, new_node->content) > 0)
+	{
+        new_node->next = *sorted;
+        *sorted = new_node;
+    }
+	else
+	{
+        current = *sorted;
+        while (current->next && ft_strcasecmp(current->next->content, new_node->content) <= 0)
+            current = current->next;
+        new_node->next = current->next;
+        current->next = new_node;
+    }
+}
+
 void	add_name_to_list(t_list **lst, char *dir_name)
 {
 	t_list	*new_node;
@@ -71,7 +118,7 @@ void	add_name_to_list(t_list **lst, char *dir_name)
 	gc_add(g_minishell, name);
 	new_node = ft_lstnew(name);
 	gc_add(g_minishell, new_node);
-	ft_lstadd_back(lst, new_node);
+	insert_sorted(lst, new_node);
 }
 
 t_list	*asterisk_functionality(char *s)

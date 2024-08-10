@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:40:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 00:59:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:02:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,13 @@ void	error_identifier(char **s)
 		ft_putstr_fd(s[0], 2);
 	if (s[1])
 	{
-		ft_putstr_fd("=", 2);
-		ft_putstr_fd(s[1], 2);
+		if (!ft_strncmp(s[1], "=", 1))
+			ft_putstr_fd(s[1], 2);
+		else
+		{
+			ft_putstr_fd("=", 2);
+			ft_putstr_fd(s[1], 2);
+		}
 	}
 	ft_putstr_fd("` : not a valid identifier.\n" RESET, 2);
 	set_env_var(g_minishell->our_env, "?", "2");

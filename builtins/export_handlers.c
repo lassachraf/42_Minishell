@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:25:23 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/06 18:01:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/08 02:27:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	**split_string(char *str, char delimiter)
 	result = malloc(3 * sizeof(char *));
 	if (!result)
 		return (NULL);
+	gc_add(g_minishell, result);
 	result[0] = ft_strndup(str, index);
 	result[1] = ft_strdup(str + index + 1);
 	result[2] = NULL;
@@ -88,4 +89,14 @@ int	process_equal(char **args, int i)
 		set_as_exported(g_minishell->our_env, split[0]);
 	}
 	return (0);
+}
+
+void	add_split_to_gc(char **split)
+{
+	int	i;
+
+	i = -1;
+	gc_add(g_minishell, split);
+	while (split[++i])
+		gc_add(g_minishell, split[i]);
 }

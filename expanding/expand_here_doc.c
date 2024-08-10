@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/06 17:15:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/07 23:36:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	export_help(t_token **tokens)
 		}
 		else
 			tmp++;
-		if (ft_strchr(tmp, '$'))
+		if (tmp && ft_strchr(tmp, '$'))
 			(*tokens)->value = helper_expander((*tokens)->value);
 	}
 	return (0);

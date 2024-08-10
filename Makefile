@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/06 17:34:24 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/07 23:56:42 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT_PATH		:=	libft/
 LIBFT			:=	libft/libft.a
 # -Werror
 CC				:=	cc
-CFLAGS			:=	-Wall -Wextra -Werror #-fsanitize=address -g3
+CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
 RM				:=	rm -f
 
 BUILTINS		:=	builtins/builtins_helpers.c			\
@@ -37,6 +37,7 @@ ENVIRONMENT		:=	environment/env_helpers.c			\
 					environment/env_utils.c
 
 EXECUTING		:=	executing/convert_env.c				\
+					executing/executer_tools.c			\
 					executing/executer.c				\
 					executing/execve_tools.c			\
 					executing/here_doc_tools.c			\
@@ -45,8 +46,7 @@ EXECUTING		:=	executing/convert_env.c				\
 					executing/redir_tools.c				\
 					executing/tools_1.c					\
 					executing/tools_2.c					\
-					executing/tools.c					\
-					executing/executer_tools.c
+					executing/tools.c
 
 EXPANDING		:=	expanding/dollar_expand.c			\
 					expanding/expand_here_doc.c			\

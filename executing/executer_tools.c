@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/06 18:58:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 09:24:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,6 @@ t_list	*creat_list(char **split, bool avoid)
 	return (lst);
 }
 
-t_list	*dollar_functionality(char **s, bool avoid)
-{
-	char	**split;
-
-	split = NULL;
-	s[1] = NULL;
-	avoid_expanding(s, avoid);
-	if (!*s)
-		return (*s = NULL, NULL);
-	if (avoid)
-	{
-		split = ft_split(*s, ' ');
-		if (!split)
-			return (*s = NULL, NULL);
-	}
-	else
-		split = s;
-	return (creat_list(split, avoid));
-}
-
 void	expand_list(t_list *cmd_lst)
 {
 	t_list	*list;
@@ -78,8 +58,7 @@ void	expand_list(t_list *cmd_lst)
 		return ;
 	while (cmd_lst)
 	{
-		if (cmd_lst->content && !ft_strcmp((char*)cmd_lst->content, "export"))
-			avoid = 0;
+		check_for_export(cmd_lst->content, &avoid);
 		if (cmd_lst->content)
 		{
 			if (ft_strchr((char *)cmd_lst->content, '$') && cmd_lst->wd_expand)

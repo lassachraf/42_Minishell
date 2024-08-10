@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/06 18:31:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 09:15:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
+void	print_tokens(t_token *tokens);
+void	print_ast(const char *prefix,  t_node* root, bool isLeft);
+
 /* Builtins */
 
 // Function that change current working directory "cd".
@@ -94,7 +97,8 @@ void				ft_unset(char *key);
 t_env				*new_dup(t_env *env);
 
 // Function that execute the builtins.
-void				execute_builtins(t_minishell *mini, char **args, bool print);
+void				execute_builtins(t_minishell *mini,
+						char **args, bool print);
 
 // Function that print the export.
 void				print_env(t_env *env);
@@ -104,6 +108,9 @@ t_env				*sort_env(t_env *env);
 
 // Function that swap two environment nodes.
 void				ft_swap(t_env *i, t_env *j, int *swapped);
+
+// Function that add split to gc.
+void				add_split_to_gc(char **split);
 
 // Set the env variable as exported.
 void				set_as_exported(t_env *env, char *var);
@@ -257,9 +264,6 @@ bool				output_redirs(t_redir *new);
 // Function that check file name of all types exclude << one.
 bool				check_name(t_redir *new);
 
-// Function that IDK , HAVE A ISSUE MUST FIX !
-char				*build_file_name(char *join);
-
 // Function that open a file discriptor for a doc.
 int					open_hidden_file(int doc_num);
 
@@ -304,6 +308,12 @@ void				check_hd_expand(t_token *tokens);
 
 // Function that fill return the new_value after expand.
 void				fill_dollar(char *s, int *i, char *new, int *j);
+
+// Function that set a boolean to true if the command is export.
+void				check_for_export(void *s, bool *avoid);
+
+//
+t_list				*creat_list(char **split, bool avoid);
 
 /* Expanding */
 
@@ -421,13 +431,13 @@ void				print_errors(char *message);
 
 /* Main_utils */
 
-// Function that check if all the fds was closed.
-void				clean_fds(t_node *ast);
-
 // Function that clean all allocation memory used.
 void				clean_and_set(void);
 
 // Function that wait for the last child and get it's exit status.
 int					wait_last(void);
+
+// Function  that wait for all processes.
+void				wait_all(void);
 
 #endif /* MINISHELL_H */

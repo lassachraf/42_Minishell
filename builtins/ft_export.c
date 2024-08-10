@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/06 17:09:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/08 02:26:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	**custome_split(char **split)
 	char	*new_str;
 	size_t	len;
 
+	add_split_to_gc(split);
 	pp = ft_strrchr(split[0], '+');
 	if (pp && *(pp + 1) == '\0')
 	{
@@ -28,13 +29,12 @@ char	**custome_split(char **split)
 		{
 			ft_strncpy(new_str, split[0], len);
 			new_str[len] = '\0';
-			free(split[0]);
 			split[0] = new_str;
 		}
 	}
-	if (ft_strchr(split[0], '$'))
+	if (split[0] && ft_strchr(split[0], '$'))
 		split[0] = helper_expander(split[0]);
-	if (ft_strchr(split[1], '$'))
+	if (split[1] && ft_strchr(split[1], '$'))
 		split[1] = helper_expander(split[1]);
 	return (split);
 }
@@ -44,6 +44,11 @@ int	process_joining(char **args, int i)
 	char	**split;
 
 	split = custome_split(ft_split(args[i], '='));
+	if (!split[0][0])
+	{
+		split[0] = ft_strdup("+=");
+		gc_add(g_minishell, split[0]);
+	}
 	if (check_identifier(split, 0) == -1)
 		return (g_minishell->exit_s = 1, -1);
 	if (get_env_var(g_minishell->our_env, split[0]))

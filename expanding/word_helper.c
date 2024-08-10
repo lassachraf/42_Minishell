@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 01:29:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/07 21:36:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,24 @@ void	handle_space(t_token *tokens, char *new_value)
 	}
 	remove_token(&g_minishell->tokens, current);
 	fill_tokens(current, new_value);
+}
+
+t_list	*dollar_functionality(char **s, bool avoid)
+{
+	char	**split;
+
+	split = NULL;
+	s[1] = NULL;
+	avoid_expanding(s, avoid);
+	if (!*s)
+		return (*s = NULL, NULL);
+	if (avoid)
+	{
+		split = ft_split(*s, ' ');
+		if (!split)
+			return (*s = NULL, NULL);
+	}
+	else
+		split = s;
+	return (creat_list(split, avoid));
 }

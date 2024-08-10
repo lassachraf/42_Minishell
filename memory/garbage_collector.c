@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:22:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/12 19:18:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/08 02:29:29 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,14 @@ void	gc_free_all(t_minishell *mini)
 	t_gc	*current;
 	t_gc	*next;
 
+	if (!mini || !mini->gc)
+		return ;
 	current = mini->gc;
 	while (current)
 	{
 		next = current->next;
-		free(current->ptr);
+		if (current->ptr)
+			free(current->ptr);
 		free(current);
 		current = next;
 	}

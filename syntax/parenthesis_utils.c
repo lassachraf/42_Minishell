@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 19:40:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/08 17:56:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/07 22:29:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_left_valid3(t_type type)
 {
-	return ((type >= L_PAREN && type <= DOLLAR) || type == WORD);
+	return ((type > L_PAREN && type <= DOLLAR) || type == WORD);
 }
 
 int	is_right_valid3(t_type type)

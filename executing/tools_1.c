@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 19:22:03 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/09 10:38:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,20 @@ bool	get_path_data(char *argv, char ***paths, char ***cmd, int *paths_num)
 	return (1);
 }
 
+int	check_for_whitespaces(char *argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (ft_isspace(argv[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	*get_fullpath(char *argv)
 {
 	int		paths_num;
@@ -48,7 +62,7 @@ char	*get_fullpath(char *argv)
 	char	*fullpath;
 	int		i;
 
-	if (!argv || !*argv || ft_isspace(*argv))
+	if (!argv || !*argv || check_for_whitespaces(argv))
 		return (NULL);
 	fullpath = NULL;
 	i = 0;
@@ -83,8 +97,8 @@ int	check_cmd(char *argv)
 		return (print_err("No such file or directory", argv), 127);
 	else if (ft_strlen(argv) == 1 && argv[0] == '.')
 	{
-		ft_putstr_fd("filename argument required\n", 2);
-		ft_putstr_fd(".: usage: . filename [arguments]", 2);
+		ft_putstr_fd(RED"badashell$ : filename argument required\n", 2);
+		ft_putstr_fd(". : usage: . filename [arguments]\n"RESET, 2);
 		return (2);
 	}
 	else if (access(cmd, F_OK) || (argv[0] == '.' && argv[1] == '.'))

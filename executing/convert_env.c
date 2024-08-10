@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/06 18:56:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/08 01:07:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,9 @@ char	**list_to_argv(t_list *list)
 
 void	select_and_excute(t_node *node, int type)
 {
-	int	id;
-
-	id = fork();
-	if (!id)
+	g_minishell->last_child = fork();
+	if (!g_minishell->last_child)
 	{
-		signal(SIGINT, SIG_DFL);
 		if (type == STRING_NODE)
 			execute_cmd(node);
 		else if (type == PAIR_NODE)
@@ -98,14 +95,15 @@ void	select_and_excute(t_node *node, int type)
 		else
 			execute_redires(node->data.redir);
 		wait_last();
-		while (waitpid(-1, NULL, 0) != -1)
-			;
+		wait_all();
 		exit(g_minishell->exit_s);
 	}
 	else
-	{
 		wait_last();
-		while (waitpid(-1, NULL, 0) != -1)
-			;
-	}
+}
+
+void	check_for_export(void *s, bool *avoid)
+{
+	if (s && !ft_strcmp((char *)s, "export"))
+		(*avoid) = 0;
 }
