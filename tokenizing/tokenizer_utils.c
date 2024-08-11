@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:38:55 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 01:53:25 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:44:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,18 @@ void	remove_token(t_token **head, t_token *token)
 		if (token->next)
 			token->next->prev = token->prev;
 	}
+}
+
+int	check_for_quote_close(char **line, int c)
+{
+	int	i;
+
+	i = 0;
+	while ((*line)[i])
+	{
+		if ((*line)[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
 }

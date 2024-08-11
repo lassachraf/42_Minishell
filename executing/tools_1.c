@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/09 10:38:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:09:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,6 @@ bool	get_path_data(char *argv, char ***paths, char ***cmd, int *paths_num)
 	if (!*cmd)
 		return (free_double((*paths)), 0);
 	return (1);
-}
-
-int	check_for_whitespaces(char *argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i])
-	{
-		if (ft_isspace(argv[i]))
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 char	*get_fullpath(char *argv)
@@ -113,8 +99,9 @@ void	call_execev(char **env, char *argv, char **cmd)
 	char	*founded_path;
 
 	founded_path = get_fullpath(argv);
-	printf(RED);
-	execve(founded_path, cmd, env);
-	printf(RESET);
-	print_err("EXEVE FAILED ", NULL);
+	if (execve(founded_path, cmd, env) == -1)
+	{
+		print_err("EXEVE FAILED ", NULL);
+		cleanup_minishell();
+	}
 }

@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   tools_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/05 14:26:57 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/11 16:39:28 by alassiqu         ###   ########.fr       */
+/*   Created: 2024/08/10 18:37:43 by alassiqu          #+#    #+#             */
+/*   Updated: 2024/08/10 18:38:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_env(t_env *env)
+int	check_for_whitespaces(char *argv)
 {
-	set_env_var(env, "_", "/usr/bin/env");
-	while (env)
+	int	i;
+
+	i = 0;
+	while (argv[i])
 	{
-		if (env->visible)
-		{
-			printf("%s=", env->key);
-			if (env->value)
-				printf("%s\n", env->value);
-			else
-				printf("\n");
-		}
-		env = env->next;
+		if (ft_isspace(argv[i]))
+			return (1);
+		i++;
 	}
-	g_minishell->exit_s = 0;
+	return (0);
 }

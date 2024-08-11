@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:38:26 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 13:22:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:33:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,11 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 		general_case(&expand, &k);
 	(*i) += k + 1;
 	search_and_copy(expand, new, j, &k);
+}
+
+int	to_lower(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
 }

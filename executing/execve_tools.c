@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execve_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 09:29:27 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:38:23 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	open_pipe(int *pfd)
+int	open_pipe(int *pfd)
 {
 	if (pipe(pfd))
 	{
 		perror("pipe:");
-		return ;
+		return (-1);
 	}
+	return (0);
 }
 
 int	dup_2(int old_fd, int new_fd)
@@ -42,7 +43,8 @@ void	fd_duper(int *pfd, int mode)
 	else
 	{
 		close(pfd[0]);
-		dup2(pfd[1], 1);
+		if (dup2(pfd[1], 1) == -1)
+			perror("dup2 fd_duper");
 	}
 }
 

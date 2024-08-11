@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/09 08:40:43 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:13:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void	do_here_doc(char *limiter, int fd, int *pipe, int expand_flag)
 
 bool	output_redirs(t_redir *new)
 {
+	if (new->file[0] == '\0')
+		return (print_err("No such file or directory", new->file), 1);
 	if (!access(new->file, F_OK))
 	{
 		if (!access(new->file, W_OK))
 			return (0);
 		return (print_err("Permission denied", new->file), 1);
 	}
-	else if (new->file[0] == '\0')
-		return (print_err("No such file or directory", new->file), 1);
 	return (0);
 }
 

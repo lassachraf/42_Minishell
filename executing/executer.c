@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/10 16:04:05 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:40:14 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ void	pipe_right(t_node *node, int *pfd, bool mode)
 			executer(node);
 	}
 	else
-	{
 		do_pipe(node, mode, pfd);
-	}
 }
 
 void	execute_pair(t_node *node)
@@ -90,12 +88,14 @@ void	execute_pair(t_node *node)
 
 	if (node->data.pair.type == PIPE)
 	{
+		if (open_pipe(pfd) == -1)
+			return ;
 		fd_in = dup(0);
 		fd_out = dup(1);
-		open_pipe(pfd);
 		dup_2(pfd[1], 1);
 		pipe_left(node->data.pair.left, pfd, 0);
-		dup2(fd_out, 1);
+		if (dup2(fd_out, 1) == -1)
+			perror("dup2 fd_out");
 		dup_2(pfd[0], 0);
 		pipe_right(node->data.pair.right, pfd, 1);
 		wait_last();

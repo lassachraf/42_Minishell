@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/09 09:15:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:38:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,20 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
-void	print_tokens(t_token *tokens);
-void	print_ast(const char *prefix,  t_node* root, bool isLeft);
+// Function that lowercase an uppercase character.
+int					to_lower(char c);
+
+// Function that compare 2 strings without case check.
+int					ft_strcasecmp(const char *a, const char *b);
+
+// Function that check if a string contains spaces.
+int					check_for_whitespaces(char *argv);
+
+// Function that check if there's a close of quote or not.
+int					check_for_quote_close(char **line, int c);
+
+// Function that reset the input && output.
+void				reset_fds(void);
 
 /* Builtins */
 
@@ -169,7 +181,7 @@ char				**env_to_envp(t_env *env);
 char				**list_to_argv(t_list *list);
 
 // Function that open pipes fds.
-void				open_pipe(int *pfd);
+int					open_pipe(int *pfd);
 
 // Function that duplicate an old fd to the new one.
 int					dup_2(int old_fd, int new_fd);

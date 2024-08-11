@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 10:41:21 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:22:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <errno.h>
 
 size_t	count_words(char *s)
 {
@@ -85,6 +84,12 @@ int	open_redir(t_redir *redir)
 	if (!is_ambiguous(redir))
 	{
 		redir->fd = open(redir->file, redir->mode, 0644);
+		if (redir->fd < 0)
+		{
+			perror("Open faild redir");
+			g_minishell->exit_s = 1;
+			return (0);
+		}
 		return (1);
 	}
 	g_minishell->exit_s = 1;

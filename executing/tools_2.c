@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/09 09:30:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/11 17:21:44 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,13 @@ void	unlink_docs(int docs)
 
 	if (!docs)
 		return ;
-	while (docs >= 0)
+	while (docs > 0)
 	{
 		join = ft_itoa(docs);
 		path = build_file_name(join);
 		name = ft_strjoin(PATH, path);
-		unlink(name);
+		if (unlink(name) == -1)
+			perror("unlink failed");
 		free(join);
 		free(path);
 		free(name);

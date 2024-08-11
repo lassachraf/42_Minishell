@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:30:50 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/02 16:39:35 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/11 14:56:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_as_visible(t_env *env, char *var)
 {
-	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
+	while (env && ft_strcmp(env->key, var))
 		env = env->next;
 	if (!env)
 		return ;
@@ -23,7 +23,7 @@ void	set_as_visible(t_env *env, char *var)
 
 void	set_as_invisible(t_env *env, char *var)
 {
-	while (env && ft_strncmp(env->key, var, ft_strlen(env->key)))
+	while (env && ft_strcmp(env->key, var))
 		env = env->next;
 	if (!env)
 		return ;

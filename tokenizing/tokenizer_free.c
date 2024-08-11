@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/09 08:37:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:44:32 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,6 @@ t_token	*choose_token(int c)
 	else
 		token = new_token(ft_strdup("\""), D_QUOTE, 0);
 	return (token);
-}
-
-int	check_for_quote_close(char **line, int c)
-{
-	int	i;
-
-	i = 0;
-	while ((*line)[i])
-	{
-		if ((*line)[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 int	add_quote(t_token **tokens, char **line)

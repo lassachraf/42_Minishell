@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/07 23:56:42 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/11 17:19:50 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME			:=	minishell
 
 LIBFT_PATH		:=	libft/
 LIBFT			:=	libft/libft.a
-# -Werror
+
 CC				:=	cc
 CFLAGS			:=	-Wall -Wextra -Werror -fsanitize=address -g3
 RM				:=	rm -f
@@ -46,6 +46,7 @@ EXECUTING		:=	executing/convert_env.c				\
 					executing/redir_tools.c				\
 					executing/tools_1.c					\
 					executing/tools_2.c					\
+					executing/tools_3.c					\
 					executing/tools.c
 
 EXPANDING		:=	expanding/dollar_expand.c			\
