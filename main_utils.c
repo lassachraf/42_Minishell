@@ -6,11 +6,40 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 02:03:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 19:05:10 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:32:15 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+char	*shlvl_hepler(char *shlvl)
+{
+	char	*new_shlvl;
+	int		tmp;
+	int		i;
+
+	i = 0;
+	tmp = ft_atoi(shlvl) + 1;
+	while (shlvl[i] && ft_isdigit(shlvl[i]))
+		i++;
+	if (shlvl[i])
+		new_shlvl = ft_strdup("1");
+	else if (tmp < 0)
+		new_shlvl = ft_strdup("0");
+	else if (tmp >= 1000)
+	{
+		new_shlvl = ft_itoa(tmp);
+		gc_add(g_minishell, new_shlvl);
+		ft_putstr_fd(RED "badashell$ : warning : shell level (", 2);
+		ft_putstr_fd(new_shlvl, 2);
+		ft_putstr_fd(") too high, resetting to 1", 2);
+		ft_putstr_fd("\n" RESET, 2);
+		new_shlvl = ft_strdup("1");
+	}
+	else
+		new_shlvl = ft_itoa(tmp);
+	return (new_shlvl);
+}
 
 void	reset_fds(void)
 {

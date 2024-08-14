@@ -1,3 +1,4 @@
 .vscode
 test/
 readline_script.sh
+debugging.c

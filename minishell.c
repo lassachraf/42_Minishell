@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/11 17:23:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:32:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,11 @@ void	increment_shlvl(void)
 {
 	char	*shlvl;
 	char	*new_shlvl;
-	int		tmp;
 
 	shlvl = get_env_var(g_minishell->our_env, "SHLVL");
 	if (!shlvl)
 		return ;
-	tmp = ft_atoi(shlvl) + 1;
-	if (tmp < 0)
-		new_shlvl = ft_strdup("0");
-	else if (tmp >= 1000)
-	{
-		new_shlvl = ft_itoa(tmp);
-		gc_add(g_minishell, new_shlvl);
-		ft_putstr_fd(RED "badashell$ : warning : shell level (", 2);
-		ft_putstr_fd(new_shlvl, 2);
-		ft_putstr_fd(") too high, resetting to 1", 2);
-		ft_putstr_fd("\n" RESET, 2);
-		new_shlvl = ft_strdup("1");
-	}
-	else
-		new_shlvl = ft_itoa(tmp);
+	new_shlvl = shlvl_hepler(shlvl);
 	gc_add(g_minishell, new_shlvl);
 	set_env_var(g_minishell->our_env, "SHLVL", new_shlvl);
 }
@@ -67,7 +52,6 @@ int	init_minishell(char **env)
 	if (env && *env)
 	{
 		g_minishell->our_env = dup_env(env);
-		printf(">*%s*\n", get_env_var(g_minishell->our_env, "SHLVL"));
 		increment_shlvl();
 	}
 	else

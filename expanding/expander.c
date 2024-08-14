@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/08 02:26:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:18:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ t_token	*word_helper(t_token *tokens)
 void	expand_dollar(void)
 {
 	t_token	*tokens;
+	int		flag;
 
+	flag = 1;
 	tokens = g_minishell->tokens;
 	while (tokens)
 	{
@@ -79,7 +81,9 @@ void	expand_dollar(void)
 			&& !ft_strcmp(tokens->value, "export"))
 		{
 			tokens = tokens->next;
-			if (export_help(&tokens))
+			if (!tokens->next_space)
+				flag = 0;
+			if (export_help(&tokens, flag))
 				break ;
 		}
 		else if (tokens->type == WORD && tokens->value

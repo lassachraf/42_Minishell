@@ -6,13 +6,29 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/07 23:36:48 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:20:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	export_help(t_token **tokens)
+int	export_key(t_token **tokens, char **tmp, int flag)
+{
+	if (ft_strchr((*tokens)->value, '$'))
+	{
+		*tokens = word_helper((*tokens));
+		if (!flag)
+			(*tokens)->prev->next_space = 0;
+	}
+	else
+		*tokens = (*tokens)->next;
+	if (!(*tokens))
+		return (1);
+	(*tmp) = (*tokens)->value;
+	return (0);
+}
+
+int	export_help(t_token **tokens, int flag)
 {
 	char	*tmp;
 
@@ -27,10 +43,8 @@ int	export_help(t_token **tokens)
 		}
 		if (!(*(tmp + 1)))
 		{
-			(*tokens) = (*tokens)->next;
-			if (!(*tokens))
+			if (export_key(&(*tokens), &tmp, flag))
 				return (1);
-			tmp = (*tokens)->value;
 		}
 		else
 			tmp++;

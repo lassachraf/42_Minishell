@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 19:38:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:31:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
+
+//
+char				*shlvl_hepler(char *shlvl);
+
+//
+t_token				*word_helper(t_token *tokens);
 
 // Function that lowercase an uppercase character.
 int					to_lower(char c);
@@ -336,7 +342,7 @@ void				expanding(void);
 void				avoid_expanding(char **s, bool avoid);
 
 // Function that help expand a case of export.
-int					export_help(t_token **tokens);
+int					export_help(t_token **tokens, int flag);
 
 // Function that expand words containing dollar.
 void				expand_dollar(void);
