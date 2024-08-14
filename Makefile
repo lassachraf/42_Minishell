@@ -6,11 +6,12 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/14 12:18:30 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/14 15:51:55 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:=	minishell
+BONUS			:=	minishell_bonus
 
 LIBFT_PATH		:=	libft/
 LIBFT			:=	libft/libft.a
@@ -109,14 +110,19 @@ $(LIBFT):
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -lreadline -o $(NAME)
 
+$(BONUS): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -lreadline -o $(BONUS)
+
 clean:
 	@make clean -C $(LIBFT_PATH)
 	@rm -f $(OBJS)
 
 fclean: clean
 	@make fclean -C $(LIBFT_PATH)
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(BONUS)
 
 re: fclean all
+
+bonus:	$(BONUS)
 
 .PHONY: clean
