@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:25:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:54:16 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_space(t_token *tokens, char *new_value)
 	fill_tokens(current, new_value);
 }
 
-int	ft_strcasecmp(const char *a, const char *b)
+int	ft_strcasecmp(char *a, char *b)
 {
 	char	res_a;
 	char	res_b;
