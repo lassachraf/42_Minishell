@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:54:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 13:09:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,25 @@ int	ft_strcasecmp(char *a, char *b)
 	return ((unsigned char)res_a - (unsigned char)res_b);
 }
 
-t_list	*dollar_functionality(char **s, bool avoid)
+int	dollar_functionality(t_list **cmds, char **s, bool avoid)
 {
+	t_list	*list;
 	char	**split;
 
 	split = NULL;
 	s[1] = NULL;
 	avoid_expanding(s, avoid);
 	if (!*s)
-		return (*s = NULL, NULL);
+		return (*s = NULL, 1);
 	if (avoid)
 	{
 		split = ft_split(*s, ' ');
 		if (!split)
-			return (*s = NULL, NULL);
+			return (*s = NULL, 1);
 	}
 	else
 		split = s;
-	return (creat_list(split, avoid));
+	list = creat_list(split, avoid);
+	add_list_into_list(&cmds, list);
+	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/11 17:19:50 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/14 12:18:30 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,8 @@ TOKENIZING		:=	tokenizing/tokenizer_free.c			\
 MAIN			:=	main_utils.c						\
 					minishell.c
 
+DEBUGGING		:=	debugging.c
+
 SRCS			:=	$(BUILTINS)							\
 					$(CLEANING)							\
 					$(ENVIRONMENT)						\
@@ -93,6 +95,7 @@ SRCS			:=	$(BUILTINS)							\
 					$(SIGNALS)							\
 					$(SYNTAXING)						\
 					$(TOKENIZING)						\
+					$(DEBUGGING)						\
 					$(MAIN)
 
 OBJS			:=	$(SRCS:.c=.o)

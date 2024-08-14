@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:45:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 13:12:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
+
+void				print_tokens(t_token *tokens);
+void				join_for_asterisk(t_token **tokens);
 
 /* Builtins */
 
@@ -342,7 +345,7 @@ int					to_lower(char c);
 int					ft_strcasecmp(char *a, char *b);
 
 // Function that return a list of nodes containing dollar expanding.
-t_list				*dollar_functionality(char **s, bool avoid);
+int					dollar_functionality(t_list **cmds, char **s, bool avoid);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);
