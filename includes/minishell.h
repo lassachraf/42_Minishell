@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:31:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:45:30 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,6 @@ typedef struct s_minishell
 }					t_minishell;
 
 extern t_minishell	*g_minishell;
-
-//
-char				*shlvl_hepler(char *shlvl);
-
-//
-t_token				*word_helper(t_token *tokens);
-
-// Function that lowercase an uppercase character.
-int					to_lower(char c);
-
-// Function that compare 2 strings without case check.
-int					ft_strcasecmp(const char *a, const char *b);
-
-// Function that check if a string contains spaces.
-int					check_for_whitespaces(char *argv);
-
-// Function that check if there's a close of quote or not.
-int					check_for_quote_close(char **line, int c);
-
-// Function that reset the input && output.
-void				reset_fds(void);
 
 /* Builtins */
 
@@ -197,6 +176,9 @@ void				fd_duper(int *pfd, int mode);
 
 // Function that get the command.
 char				*get_command(char *argv);
+
+// Function that check if a string contains spaces.
+int					check_for_whitespaces(char *argv);
 
 // Function that join the command with it's path.
 char				*add_slash_cmd(char *path, char *cmd);
@@ -347,8 +329,17 @@ int					export_help(t_token **tokens, int flag);
 // Function that expand words containing dollar.
 void				expand_dollar(void);
 
+// Function that expand dollar words with a special method.
+t_token				*word_helper(t_token *tokens);
+
 // Function that check if the character is numerical.
 int					ft_isnum(int c);
+
+// Function that lowercase an uppercase character.
+int					to_lower(char c);
+
+// Function that compare 2 strings without case check.
+int					ft_strcasecmp(char *a, char *b);
 
 // Function that return a list of nodes containing dollar expanding.
 t_list				*dollar_functionality(char **s, bool avoid);
@@ -449,6 +440,9 @@ void				print_errors(char *message);
 
 /* Main_utils */
 
+// Function that reset the input && output.
+void				reset_fds(void);
+
 // Function that clean all allocation memory used.
 void				clean_and_set(void);
 
@@ -457,5 +451,8 @@ int					wait_last(void);
 
 // Function  that wait for all processes.
 void				wait_all(void);
+
+// Function that help increment shlvl.
+char				*shlvl_hepler(char *shlvl);
 
 #endif /* MINISHELL_H */

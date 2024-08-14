@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/09 09:13:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 10:39:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ int					special_case(t_token *prev, t_token *curr, t_token *next);
 
 // Function that removes a token from the list of tokens.
 void				remove_token(t_token **head, t_token *token);
+
+// Function that check if there's a close of quote or not.
+int					check_for_quote_close(char **line, int c);
 
 /* Tokenizer */
 
