@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 13:09:21 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:51:54 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,6 @@ int	dollar_functionality(t_list **cmds, char **s, bool avoid)
 	else
 		split = s;
 	list = creat_list(split, avoid);
-	add_list_into_list(&cmds, list);
+	add_list_into_list(cmds, list);
 	return (1);
 }
