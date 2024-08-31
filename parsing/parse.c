@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 21:07:16 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 21:41:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ t_node	*parsing(void)
 	left = NULL;
 	expanding();
 	expand_dollar();
-	remove_quotes(&g_minishell->tokens);
 	join_for_asterisk(&g_minishell->tokens);
 	join_words(&g_minishell->tokens);
 	left = parse_block(&g_minishell->tokens);
