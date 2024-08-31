@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/30 19:30:11 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/31 21:08:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ bool	check_expand(t_redir *new)
 
 	val = helper_expander(new->file);
 	size = count_words(val);
+	if (new->quoted)
+		size = 1;
 	if (size == 1 || !size)
 	{
 		if (size)

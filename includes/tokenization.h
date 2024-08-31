@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:39:04 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 19:45:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_type			type;
+	int				quoted;
 	bool			hd_expand;
 	bool			wd_expand;
 	int				next_space;
@@ -63,7 +64,7 @@ void				clear_token(t_token **tokens);
 /* Tokenizer_helpers */
 
 // Function that create and return a new token node.
-t_token				*new_token(char *value, t_type type, int wd);
+t_token				*new_token(char *value, t_type type, int wd, int quoted);
 
 // Function that add a new token to the list of tokens.
 void				add_token_back(t_token **tokens, t_token *new_token);

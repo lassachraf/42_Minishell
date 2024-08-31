@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 12:03:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:35:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	add_token_middle(t_token **tokens, t_token *new_token,
 	prev_token->next = new_token;
 }
 
-void	check_for_value(t_token **tokens, char *new)
+void	check_for_value(t_token **tokens, char *new, int flag)
 {
 	t_token	*tmp;
 
@@ -46,7 +46,7 @@ void	check_for_value(t_token **tokens, char *new)
 		(*tokens) = tmp;
 	}
 	else if (contains_space(new))
-		handle_space(*tokens, new);
+		handle_space(*tokens, new, flag);
 	else
 		(*tokens)->value = new;
 }
@@ -61,7 +61,7 @@ t_token	*word_helper(t_token *tokens)
 	if (tokens->wd_expand)
 	{
 		new_value = helper_expander(tokens->value);
-		check_for_value(&tokens, new_value);
+		check_for_value(&tokens, new_value, tokens->quoted);
 	}
 	return (tokens->next);
 }

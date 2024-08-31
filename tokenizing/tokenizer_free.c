@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 12:34:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 19:46:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ int	add_string(t_token **tokens, char **line, char quote_char)
 		i++;
 	if (i == 0)
 	{
-		new = new_token(ft_strdup(""), WORD, 0);
+		new = new_token(ft_strdup(""), WORD, 0, 0);
 		add_token_back(tokens, new);
 		return (1);
 	}
 	value = ft_substr(*line, 0, i);
 	if (quote_char == '\'')
-		new = new_token(value, WORD, 0);
+		new = new_token(value, WORD, 0, 1);
 	else
-		new = new_token(value, WORD, 1);
+		new = new_token(value, WORD, 1, 1);
 	if (ft_strchr(new->value, '*'))
 		new->wd_expand = 0;
 	add_token_back(tokens, new);
@@ -54,9 +54,9 @@ t_token	*choose_token(int c)
 
 	token = NULL;
 	if (c == '\'')
-		token = new_token(ft_strdup("'"), S_QUOTE, 0);
+		token = new_token(ft_strdup("'"), S_QUOTE, 0, 0);
 	else
-		token = new_token(ft_strdup("\""), D_QUOTE, 0);
+		token = new_token(ft_strdup("\""), D_QUOTE, 0, 0);
 	return (token);
 }
 

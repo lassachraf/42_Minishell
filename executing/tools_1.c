@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/29 19:08:58 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/31 21:07:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*get_fullpath(char *argv)
 		if ((*argv == '/' || *argv == '.') && !access(*cmd, X_OK))
 			return (founded_cmd(argv, paths, cmd));
 	}
-	else if (*argv != '/' && *argv != '.')
+	if (*argv != '/' && *argv != '.')
 		while (paths_num-- > 0 && !fullpath)
 			fullpath = add_slash_cmd(paths[i++], *cmd);
 	return (free_double(cmd), free_double(paths), fullpath);

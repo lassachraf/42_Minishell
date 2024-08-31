@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 14:51:54 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:35:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	check_env(char *var)
 		return (ft_strlen(get_env_var(g_minishell->our_env, var)));
 }
 
-void	fill_tokens(t_token *current, char *new_value)
+void	fill_tokens(t_token *current, char *new_value, int flag)
 {
 	t_token	*new_tok;
 	char	*chunk;
@@ -40,7 +40,7 @@ void	fill_tokens(t_token *current, char *new_value)
 			while (new_value[i] && !ft_isspace(new_value[i]))
 				i++;
 			chunk = ft_substr(new_value, j, (i - j));
-			new_tok = new_token(chunk, WORD, 0);
+			new_tok = new_token(chunk, WORD, 0, flag);
 			new_tok->next_space = 1;
 			add_token_middle(&g_minishell->tokens, new_tok, current->prev);
 			current = new_tok->next;
@@ -50,7 +50,7 @@ void	fill_tokens(t_token *current, char *new_value)
 	}
 }
 
-void	handle_space(t_token *tokens, char *new_value)
+void	handle_space(t_token *tokens, char *new_value, int flag)
 {
 	t_token	*current;
 
@@ -61,7 +61,7 @@ void	handle_space(t_token *tokens, char *new_value)
 		return ;
 	}
 	remove_token(&g_minishell->tokens, current);
-	fill_tokens(current, new_value);
+	fill_tokens(current, new_value, flag);
 }
 
 int	ft_strcasecmp(char *a, char *b)

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:41:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 18:44:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 19:48:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_token	*tokenizer_handler(char *line)
 		else
 			error = (!append_identifier(&tokens, &line) && 1);
 	}
-	add_token_back(&tokens, new_token(NULL, END, 0));
+	add_token_back(&tokens, new_token(NULL, END, 0, 0));
 	return (tokens);
 }
 

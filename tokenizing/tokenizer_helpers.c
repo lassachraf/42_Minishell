@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/04 01:56:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 19:45:40 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*new_token(char *value, t_type type, int wd)
+t_token	*new_token(char *value, t_type type, int wd, int quoted)
 {
 	t_token	*new_token;
 
@@ -24,6 +24,7 @@ t_token	*new_token(char *value, t_type type, int wd)
 	gc_add(g_minishell, new_token->value);
 	new_token->type = type;
 	new_token->hd_expand = 0;
+	new_token->quoted = quoted;
 	new_token->wd_expand = wd;
 	new_token->next_space = 0;
 	new_token->prev = NULL;
@@ -56,7 +57,7 @@ int	append_separator(t_token **tokens, char **line, t_type type)
 		value = ft_substr(*line, 0, 2);
 	else
 		value = ft_substr(*line, 0, 1);
-	token = new_token(value, type, 1);
+	token = new_token(value, type, 1, 0);
 	if (!token)
 		return (0);
 	add_token_back(tokens, token);
@@ -80,7 +81,7 @@ int	append_identifier(t_token **tokens, char **line)
 	value = ft_substr(tmp, 0, i);
 	if (!value)
 		return (0);
-	new = new_token(value, WORD, 1);
+	new = new_token(value, WORD, 1, 0);
 	if (!new)
 		return (0);
 	*line += i;
@@ -101,7 +102,7 @@ int	append_space(t_token **tokens, char **line)
 	value = ft_substr(*line, 0, i);
 	if (!value)
 		return (0);
-	token = new_token(value, WHITESPACE, 0);
+	token = new_token(value, WHITESPACE, 0, 0);
 	if (!token)
 		return (0);
 	add_token_back(tokens, token);

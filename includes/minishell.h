@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 18:00:15 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:36:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ char				*build_file_name(char *join);
 int					process_exit(char **args, bool print);
 
 // Funcion that handle space case in expanded tokens.
-void				handle_space(t_token *tokens, char *new_value);
+void				handle_space(t_token *tokens, char *new_value, int flag);
 
 // Function that count how many word is in a string.
 size_t				count_words(char *s);
