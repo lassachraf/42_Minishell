@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+         #
+#    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/30 08:11:23 by baouragh         ###   ########.fr        #
+#    Updated: 2024/08/31 17:39:25 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ EXECUTING		:=	executing/convert_env.c				\
 					executing/executer_tools.c			\
 					executing/executer.c				\
 					executing/execve_tools.c			\
+					executing/export_exec.c				\
 					executing/here_doc_tools.c			\
 					executing/here_doc_utils.c			\
 					executing/here_doc.c				\
@@ -55,6 +56,7 @@ EXPANDING		:=	expanding/dollar_expand.c			\
 					expanding/expand_here_doc.c			\
 					expanding/expander_utils.c			\
 					expanding/expander.c				\
+					expanding/export_helpers.c			\
 					expanding/fill_expand.c				\
 					expanding/wildcard_expand.c			\
 					expanding/word_helper.c

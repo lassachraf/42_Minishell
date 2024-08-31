@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 11:58:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 17:19:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,14 @@ void	executer(t_node *node, int *pfd)
 	{
 		if (node->data.cmd && node->data.cmd->is_block
 			&& ft_is_builtin((char *)node->data.cmd->content))
-			select_and_excute(node, STRING_NODE, pfd);
+			select_and_execute(node, STRING_NODE, pfd);
 		else
 			execute_cmd(node, pfd);
 	}
 	else if (node->type == PAIR_NODE)
 	{
 		if (node->data.pair.is_block)
-			select_and_excute(node, PAIR_NODE, pfd);
+			select_and_execute(node, PAIR_NODE, pfd);
 		else
 			execute_pair(node, pfd);
 	}

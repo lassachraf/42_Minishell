@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 17:04:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 17:46:09 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,52 +48,11 @@ t_list	*creat_list(char **split, bool avoid)
 	return (lst);
 }
 
-// int	len_of_contents(t_list *list)
-// {
-// 	int	len;
-
-// 	len = 0;
-// 	while (list)
-// 	{
-// 		if (list->content)
-// 			len += ft_strlen(list->content);
-// 		list = list->next;
-// 	}
-// 	return (len);
-// }
-
-// char	*list_to_charp(t_list *list)
-// {
-// 	char	*charp;
-// 	int		size;
-// 	int		i;
-// 	int		len;
-
-// 	i = 0;
-// 	if (!list || !list->content)
-// 		return (NULL);
-// 	list = list->next;
-// 	size = len_of_contents(list);
-// 	charp = malloc(sizeof(char) * (size + 1));
-// 	if (!charp)
-// 		return (gc_free_all(g_minishell), NULL);
-// 	gc_add(g_minishell, charp);
-// 	while (i < size)
-// 	{
-// 		len = ft_strlen(list->content); 
-// 		ft_memmove(charp + i, list->content, len);
-// 		i += len;
-// 		list = list->next;
-// 	}
-// 	charp[i] = '\0';
-// 	return (charp);
-// }
-
-void	expand_list(t_list *cmds) // export $a=$b ok=a gy=$l > 1 
+void	expand_list(t_list *cmds)
 {
 	t_list	*list;
 	bool	avoid;
-	bool	export;
+	int		export;
 
 	list = NULL;
 	export = 0;
@@ -102,20 +61,16 @@ void	expand_list(t_list *cmds) // export $a=$b ok=a gy=$l > 1
 		return ;
 	while (cmds)
 	{
-		if (cmds->content && !ft_strcmp(cmds->content, "export") && ft_lstsize(cmds) > 1)
-		{
-			check_for_export(&cmds, &avoid);
-			export = 1;
-		}
+		if (cmds->content && !ft_strcmp(cmds->content, "export")
+			&& ft_lstsize(cmds) > 1)
+			check_for_export(&cmds, &avoid, &export);
 		else if (cmds->content)
 		{
-			if (ft_strchr((char *)cmds->content, '$') && cmds->wd_expand && !export)
+			if (ft_strchr((char *)cmds->content, '$') && cmds->wd_expand
+				&& !export)
 				dollar_functionality(&cmds, (char **)&cmds->content, avoid);
 			else if (ft_strchr((char *)cmds->content, '*') && cmds->wd_expand)
-			{
-				list = asterisk_functionality((char *)cmds->content);
-				add_list_into_list(&cmds, list);
-			}
+				asterisk_functionality_2(&cmds, (char *)cmds->content);
 		}
 		cmds = cmds->next;
 	}

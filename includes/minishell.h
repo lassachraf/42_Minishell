@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 17:14:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 18:00:15 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ char				*avoid_spaces(char *s);
 int					check_dollars(char *s);
 
 void				check_key(t_token **tokens, char *s, char *l);
+
+void				add_name_to_list(t_list **lst, char *dir_name);
+
+int					export_key(t_token **tokens, char **tmp, int flag);
 
 /* Builtins */
 
@@ -277,7 +281,7 @@ int					open_hidden_file(int doc_num);
 void				execute_redires(t_list *red_list, int *pfd);
 
 // Function that go trough a way of exe based on its node's type.
-void				select_and_excute(t_node *node, int type, int *pfd);
+void				select_and_execute(t_node *node, int type, int *pfd);
 
 // Function that execute a pair node | , || , &&.
 void				execute_pair(t_node *node, int *pfd);
@@ -316,7 +320,7 @@ void				check_hd_expand(t_token *tokens);
 void				fill_dollar(char *s, int *i, char *new, int *j);
 
 // Function that set a boolean to true if the command is export.
-int					check_for_export(t_list **s, bool *avoid);
+int					check_for_export(t_list **s, bool *avoid, int *flag);
 
 //
 t_list				*creat_list(char **split, bool avoid);
@@ -362,6 +366,9 @@ int					dollar_functionality(t_list **cmds, char **s, bool avoid);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);
+
+// 
+int					asterisk_functionality_2(t_list **cmds, char *s);
 
 // Function that join 2 tokens.
 void				join_for_asterisk(t_token **tokens);
