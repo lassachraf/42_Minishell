@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
+#    By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/08/29 15:34:50 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/08/30 08:11:23 by baouragh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ EXECUTING		:=	executing/convert_env.c				\
 					executing/tools_1.c					\
 					executing/tools_2.c					\
 					executing/tools_3.c					\
-					executing/tools.c
+					executing/tools.c					\
+					executing/pipe_tools.c
 
 EXPANDING		:=	expanding/dollar_expand.c			\
 					expanding/expand_here_doc.c			\

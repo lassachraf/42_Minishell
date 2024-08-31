@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/11 17:21:44 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:31:43 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	do_cmd(t_node *ast, bool print)
 	exit(g_minishell->last_child);
 }
 
-void	do_pipe(t_node *cmd, int mode, int *pfd)
+void	do_pipe(t_node *cmd, int *pfd)
 {
 	g_minishell->last_child = fork();
 	if (g_minishell->last_child < 0)
@@ -63,7 +63,7 @@ void	do_pipe(t_node *cmd, int mode, int *pfd)
 	if (g_minishell->last_child == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
-		fd_duper(pfd, mode);
+		fd_closer(pfd);
 		expand_list(cmd->data.cmd);
 		remove_null(&cmd);
 		if (!cmd->data.cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/10 19:38:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:34:20 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	dup_2(int old_fd, int new_fd)
 {
 	if (dup2(old_fd, new_fd) < 0)
 	{
+		close(old_fd);
 		perror("dup2: ");
 		return (-1);
 	}
@@ -33,19 +34,10 @@ int	dup_2(int old_fd, int new_fd)
 	return (0);
 }
 
-void	fd_duper(int *pfd, int mode)
+void	fd_closer(int *pfd)
 {
-	if (mode == 1)
-	{
-		close(pfd[1]);
-		close(pfd[0]);
-	}
-	else
-	{
-		close(pfd[0]);
-		if (dup2(pfd[1], 1) == -1)
-			perror("dup2 fd_duper");
-	}
+	close(pfd[1]);
+	close(pfd[0]);
 }
 
 char	*get_command(char *argv)

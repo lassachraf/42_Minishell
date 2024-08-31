@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/08 01:07:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 17:13:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,17 @@ char	**list_to_argv(t_list *list)
 	return (argv);
 }
 
-void	select_and_excute(t_node *node, int type)
+void	select_and_excute(t_node *node, int type, int *pfd)
 {
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
 		if (type == STRING_NODE)
-			execute_cmd(node);
+			execute_cmd(node, pfd);
 		else if (type == PAIR_NODE)
-			execute_pair(node);
+			execute_pair(node, pfd);
 		else
-			execute_redires(node->data.redir);
+			execute_redires(node->data.redir, pfd);
 		wait_last();
 		wait_all();
 		exit(g_minishell->exit_s);
@@ -102,8 +102,103 @@ void	select_and_excute(t_node *node, int type)
 		wait_last();
 }
 
-void	check_for_export(void *s, bool *avoid)
+int	last_element(char **s)
 {
-	if (s && !ft_strcmp((char *)s, "export"))
-		(*avoid) = 0;
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i - 1);
+}
+
+t_list	*expand_a_dollar(char **s, bool avoid, char *value, int n)
+{
+	char	**split;
+
+	printf(">> %d\n", n);
+	if (avoid)
+		*s = avoid_spaces(helper_expander(*s));
+	else
+		*s = helper_expander(*s);
+	if (n == 2) // export a=$b
+		return (NULL);
+	else
+	{
+		split = ft_split(*s, ' ');
+		if (!split)
+			return (NULL);
+		int index = last_element(split);
+		if (index == -1)
+			return (NULL);
+		gc_add(g_minishell, split[index]);
+		split[index] = ft_strjoin(split[index], value);
+		printf("split[index] >> %s\n", split[index]);
+		return (creat_list(split, 1));
+	}
+}
+
+int	setting_data(t_list **s, char **tmp, char **key, char **value)
+{
+	int	len;
+	int	start;
+
+	*tmp = ft_strchr((char *)(*s)->content, '=');
+	len = (ft_strlen((char *)(*s)->content) - (*tmp - (char *)(*s)->content));
+	start = (*tmp - (char *)(*s)->content);
+	*key = ft_substr((char *)(*s)->content, 0, start);
+	gc_add(g_minishell, *key);
+	*value = ft_substr((char *)(*s)->content, start, len);
+	gc_add(g_minishell, *value);
+	return (check_dollars((char *)(*s)->content));
+}
+
+void	split_case_3(t_list **s, char **key, char *value, int split)
+{
+	t_list	*tmp;
+	char	**val;
+	char	*temp;
+	int		p;
+
+	val = ft_split(helper_expander(value), ' ');
+	add_list_into_list(s, expand_a_dollar(key, 0, val[0], split));
+	p = 0;
+	while (val[++p])
+	{
+		temp = ft_strdup(val[p]);
+		gc_add(g_minishell, temp);
+		tmp = ft_lstnew(temp);
+		gc_add(g_minishell, tmp);
+		ft_lstadd_back(s, tmp);
+	}
+	free_double(val);
+}
+
+int	check_for_export(t_list **s, bool *avoid)
+{
+	char	*tmp;
+	char	*key;
+	t_list	*list;
+	char	*value;
+	int		split;
+
+	tmp = NULL;
+	tmp = NULL;
+	key = NULL;
+	value = NULL;
+	(*s) = (*s)->next;
+	list = *s;
+	while(s && *s && (*s)->content)
+	{
+		split = setting_data(s, &tmp, &key, &value);
+		if (split == 1)
+			add_list_into_list(s, expand_a_dollar(&key, 0, value, split));
+		else if (split == 2)
+			(*s)->content = helper_expander((*s)->content);
+		else if (split == 3)
+			split_case_3(s, &key, value, split);
+		(*s) = (*s)->next;
+	}
+	*s = list;
+	return ((*avoid) = 0, 0);
 }

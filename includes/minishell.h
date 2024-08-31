@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 13:12:26 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 17:14:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,11 @@ typedef struct s_minishell
 
 extern t_minishell	*g_minishell;
 
-void				print_tokens(t_token *tokens);
-void				join_for_asterisk(t_token **tokens);
+char				*avoid_spaces(char *s);
+
+int					check_dollars(char *s);
+
+void				check_key(t_token **tokens, char *s, char *l);
 
 /* Builtins */
 
@@ -150,7 +153,7 @@ t_env				*special_dup_env(void);
 /* Executing */
 
 // Main function that execute the user input.
-void				executer(t_node *node);
+void				executer(t_node *node, int *pfd);
 
 // Main function that handle here_doc.
 int					here_doc(char *limiter, int doc_num, int expand_flag);
@@ -174,8 +177,8 @@ int					open_pipe(int *pfd);
 // Function that duplicate an old fd to the new one.
 int					dup_2(int old_fd, int new_fd);
 
-// Function that duplicate fd with a special mode.
-void				fd_duper(int *pfd, int mode);
+// Function that closes fds of pipe.
+void				fd_closer(int *pfd);
 
 // Function that get the command.
 char				*get_command(char *argv);
@@ -196,7 +199,7 @@ void				input_to_dup(t_list *red_list);
 void				output_to_dup(t_list *red_list);
 
 // Function that execute here-doc command.
-void				run_doc_cmd(t_list *red_list);
+void				run_doc_cmd(t_list *red_list, int *pfd);
 
 // Function that open redirection after checking the ambiguous.
 int					open_redir(t_redir *redir);
@@ -238,10 +241,10 @@ int					wait_and_get(void);
 void				do_cmd(t_node *ast, bool print);
 
 // Function that do pipe process.
-void				do_pipe(t_node *cmd, int mode, int *pfd);
+void				do_pipe(t_node *cmd, int *pfd);
 
 // Function that execute a command.
-void				execute_cmd(t_node *node);
+void				execute_cmd(t_node *node, int *pfd);
 
 // Function that scan for here-doc and open them.
 int					scan_and_set(t_node *node);
@@ -271,22 +274,22 @@ bool				check_name(t_redir *new);
 int					open_hidden_file(int doc_num);
 
 // Function that excute redirections nodes .
-void				execute_redires(t_list *red_list);
+void				execute_redires(t_list *red_list, int *pfd);
 
 // Function that go trough a way of exe based on its node's type.
-void				select_and_excute(t_node *node, int type);
+void				select_and_excute(t_node *node, int type, int *pfd);
 
 // Function that execute a pair node | , || , &&.
-void				execute_pair(t_node *node);
+void				execute_pair(t_node *node, int *pfd);
 
 // Function that execute a pair nodes under types || , &&.
 void				execute_and_or(t_node *node);
 
 // Function that handle the left side of a pipe.
-void				pipe_left(t_node *node, int *pfd, bool mode);
+void				pipe_left(t_node *node, int *pfd);
 
 // Function that handle the right side of a pipe.
-void				pipe_right(t_node *node, int *pfd, bool mode);
+void				pipe_right(t_node *node, int *pfd);
 
 // Function that remove null nodes.
 void				remove_null(t_node **res);
@@ -313,10 +316,20 @@ void				check_hd_expand(t_token *tokens);
 void				fill_dollar(char *s, int *i, char *new, int *j);
 
 // Function that set a boolean to true if the command is export.
-void				check_for_export(void *s, bool *avoid);
+int					check_for_export(t_list **s, bool *avoid);
 
 //
 t_list				*creat_list(char **split, bool avoid);
+
+// Function that execute a pipe and close an old pfds of pipe
+void				exe_old_pfd(t_node *node, int *pfd_2,
+						int fd_in, int fd_out);
+
+// Function that run left of exe of pipe
+void				left_pipe(t_node *node, int *pfd, int fd_in, int fd_out);
+
+// // Function that execute a pipe
+void				exe_non_opfd(t_node *node, int fd_in, int fd_out);
 
 /* Expanding */
 
@@ -349,6 +362,9 @@ int					dollar_functionality(t_list **cmds, char **s, bool avoid);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);
+
+// Function that join 2 tokens.
+void				join_for_asterisk(t_token **tokens);
 
 // Function that help expanding words.
 char				*helper_expander(char *s);

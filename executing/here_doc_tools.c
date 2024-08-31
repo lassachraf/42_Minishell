@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:13:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/05 15:47:22 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/08/29 21:37:24 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	output_to_dup(t_list *red_list)
 	}
 }
 
-void	run_doc_cmd(t_list *red_list)
+void	run_doc_cmd(t_list *red_list, int *pfd)
 {
 	t_list	*last;
 	t_redir	*new;
@@ -71,9 +71,9 @@ void	run_doc_cmd(t_list *red_list)
 	last = ft_lstlast(red_list);
 	new = last->content;
 	if (new->cmd)
-		executer(string_node_new(new->cmd));
+		execute_cmd(string_node_new(new->cmd), pfd);
 	else if (new->node)
-		executer(new->node);
+		executer(new->node, pfd);
 }
 
 int	scan_and_set(t_node *node)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expand.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 18:34:11 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:15:33 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ t_list	*asterisk_functionality(char *s)
 	{
 		if (entry->d_name[0] != '.' && match_pattern(s,
 				entry->d_name))
+			add_name_to_list(&lst, entry->d_name);
+		else if (entry->d_name[0] == '.' && s[0] == '.'
+			&& match_pattern(s, entry->d_name))
 			add_name_to_list(&lst, entry->d_name);
 		entry = readdir(dir);
 	}

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:20:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 15:17:26 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,48 @@ int	export_key(t_token **tokens, char **tmp, int flag)
 	return (0);
 }
 
+int	check_dollars(char *s)
+{
+	int	i;
+	int	key;
+	int	value;
+
+	i = -1;
+	key = 0;
+	value = 0;
+	while (s[++i] && s[i] != '=')
+	{
+		if (s[i] == '$')
+			key = 1;
+	}
+	if (s[i] && s[i] == '=')
+		i++;
+	if (s[i])
+	{
+		while (s[i])
+		{
+			if (s[i++] == '$')
+				value = 2;
+		}
+	}
+	return (key + value);
+}
+
+void	check_key(t_token **tokens, char *s, char *l)
+{
+	char	*key;
+	char	*value;
+
+	key = ft_substr(s, 0, (l - s));
+	value = ft_substr(s, (l - s + 1), (ft_strlen(s) - (l - s)));
+	gc_add(g_minishell, key);
+	gc_add(g_minishell, value);
+	if (ft_strchr(key, '$') && ft_strchr(value, '$'))
+		(*tokens) = word_helper(*tokens);
+	else if (ft_strchr(key, '$'))
+		(*tokens) = word_helper(*tokens);
+}
+
 int	export_help(t_token **tokens, int flag)
 {
 	char	*tmp;
@@ -36,11 +78,13 @@ int	export_help(t_token **tokens, int flag)
 	if ((*tokens) && (*tokens)->value)
 	{
 		tmp = ft_strchr((*tokens)->value, '=');
-		if (!tmp)
+		if (check_dollars((*tokens)->value))
 		{
-			(*tokens) = (*tokens)->next;
-			return (0);
+			check_key(&(*tokens), (*tokens)->value, tmp);
+			return (1);
 		}
+		if (!tmp)
+			return ((*tokens) = (*tokens)->next, 0);
 		if (!(*(tmp + 1)))
 		{
 			if (export_key(&(*tokens), &tmp, flag))

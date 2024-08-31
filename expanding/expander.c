@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/14 10:18:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/08/31 12:03:23 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,3 @@ void	expanding(void)
 			tokens = tokens->next;
 	}
 }
-
-// JOIN_TOKENS
