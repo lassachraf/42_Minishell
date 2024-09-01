@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 20:35:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 14:04:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	check_for_value(t_token **tokens, char *new, int flag)
 	t_token	*tmp;
 
 	tmp = NULL;
+	printf("value checks\n");
 	if (!new)
 	{
 		tmp = (*tokens)->next;
@@ -46,7 +47,10 @@ void	check_for_value(t_token **tokens, char *new, int flag)
 		(*tokens) = tmp;
 	}
 	else if (contains_space(new))
+	{
+		printf("value checks 2\n");
 		handle_space(*tokens, new, flag);
+	}
 	else
 		(*tokens)->value = new;
 }
@@ -69,9 +73,7 @@ t_token	*word_helper(t_token *tokens)
 void	expand_dollar(void)
 {
 	t_token	*tokens;
-	int		flag;
 
-	flag = 1;
 	tokens = g_minishell->tokens;
 	while (tokens)
 	{
@@ -81,14 +83,15 @@ void	expand_dollar(void)
 			&& !ft_strcmp(tokens->value, "export"))
 		{
 			tokens = tokens->next;
-			if (!tokens->next_space)
-				flag = 0;
-			if (export_help(&tokens, flag))
+			if (export_help(&tokens, tokens->next_space))
 				break ;
 		}
 		else if (tokens->type == WORD && tokens->value
-			&& ft_strchr(tokens->value, '$'))
-			tokens = word_helper(tokens);
+			&& ft_strchr(tokens->value, '$') && tokens->quoted)
+		{
+			tokens->value = helper_expander(tokens->value); 
+			tokens = tokens->next;
+		}
 		else
 			tokens = tokens->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 21:07:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 12:12:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ char	**get_env_paths(void)
 bool	get_path_data(char *argv, char ***paths, char ***cmd, int *paths_num)
 {
 	(*paths) = get_env_paths();
-	if (!(*paths))
+	if (!(*paths) && *argv != '.' && *argv != '/')
 		return (0);
 	*paths_num = strings_count((*paths));
-	if (*paths_num == -1 || !*paths_num)
+	if ((*paths_num == -1 || !*paths_num) && *argv != '.' && *argv != '/')
 		return (free_double((*paths)), 0);
 	*cmd = ft_split(argv, ' ');
 	if (!*cmd)

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 20:35:56 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 13:45:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	fill_tokens(t_token *current, char *new_value, int flag)
 	}
 }
 
-void	handle_space(t_token *tokens, char *new_value, int flag)
+void	handle_space(t_token *tokens, char *new_value, int flag) // "$a" --> not avoid , else avoid
 {
 	t_token	*current;
 
@@ -58,6 +58,7 @@ void	handle_space(t_token *tokens, char *new_value, int flag)
 	if (count_words(new_value) < 2)
 	{
 		tokens->value = new_value;
+		printf("pssss >> %d\n", tokens->quoted);
 		return ;
 	}
 	remove_token(&g_minishell->tokens, current);
@@ -85,25 +86,29 @@ int	ft_strcasecmp(char *a, char *b)
 	return ((unsigned char)res_a - (unsigned char)res_b);
 }
 
-int	dollar_functionality(t_list **cmds, char **s, bool avoid)
+int	dollar_functionality(t_list **cmds, char **s, bool quote)
 {
 	t_list	*list;
 	char	**split;
+	bool 	free;
 
 	split = NULL;
 	s[1] = NULL;
-	avoid_expanding(s, avoid);
+	free = 0;
+
+	avoid_expanding(s, quote);
 	if (!*s)
 		return (*s = NULL, 1);
-	if (avoid)
+	if (!quote)
 	{
+		free = 1;
 		split = ft_split(*s, ' ');
 		if (!split)
 			return (*s = NULL, 1);
 	}
 	else
 		split = s;
-	list = creat_list(split, avoid);
+	list = creat_list(split, free);
 	add_list_into_list(cmds, list);
 	return (1);
 }

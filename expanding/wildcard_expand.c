@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:54:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 17:42:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 11:43:10 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	add_name_to_list(t_list **lst, char *dir_name)
 t_list	*asterisk_functionality(char *s)
 {
 	DIR				*dir;
-	struct dirent	*entry;
 	t_list			*lst;
+	struct dirent	*entry;
 
 	lst = NULL;
 	dir = opendir(".");

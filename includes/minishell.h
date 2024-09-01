@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 20:36:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 13:11:58 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ void				exe_non_opfd(t_node *node, int fd_in, int fd_out);
 void				expanding(void);
 
 // Function that expand in here-doc.
-void				avoid_expanding(char **s, bool avoid);
+void				avoid_expanding(char **s, bool quote);
 
 // Function that help expand a case of export.
 int					export_help(t_token **tokens, int flag);
@@ -362,7 +362,7 @@ int					to_lower(char c);
 int					ft_strcasecmp(char *a, char *b);
 
 // Function that return a list of nodes containing dollar expanding.
-int					dollar_functionality(t_list **cmds, char **s, bool avoid);
+int					dollar_functionality(t_list **cmds, char **s, bool quote);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);

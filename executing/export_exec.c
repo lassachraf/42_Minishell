@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 17:20:19 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 17:40:59 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 13:11:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ int	last_element(char **s)
 	return (i - 1);
 }
 
-t_list	*expand_a_dollar(char **s, bool avoid, char *value, int n)
+t_list	*expand_a_dollar(char **s, int *n, char *value, bool quote)
 {
 	char	**split;
 	int		index;
 
-	if (avoid)
+	if (n[0] && quote)
 		*s = avoid_spaces(helper_expander(*s));
 	else
 		*s = helper_expander(*s);
-	if (n == 2)
+	if (n[1] == 2)
 		return (NULL);
 	else
 	{
@@ -68,10 +68,17 @@ void	split_case_3(t_list **s, char **key, char *value, int split)
 	t_list	*tmp;
 	char	**val;
 	char	*temp;
+	int		*p2;
 	int		p;
 
+	p2 = malloc(sizeof(int) * 2);
+	if (p2)
+		return ;
+	gc_add(g_minishell, p2);
+	p2[0] = 0;
+	p2[1] = split;
 	val = ft_split(helper_expander(value), ' ');
-	add_list_into_list(s, expand_a_dollar(key, 0, val[0], split));
+	add_list_into_list(s, expand_a_dollar(key, p2, val[0], (*s)->is_quoted));
 	p = 0;
 	while (val[++p])
 	{

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:54:28 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 21:02:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 12:55:28 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	add_cmd(t_token **tokens, t_list **cmd_list)
 	if (!new)
 		return ;
 	new->wd_expand = (*tokens)->wd_expand;
+	new->is_quoted = (*tokens)->quoted;
 	gc_add(g_minishell, new);
 	ft_lstadd_back(cmd_list, new);
 }

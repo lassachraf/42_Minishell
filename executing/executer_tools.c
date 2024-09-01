@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 17:46:09 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 13:49:12 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	add_list_into_list(t_list **lst, t_list *new)
 	ft_lstlast(*lst)->next = save_next;
 }
 
-t_list	*creat_list(char **split, bool avoid)
+t_list	*creat_list(char **split, bool free)
 {
 	t_list	*lst;
 	char	*tmp;
@@ -42,7 +42,7 @@ t_list	*creat_list(char **split, bool avoid)
 		ft_lstadd_back(&lst, temp);
 		i++;
 	}
-	if (avoid)
+	if (free)
 		free_double(split);
 	temp = lst;
 	return (lst);
@@ -61,6 +61,7 @@ void	expand_list(t_list *cmds)
 		return ;
 	while (cmds)
 	{
+		printf("content >>> %s\n", (char *)cmds->content);
 		if (cmds->content && !ft_strcmp(cmds->content, "export")
 			&& ft_lstsize(cmds) > 1)
 			check_for_export(&cmds, &avoid, &export);
@@ -68,7 +69,7 @@ void	expand_list(t_list *cmds)
 		{
 			if (ft_strchr((char *)cmds->content, '$') && cmds->wd_expand
 				&& !export)
-				dollar_functionality(&cmds, (char **)&cmds->content, avoid);
+				dollar_functionality(&cmds, (char **)&cmds->content, cmds->is_quoted);
 			else if (ft_strchr((char *)cmds->content, '*') && cmds->wd_expand)
 				asterisk_functionality_2(&cmds, (char *)cmds->content);
 		}
