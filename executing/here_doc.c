@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/04 20:11:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/01 09:49:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	read_buf(char **buf, char *limiter, int expand_flag)
 	gc_add(g_minishell, *buf);
 	if (*buf)
 	{
-		if (ft_strchr(*buf, '$') && expand_flag && ft_strcmp(*buf, limiter))
+		if (ft_strchr(*buf, '$') && expand_flag && ft_strcmp(*buf, limiter)
+			&& *limiter)
 		{
 			*buf = helper_expander(*buf);
 			if (!*buf)
