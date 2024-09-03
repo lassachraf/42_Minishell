@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 08:23:50 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:27:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ t_token	*word_helper(t_token *tokens)
 	return (tokens->next);
 }
 
+int	is_separator_2(char *s)
+{
+	return (!ft_strncmp(s, "&&", 2) || *s == '<'
+		|| *s == '>' || *s == '|' || *s == '(' || *s == ')');
+}
+
 void	expand_dollar(void)
 {
 	t_token	*tokens;
@@ -73,8 +79,11 @@ void	expand_dollar(void)
 	tokens = g_minishell->tokens;
 	while (tokens)
 	{
-		if (tokens->value && is_separator(tokens->value))
+		// printf("1 >> %s\n", tokens->value);
+		if (tokens->value && is_separator_2(tokens->value))
 			break ;
+		// printf("about to expand >> %s\n", tokens->value);
+		// printf("its flag is >> %d\n", tokens->quoted);
 		if (tokens->type == WORD && tokens->value
 			&& !ft_strcmp(tokens->value, "export"))
 		{
@@ -83,8 +92,10 @@ void	expand_dollar(void)
 				break ;
 		}
 		else if (tokens->type == WORD && tokens->value
-			&& ft_strchr(tokens->value, '$') && tokens->quoted)
+			&& ft_strchr(tokens->value, '$')
+			&& tokens->quoted == 1)
 		{
+			// printf("about to expand >> %s\n", tokens->value);
 			tokens->value = helper_expander(tokens->value);
 			tokens = tokens->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 18:22:14 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 21:44:08 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:20:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,6 @@ void	ft_cd(t_minishell *mini, char *path)
 		return ;
 	}
 	set_env_var(mini->our_env, "PWD", cwd);
+	if (!get_env_var(mini->our_env, "PWD"))
+		add_env_var(g_minishell->our_env, "PWD", cwd);
 }

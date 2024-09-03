@@ -6,18 +6,17 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/09/03 10:01:23 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/09/03 12:10:07 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:=	minishell
-BONUS			:=	minishell_bonus
 
 LIBFT_PATH		:=	libft/
 LIBFT			:=	libft/libft.a
 
 CC				:=	cc
-CFLAGS			:=	-Wall -Wextra -Werror #-fsanitize=address -g3
+CFLAGS			:=	-Wall -Wextra -Werror
 RM				:=	rm -f
 
 BUILTINS		:=	builtins/builtins_helpers.c			\
@@ -110,9 +109,6 @@ $(LIBFT):
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -lreadline -o $(NAME)
 
-$(BONUS): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -lreadline -o $(BONUS)
-
 clean:
 	@make clean -C $(LIBFT_PATH)
 	@rm -f $(OBJS)
@@ -123,6 +119,6 @@ fclean: clean
 
 re: fclean all
 
-bonus:	$(BONUS)
+bonus:	re
 
 .PHONY: clean

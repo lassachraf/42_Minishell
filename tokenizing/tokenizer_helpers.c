@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 19:45:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:12:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	append_identifier(t_token **tokens, char **line)
 	value = ft_substr(tmp, 0, i);
 	if (!value)
 		return (0);
-	new = new_token(value, WORD, 1, 0);
+	new = new_token(value, WORD, 1, 1);
 	if (!new)
 		return (0);
 	*line += i;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/11 15:32:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:20:38 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,34 +80,37 @@ int	case_of_no_value(char **args, int *i)
 	return (0);
 }
 
-void	process_each_arg(char **args, int i)
+int	process_each_arg(char **args, int i)
 {
 	if (ft_strchr(args[i], '='))
 	{
 		if (ft_strstr(args[i], "+="))
 		{
 			if (process_joining(args, i) == -1)
-				return ;
+				return (1);
 		}
 		else if (process_equal(args, i) == -1)
 		{
 			g_minishell->exit_s = 1;
-			return ;
+			set_env_var(g_minishell->our_env, "?", "1");
+			return (1);
 		}
 	}
 	else
 	{
 		if (case_of_no_value(args, &i))
-			return ;
+			return (1);
 	}
-	g_minishell->exit_s = 0;
+	return (0);
 }
 
 void	ft_export(char **args, int nb_args)
 {
 	t_env	*sorted_env;
 	int		i;
+	int		j;
 
+	j = 0;
 	sorted_env = sort_env(g_minishell->our_env);
 	if (nb_args == 1)
 		print_env(sorted_env);
@@ -116,9 +119,14 @@ void	ft_export(char **args, int nb_args)
 		i = 1;
 		while (args[i])
 		{
-			process_each_arg(args, i);
+			j += process_each_arg(args, i);
 			i++;
 		}
+	}
+	if (j == 0)
+	{
+		g_minishell->exit_s = 0;
+		set_env_var(g_minishell->our_env, "?", "0");
 	}
 	clear_env(sorted_env);
 }

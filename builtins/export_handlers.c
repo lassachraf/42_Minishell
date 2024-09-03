@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:25:23 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/11 11:29:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:24:56 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	process_equal(char **args, int i)
 	if (!split)
 		return (print_errors("Split failed in process equal !"), -1);
 	if (check_identifier(split, 0) == -1)
-		return (-1);
+		return (g_minishell->exit_s = 1, -1);
 	if (get_env_var(g_minishell->our_env, split[0]))
 	{
 		set_as_visible(g_minishell->our_env, split[0]);

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:55:27 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/14 12:27:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:15:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	join_words(t_token **tokens)
 			temp->wd_expand = 0;
 			if (ft_strchr(curr->value, '*') || ft_strchr(temp->value, '*'))
 				temp->wd_expand = curr->wd_expand;
+			if (ft_strchr(curr->value, '$'))
+				temp->quoted = curr->quoted;
 			gc_add(g_minishell, temp->value);
 			remove_token(tokens, curr);
 		}

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 09:42:47 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 19:41:41 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:38:23 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_redir
 	int					fd;
 	int					quoted;
 	int					hd_expand;
+	bool				wd_expand;
 	char				*file;
 	bool				is_block;
 	t_list				*cmd;

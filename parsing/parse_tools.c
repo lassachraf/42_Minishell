@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:54:28 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/01 12:55:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:20:13 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_redir	*do_red(t_token **tokens)
 	(*tokens) = (*tokens)->next;
 	new->file = (*tokens)->value;
 	new->quoted = (*tokens)->quoted;
+	new->wd_expand = (*tokens)->wd_expand;
 	new->hd_expand = (*tokens)->hd_expand;
 	return (new);
 }

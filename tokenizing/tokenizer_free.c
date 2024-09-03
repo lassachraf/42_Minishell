@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 21:51:46 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:20:22 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	add_string(t_token **tokens, char **line, char quote_char)
 	}
 	value = ft_substr(*line, 0, i);
 	if (quote_char == '\'')
-		new = new_token(value, WORD, 0, 1);
+		new = new_token(value, WORD, 0, 2);
 	else
 		new = new_token(value, WORD, 1, 1);
 	if (ft_strchr(new->value, '*'))
@@ -54,9 +54,9 @@ t_token	*choose_token(int c)
 
 	token = NULL;
 	if (c == '\'')
-		token = new_token(ft_strdup("'"), S_QUOTE, 0, 0);
+		token = new_token(ft_strdup("'"), S_QUOTE, 0, 2);
 	else
-		token = new_token(ft_strdup("\""), D_QUOTE, 0, 0);
+		token = new_token(ft_strdup("\""), D_QUOTE, 0, 1);
 	return (token);
 }
 
