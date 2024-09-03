@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:41:22 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 21:15:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:02:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ t_token	*tokenizer(void)
 	char	*line;
 
 	line = ft_strtrim(g_minishell->line, " \t\n\v\f\r");
-	gc_add(g_minishell, line);
 	tokens = tokenizer_handler(line);
 	if (!tokens)
 		gc_free_all(g_minishell);
+	free(line);
 	return (tokens);
 }

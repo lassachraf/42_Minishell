@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/29 19:31:43 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:53:48 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	do_cmd(t_node *ast, bool print)
 {
 	char	**cmd;
 	char	**env;
+	int		i;
 
+	i = 0;
 	if (!ast)
 		exit(0);
 	if (ft_is_builtin(ast->data.cmd->content))
@@ -49,7 +51,9 @@ void	do_cmd(t_node *ast, bool print)
 		if (!g_minishell->last_child)
 			call_execev(env, *cmd, cmd);
 	}
-	exit(g_minishell->last_child);
+	i = g_minishell->last_child;
+	cleanup_minishell();
+	exit(i);
 }
 
 void	do_pipe(t_node *cmd, int *pfd)
@@ -69,7 +73,6 @@ void	do_pipe(t_node *cmd, int *pfd)
 		if (!cmd->data.cmd)
 			exit(0);
 		do_cmd(cmd, 0);
-		exit(0);
 	}
 }
 

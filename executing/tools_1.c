@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/01 12:12:18 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:41:01 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,5 @@ void	call_execev(char **env, char *argv, char **cmd)
 
 	founded_path = get_fullpath(argv);
 	if (execve(founded_path, cmd, env) == -1)
-	{
 		print_err("EXEVE FAILED ", NULL);
-		cleanup_minishell();
-	}
 }

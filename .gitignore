@@ -1,4 +1,4 @@
 .vscode
-test/
-readline_script.sh
-debugging.c
+rdl.supp
+*.o
+*/*.o

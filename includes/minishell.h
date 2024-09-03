@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/01 13:11:58 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:57:30 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,8 +332,11 @@ void				exe_old_pfd(t_node *node, int *pfd_2,
 // Function that run left of exe of pipe
 void				left_pipe(t_node *node, int *pfd, int fd_in, int fd_out);
 
-// // Function that execute a pipe
+// Function that execute a pipe
 void				exe_non_opfd(t_node *node, int fd_in, int fd_out);
+
+// Function that save exit status and clean_up minishell, exit with it.
+void				save_status_clean(void);
 
 /* Expanding */
 

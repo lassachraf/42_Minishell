@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/01 13:49:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:54:09 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	expand_list(t_list *cmds)
 		return ;
 	while (cmds)
 	{
-		printf("content >>> %s\n", (char *)cmds->content);
 		if (cmds->content && !ft_strcmp(cmds->content, "export")
 			&& ft_lstsize(cmds) > 1)
 			check_for_export(&cmds, &avoid, &export);
@@ -69,7 +68,8 @@ void	expand_list(t_list *cmds)
 		{
 			if (ft_strchr((char *)cmds->content, '$') && cmds->wd_expand
 				&& !export)
-				dollar_functionality(&cmds, (char **)&cmds->content, cmds->is_quoted);
+				dollar_functionality(&cmds, (char **)&cmds->content, \
+						cmds->is_quoted);
 			else if (ft_strchr((char *)cmds->content, '*') && cmds->wd_expand)
 				asterisk_functionality_2(&cmds, (char *)cmds->content);
 		}
@@ -98,7 +98,6 @@ void	execute_cmd(t_node *node, int *pfd)
 				fd_closer(pfd);
 			signal(SIGQUIT, SIG_DFL);
 			do_cmd(node, 1);
-			exit(0);
 		}
 	}
 }

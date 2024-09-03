@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 21:07:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:50:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	select_and_execute(t_node *node, int type, int *pfd)
 			execute_redires(node->data.redir, pfd);
 		wait_last();
 		wait_all();
-		exit(g_minishell->exit_s);
+		save_status_clean();
 	}
 	else
 		wait_last();

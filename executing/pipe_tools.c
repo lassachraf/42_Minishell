@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:08:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/30 08:32:46 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:53:30 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ void	exe_old_pfd(t_node *node, int *pfd_2, int fd_in, int fd_out)
 		}
 		else
 			execute_and_or(node);
-		exit(g_minishell->exit_s);
+		save_status_clean();
 	}
 }

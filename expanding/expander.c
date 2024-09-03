@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/01 14:04:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:23:50 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	check_for_value(t_token **tokens, char *new, int flag)
 	t_token	*tmp;
 
 	tmp = NULL;
-	printf("value checks\n");
 	if (!new)
 	{
 		tmp = (*tokens)->next;
@@ -47,10 +46,7 @@ void	check_for_value(t_token **tokens, char *new, int flag)
 		(*tokens) = tmp;
 	}
 	else if (contains_space(new))
-	{
-		printf("value checks 2\n");
 		handle_space(*tokens, new, flag);
-	}
 	else
 		(*tokens)->value = new;
 }
@@ -89,7 +85,7 @@ void	expand_dollar(void)
 		else if (tokens->type == WORD && tokens->value
 			&& ft_strchr(tokens->value, '$') && tokens->quoted)
 		{
-			tokens->value = helper_expander(tokens->value); 
+			tokens->value = helper_expander(tokens->value);
 			tokens = tokens->next;
 		}
 		else

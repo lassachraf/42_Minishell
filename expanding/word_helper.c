@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/01 13:45:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:24:49 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	fill_tokens(t_token *current, char *new_value, int flag)
 	}
 }
 
-void	handle_space(t_token *tokens, char *new_value, int flag) // "$a" --> not avoid , else avoid
+void	handle_space(t_token *tokens, char *new_value, int flag)
 {
 	t_token	*current;
 
@@ -58,7 +58,6 @@ void	handle_space(t_token *tokens, char *new_value, int flag) // "$a" --> not av
 	if (count_words(new_value) < 2)
 	{
 		tokens->value = new_value;
-		printf("pssss >> %d\n", tokens->quoted);
 		return ;
 	}
 	remove_token(&g_minishell->tokens, current);
@@ -90,12 +89,11 @@ int	dollar_functionality(t_list **cmds, char **s, bool quote)
 {
 	t_list	*list;
 	char	**split;
-	bool 	free;
+	bool	free;
 
 	split = NULL;
 	s[1] = NULL;
 	free = 0;
-
 	avoid_expanding(s, quote);
 	if (!*s)
 		return (*s = NULL, 1);

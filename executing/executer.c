@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/31 17:19:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:54:59 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	pipe_left(t_node *node, int *pfd)
 				wait_last();
 				while (waitpid(-1, NULL, 0) != -1)
 					;
-				exit(g_minishell->exit_s);
+				save_status_clean();
 			}
 		}
 		else

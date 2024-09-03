@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/01 09:49:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:41:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	read_buf(char **buf, char *limiter, int expand_flag)
 {
 	g_minishell->lines++;
 	*buf = readline("> ");
-	gc_add(g_minishell, *buf);
 	if (*buf)
 	{
 		if (ft_strchr(*buf, '$') && expand_flag && ft_strcmp(*buf, limiter)
@@ -82,9 +81,11 @@ void	read_buf(char **buf, char *limiter, int expand_flag)
 void	get_lines_count(int *pipe)
 {
 	char	buf[2048];
+	int		br;
 
 	close(pipe[1]);
-	read(pipe[0], &buf, 2048);
+	br = read(pipe[0], &buf, 2048);
+	buf[br] = '\0';
 	g_minishell->lines = ft_atoi(buf);
 }
 
@@ -99,7 +100,10 @@ int	here_doc(char *limiter, int doc_num, int expand_flag)
 	fd = open_hidden_file(doc_num);
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
-		return (do_here_doc(limiter, fd, pipe, expand_flag), exit(0), 0);
+	{
+		do_here_doc(limiter, fd, pipe, expand_flag);
+		save_status_clean();
+	}
 	else
 	{
 		wait_and_get();
@@ -108,8 +112,7 @@ int	here_doc(char *limiter, int doc_num, int expand_flag)
 		if (!g_minishell->exit_s)
 		{
 			fd_hidden = re_open_hidden_file(doc_num);
-			close(fd);
-			return (fd_hidden);
+			return (close(fd), fd_hidden);
 		}
 	}
 	return (close(fd), -1);

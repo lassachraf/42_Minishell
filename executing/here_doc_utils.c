@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 19:24:15 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:17:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	do_here_doc(char *limiter, int fd, int *pipe, int expand_flag)
 	write(pipe[1], lines, ft_strlen(lines));
 	free(lines);
 	close(pipe[0]);
+	g_minishell->exit_s = 0;
 }
 
 bool	output_redirs(t_redir *new)
