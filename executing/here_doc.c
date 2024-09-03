@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 09:41:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/03 09:58:04 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	write_or_break(int fd, char *limiter, char *buf, int count)
 void	read_buf(char **buf, char *limiter, int expand_flag)
 {
 	g_minishell->lines++;
-	*buf = readline("> ");
+	*buf =              ("> ");
 	if (*buf)
 	{
 		if (ft_strchr(*buf, '$') && expand_flag && ft_strcmp(*buf, limiter)
