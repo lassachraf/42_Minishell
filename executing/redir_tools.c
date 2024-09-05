@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 18:26:53 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:05:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ bool	check_expand(t_redir *new)
 	int		size;
 
 	val = new->file;
-	if (new->quoted == 1) // to be checked !
-	{
+	if (new->quoted == 1)
 		val = helper_expander(new->file);
-	}
 	size = count_words(val);
 	if (new->quoted)
 		size = 1;

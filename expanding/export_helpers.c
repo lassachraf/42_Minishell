@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 17:36:58 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 17:37:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:06:25 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,10 @@ void	check_key(t_token **tokens, char *s, char *l)
 		(*tokens) = word_helper(*tokens);
 	else if (ft_strchr(key, '$'))
 		(*tokens) = word_helper(*tokens);
+}
+
+int	is_separator_2(char *s)
+{
+	return (!ft_strncmp(s, "&&", 2) || *s == '<'
+		|| *s == '>' || *s == '|' || *s == '(' || *s == ')');
 }

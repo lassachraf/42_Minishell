@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 08:57:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:06:45 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void				check_key(t_token **tokens, char *s, char *l);
 void				add_name_to_list(t_list **lst, char *dir_name);
 
 int					export_key(t_token **tokens, char **tmp, int flag);
+
+int					is_separator_2(char *s);
 
 /* Builtins */
 
