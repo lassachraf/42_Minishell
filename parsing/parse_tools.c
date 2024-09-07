@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:54:28 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 19:20:13 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:41:23 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ t_redir	*do_red(t_token **tokens)
 		new->mode = O_CREAT | O_RDWR | O_APPEND;
 	(*tokens) = (*tokens)->next;
 	new->file = (*tokens)->value;
-	new->quoted = (*tokens)->quoted;
-	new->wd_expand = (*tokens)->wd_expand;
-	new->hd_expand = (*tokens)->hd_expand;
+	new->quoted = (*tokens)->quoted; // expand_list 0 -> NONE 1 -> "  2-> '
+	new->wd_expand = (*tokens)->wd_expand; // expand_list 
+	new->hd_expand = (*tokens)->hd_expand; // here_doc expand
 	return (new);
 }
 
@@ -67,6 +67,7 @@ void	add_cmd(t_token **tokens, t_list **cmd_list)
 	if (!new)
 		return ;
 	new->wd_expand = (*tokens)->wd_expand;
+	new->avoid_spaces = (*tokens)->avoid;
 	new->is_quoted = (*tokens)->quoted;
 	gc_add(g_minishell, new);
 	ft_lstadd_back(cmd_list, new);

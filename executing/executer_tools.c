@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 19:10:20 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:24:36 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ void	expand_list(t_list *cmds)
 			check_for_export(&cmds, &avoid, &export);
 		else if (cmds->content)
 		{
-			if (ft_strchr((char *)cmds->content, '$') && cmds->wd_expand
+			if (ft_strchr((char *)cmds->content, '$') && cmds->is_quoted <= 1
 				&& !export)
-				dollar_functionality(&cmds, (char **)&cmds->content, \
-						cmds->is_quoted);
+				dollar_functionality(&cmds, (char **)&cmds->content,
+						cmds->avoid_spaces);
 			else if (ft_strchr((char *)cmds->content, '*') && cmds->wd_expand)
 				asterisk_functionality_2(&cmds, (char *)cmds->content);
 		}
@@ -94,6 +94,7 @@ void	execute_cmd(t_node *node, int *pfd)
 		g_minishell->last_child = fork();
 		if (!g_minishell->last_child)
 		{
+			clean_fds(g_minishell->ast);
 			if (pfd)
 				fd_closer(pfd);
 			signal(SIGQUIT, SIG_DFL);

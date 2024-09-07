@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:20:20 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/07/29 10:50:12 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:59:07 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,13 @@ char	*ft_malloc(t_minishell *mini, size_t size)
 void	cleanup_minishell(void)
 {
 	clear_env(g_minishell->our_env);
+	close(g_minishell->stdin);
+	close(g_minishell->stdout);
+	if (g_minishell->her_pfd)
+	{
+		close(g_minishell->her_pfd[0]);
+		close(g_minishell->her_pfd[1]);
+	}
 	gc_free_all(g_minishell);
 	free(g_minishell);
 }

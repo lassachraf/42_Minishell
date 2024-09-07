@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:11:26 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 10:41:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 10:47:58 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@ int	check_cmd(char *argv)
 	char		*cmd;
 	struct stat	statbuf;
 
+	if (ft_strlen(argv) == 1 && argv[0] == '.')
+	{
+		ft_putstr_fd(RED"badashell$ : filename argument required\n", 2);
+		ft_putstr_fd(". : usage: . filename [arguments]\n"RESET, 2);
+		return (2);
+	}
 	statbuf.st_mode = 0;
 	stat(argv, &statbuf);
 	if (S_ISDIR(statbuf.st_mode) == true && ft_strchr(argv, '/'))
@@ -81,12 +87,6 @@ int	check_cmd(char *argv)
 	if (*argv != '\0' && (*argv == '/' || *argv == '.'
 			|| !get_env_var(g_minishell->our_env, "PATH")) && access(cmd, F_OK))
 		return (print_err("No such file or directory", argv), 127);
-	else if (ft_strlen(argv) == 1 && argv[0] == '.')
-	{
-		ft_putstr_fd(RED"badashell$ : filename argument required\n", 2);
-		ft_putstr_fd(". : usage: . filename [arguments]\n"RESET, 2);
-		return (2);
-	}
 	else if (access(cmd, F_OK) || (argv[0] == '.' && argv[1] == '.'))
 		return (print_err("Command not found", argv), 127);
 	else if (access(cmd, X_OK))

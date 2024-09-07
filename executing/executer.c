@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 19:10:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:24:44 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	pipe_left(t_node *node, int *pfd)
 			g_minishell->last_child = fork();
 			if (!g_minishell->last_child)
 			{
+				clean_fds(g_minishell->ast);
 				close(pfd[0]);
 				close(pfd[1]);
 				execute_pair(node, pfd);

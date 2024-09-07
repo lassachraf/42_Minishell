@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/05 14:06:45 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 16:45:15 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ typedef struct s_minishell
 	pid_t			last_child;
 	t_env			*our_env;
 	t_token			*tokens;
+	t_list			*files;
 	int				exit_s;
 	int				stdout;
 	int				stdin;
 	char			*line;
+	int				*her_pfd;
 	int				lines;
 	int				docs;
 	t_node			*ast;
@@ -76,6 +78,10 @@ void				add_name_to_list(t_list **lst, char *dir_name);
 int					export_key(t_token **tokens, char **tmp, int flag);
 
 int					is_separator_2(char *s);
+
+void				clean_fds(t_node *ast);
+
+char				*get_filename(int id);
 
 /* Builtins */
 
@@ -304,7 +310,7 @@ void				remove_null(t_node **res);
 void				add_list_into_list(t_list **lst, t_list *new);
 
 // Function that create the name of here_doc file names.
-char				*build_file_name(char *join);
+char				*build_file_name(int id);
 
 // Function that process and run exit builtin.
 int					process_exit(char **args, bool print);
@@ -342,11 +348,13 @@ void				save_status_clean(void);
 
 /* Expanding */
 
+int					is_there_whitespaces(char *s);
+
 // Main function to do expand.
 void				expanding(void);
 
 // Function that expand in here-doc.
-void				avoid_expanding(char **s, bool quote);
+void				avoid_expanding(char **s, bool avoid);
 
 // Function that help expand a case of export.
 int					export_help(t_token **tokens, int flag);
@@ -367,7 +375,7 @@ int					to_lower(char c);
 int					ft_strcasecmp(char *a, char *b);
 
 // Function that return a list of nodes containing dollar expanding.
-int					dollar_functionality(t_list **cmds, char **s, bool quote);
+int					dollar_functionality(t_list **cmds, char **s, bool avoid);
 
 // Function that return a list of nodes containing asterisk expanding.
 t_list				*asterisk_functionality(char *s);

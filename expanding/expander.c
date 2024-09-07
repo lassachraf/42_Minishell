@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 11:11:46 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/05 14:07:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:27:18 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ void	expand_dollar(void)
 			tokens->value = helper_expander(tokens->value);
 			tokens = tokens->next;
 		}
+		else if (tokens->type == WORD && tokens->value
+			&& ft_strchr(tokens->value, '$')
+			&& tokens->quoted == 0)
+			tokens = word_helper(tokens);
 		else
 			tokens = tokens->next;
 	}

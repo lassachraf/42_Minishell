@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 09:22:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/08 02:29:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:15:10 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	gc_add(t_minishell *mini, void *ptr)
 	if (!new_node)
 	{
 		perror("malloc failed !");
+		cleanup_minishell();
 		exit(2);
 	}
 	new_node->ptr = ptr;

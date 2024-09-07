@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:08:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 08:53:30 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:24:57 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	exe_old_pfd(t_node *node, int *pfd_2, int fd_in, int fd_out)
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
+		clean_fds(g_minishell->ast);
 		fd_closer(pfd_2);
 		if (node->data.pair.type == PIPE)
 		{

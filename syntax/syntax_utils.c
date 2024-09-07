@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:42 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/03 21:50:00 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:36:16 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,19 @@ void	check_hd_expand(t_token *tokens)
 			tokens = skip_whitespace_token(tokens);
 			if (tokens->type == WORD)
 			{
-				tokens = tokens->next;
-				if (tokens->type == S_QUOTE || tokens->type == D_QUOTE)
-					tokens->prev->hd_expand = 0;
+				if (tokens->quoted != 0)
+					tokens->hd_expand = 0;
 				else
-					tokens->prev->hd_expand = 1;
+					tokens->hd_expand = 1;
 			}
 			else
 				tokens->hd_expand = 0;
 		}
+		else if (tokens->type == WORD && is_there_whitespaces(tokens->value))
+			tokens->avoid = 1;
 		tokens = tokens->next;
 	}
 }
+
+
+// $PWD "$PWD"        >> 1 

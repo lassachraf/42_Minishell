@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/31 21:10:40 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:50:50 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	init_minishell(char **env)
 	ft_bzero(g_minishell, sizeof(t_minishell));
 	g_minishell->stdin = dup(0);
 	g_minishell->stdout = dup(1);
+	g_minishell->her_pfd = NULL;
 	if (g_minishell->stdin == -1 || g_minishell->stdout == -1)
 		return (perror("dup failed in init"), 0);
 	if (env && *env)

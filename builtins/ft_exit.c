@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/07 22:53:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 11:11:24 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	ft_exit(char *args, int print)
 	if (args && !sec_is_num(args))
 	{
 		print_exit_error(args);
+		cleanup_minishell();
 		exit(2);
 	}
 	if (args)
@@ -60,6 +61,7 @@ void	ft_exit(char *args, int print)
 	if (args && is_out_of_range(args))
 	{
 		print_exit_error(args);
+		cleanup_minishell();
 		exit(2);
 	}
 	cleanup_minishell();

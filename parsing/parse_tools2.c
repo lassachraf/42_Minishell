@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tools2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:55:27 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 19:15:08 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:39:13 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,13 @@ void	join_words(t_token **tokens)
 			temp->wd_expand = 0;
 			if (ft_strchr(curr->value, '*') || ft_strchr(temp->value, '*'))
 				temp->wd_expand = curr->wd_expand;
-			if (ft_strchr(curr->value, '$'))
+			if (is_there_whitespaces(temp->value))
+				temp->avoid = 1;
+			else if (ft_strchr(curr->value, '$'))
 				temp->quoted = curr->quoted;
 			gc_add(g_minishell, temp->value);
 			remove_token(tokens, curr);
+			printf(">> %s, >> %d\n", temp->value, temp->avoid);
 		}
 		else
 			temp = temp->next;

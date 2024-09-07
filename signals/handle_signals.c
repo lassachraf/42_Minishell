@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/08 00:43:17 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:21:25 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	here_doc_sig(int sig)
 		return ;
 	ft_putstr_fd("\n", 2);
 	g_minishell->exit_s = 130;
+	close(g_minishell->stdin);
+	cleanup_minishell();
 	exit(130);
 }
 

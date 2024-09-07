@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/05 14:05:33 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:12:48 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ bool	check_expand(t_redir *new)
 	int		size;
 
 	val = new->file;
-	if (new->quoted == 1)
+	if (new->quoted <= 1)
 		val = helper_expander(new->file);
 	size = count_words(val);
-	if (new->quoted)
+	if (new->quoted > 0)
 		size = 1;
 	if (size == 1 || !size)
 	{
@@ -63,9 +63,9 @@ int	is_ambiguous(t_redir *new)
 
 	size = 0;
 	asterisk = NULL;
-	if (ft_strchr(new->file, '$'))
+	if (ft_strchr(new->file, '$') && new->quoted <= 1)
 		return (check_expand(new));
-	else if (ft_strchr(new->file, '*'))
+	else if (ft_strchr(new->file, '*') && !new->quoted)
 	{
 		asterisk = asterisk_functionality(new->file);
 		size = ft_lstsize(asterisk);

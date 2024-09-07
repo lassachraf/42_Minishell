@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 08:24:49 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:42:31 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	ft_strcasecmp(char *a, char *b)
 	return ((unsigned char)res_a - (unsigned char)res_b);
 }
 
-int	dollar_functionality(t_list **cmds, char **s, bool quote)
+int	dollar_functionality(t_list **cmds, char **s, bool avoid)
 {
 	t_list	*list;
 	char	**split;
@@ -94,10 +94,10 @@ int	dollar_functionality(t_list **cmds, char **s, bool quote)
 	split = NULL;
 	s[1] = NULL;
 	free = 0;
-	avoid_expanding(s, quote);
+	avoid_expanding(s, avoid);
 	if (!*s)
 		return (*s = NULL, 1);
-	if (!quote)
+	if (!avoid)
 	{
 		free = 1;
 		split = ft_split(*s, ' ');

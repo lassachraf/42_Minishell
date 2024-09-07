@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 18:12:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:42:35 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_token	*new_token(char *value, t_type type, int wd, int quoted)
 	new_token->value = value;
 	gc_add(g_minishell, new_token->value);
 	new_token->type = type;
+	new_token->avoid = 0;
 	new_token->hd_expand = 0;
 	new_token->quoted = quoted;
 	new_token->wd_expand = wd;
@@ -81,7 +82,7 @@ int	append_identifier(t_token **tokens, char **line)
 	value = ft_substr(tmp, 0, i);
 	if (!value)
 		return (0);
-	new = new_token(value, WORD, 1, 1);
+	new = new_token(value, WORD, 1, 0);
 	if (!new)
 		return (0);
 	*line += i;

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:11:04 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:21:27 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 16:30:27 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,12 @@ void				ft_putnbr_fd(int n, int fd);
 
 typedef struct s_list
 {
-	void			*content;
-	bool			wd_expand;
+	int				id;
 	bool			is_block;
+	void			*content;
 	int				is_quoted;
+	bool			wd_expand;
+	bool			avoid_spaces;
 	struct s_list	*next;
 }					t_list;
 

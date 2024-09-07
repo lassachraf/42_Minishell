@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 17:20:19 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/01 13:11:52 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:28:49 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	last_element(char **s)
 	return (i - 1);
 }
 
-t_list	*expand_a_dollar(char **s, int *n, char *value, bool quote)
+t_list	*expand_a_dollar(char **s, int *n, char *value, int quote)
 {
 	char	**split;
 	int		index;

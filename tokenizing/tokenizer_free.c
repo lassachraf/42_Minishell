@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 19:58:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:20:22 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:49:08 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	add_string(t_token **tokens, char **line, char quote_char)
 	add_token_back(tokens, new);
 	*line += i;
 	return (1);
-}
+} // cgqjcd
 
 t_token	*choose_token(int c)
 {

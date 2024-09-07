@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   convert_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/03 08:50:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:24:26 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	select_and_execute(t_node *node, int type, int *pfd)
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
+		clean_fds(g_minishell->ast);
 		if (type == STRING_NODE)
 			execute_cmd(node, pfd);
 		else if (type == PAIR_NODE)

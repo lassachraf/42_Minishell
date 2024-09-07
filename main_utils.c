@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 02:03:45 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 18:57:51 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:58:33 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+
+int	is_there_whitespaces(char *s)
+{
+	int i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (ft_isspace(s[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 char	*shlvl_hepler(char *shlvl)
 {
@@ -49,11 +63,42 @@ void	reset_fds(void)
 		perror("dup2 stdin");
 }
 
+void	clean_fds(t_node *ast)
+{
+	t_list	*red_lst;
+	t_redir	*red;
+
+	if (!ast)
+		return ;
+	if (ast->type == PAIR_NODE)
+	{
+		clean_fds(ast->data.pair.left);
+		clean_fds(ast->data.pair.right);
+	}
+	else if (ast->type == REDIR_NODE)
+	{
+		red_lst = ast->data.redir;
+		while (red_lst)
+		{
+			red = red_lst->content;
+			if(red->fd > 2)
+				close(red->fd);
+			red_lst = red_lst->next;
+		}
+		clean_fds(red->node);
+	}
+}
+
 void	clean_and_set(void)
 {
 	char	*exit_stat;
 
-	gc_free_all(g_minishell);
+	if (g_minishell->her_pfd)
+	{
+		close(g_minishell->her_pfd[0]);
+		close(g_minishell->her_pfd[1]);
+	}
+	clean_fds(g_minishell->ast);
 	unlink_docs(g_minishell->docs);
 	exit_stat = ft_itoa(g_minishell->exit_s);
 	set_env_var(g_minishell->our_env, "?", exit_stat);
