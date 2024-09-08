@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 18:53:40 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 19:13:48 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ size_t	count_words(char *s)
 
 	if (!s)
 		return (0);
+	if (!*s)
+		return (1);
 	words = 0;
 	while (*s)
 	{
@@ -41,12 +43,17 @@ bool	check_expand(t_redir *new)
 	val = new->file;
 	if (new->quoted <= 1)
 		val = helper_expander(new->file);
+	if (!val)
+	{
+		val = ft_strdup("");
+		gc_add(g_minishell, val);
+	}
 	size = count_words(val);
-	if (new->quoted > 0)
+	if (!size && !new->quoted_af)
 		size = 1;
 	if (size == 1 || !size)
 	{
-		if (size)
+		if ((size && new->quoted_af) || new->quoted == 1)
 			new->file = val;
 		else
 			new->fd = -1;

@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:54:28 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 17:51:36 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:51:33 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_redir	*do_red(t_token **tokens)
 		new->mode = O_CREAT | O_RDWR | O_APPEND;
 	(*tokens) = (*tokens)->next;
 	new->file = (*tokens)->value;
+	new->quoted_af = (*tokens)->quoted_af;
 	new->quoted = (*tokens)->quoted;
 	new->wd_expand = (*tokens)->wd_expand;
 	new->hd_expand = (*tokens)->hd_expand;
