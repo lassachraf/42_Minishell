@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:12:44 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 18:42:31 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:37:54 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,6 @@ void	handle_space(t_token *tokens, char *new_value, int flag)
 	t_token	*current;
 
 	current = tokens;
-	if (count_words(new_value) < 2)
-	{
-		tokens->value = new_value;
-		return ;
-	}
 	remove_token(&g_minishell->tokens, current);
 	fill_tokens(current, new_value, flag);
 }

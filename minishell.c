@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/07 14:50:50 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:39:24 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ void	wait_all(void)
 	while (waitpid(-1, NULL, 0) != -1)
 	{
 		if (g_minishell->exit_s == 130)
-		{
 			ft_putstr_fd("\n", 2);
-			g_minishell->exit_s = 0;
-		}
 	}
 }
 
@@ -47,6 +44,7 @@ int	init_minishell(char **env)
 	ft_bzero(g_minishell, sizeof(t_minishell));
 	g_minishell->stdin = dup(0);
 	g_minishell->stdout = dup(1);
+	g_minishell->size = 2;
 	g_minishell->her_pfd = NULL;
 	if (g_minishell->stdin == -1 || g_minishell->stdout == -1)
 		return (perror("dup failed in init"), 0);
@@ -72,6 +70,7 @@ void	ft_readline(void)
 
 	exit_status = 0;
 	g_minishell->lines++;
+	g_minishell->files = NULL;
 	g_minishell->docs = 0;
 	g_minishell->line = readline(PROMPT);
 	gc_add(g_minishell, g_minishell->line);
@@ -103,7 +102,7 @@ int	main(int argc, char **argv, char **env)
 		if (!g_minishell->ast)
 			continue ;
 		if (scan_and_set(g_minishell->ast))
-			executer(g_minishell->ast, NULL);
+			executer(g_minishell->ast, NULL, NULL);
 		reset_fds();
 		wait_last();
 		wait_all();

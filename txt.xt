@@ -1,0 +1,13 @@
+echo $""$USER
+
+> $sfsdf""
+
+echo echo $""
+
+badashell$> export ad="$sdfs ls"
+badashell$> $ad
+badashell$ :  ls : Command not found
+
+?=0
+
+export $

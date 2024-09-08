@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:55:27 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/06 18:39:13 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:29:03 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	join_words(t_token **tokens)
 				temp->quoted = curr->quoted;
 			gc_add(g_minishell, temp->value);
 			remove_token(tokens, curr);
-			printf(">> %s, >> %d\n", temp->value, temp->avoid);
 		}
 		else
 			temp = temp->next;

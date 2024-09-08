@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 15:24:36 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:40:58 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	expand_list(t_list *cmds)
 			if (ft_strchr((char *)cmds->content, '$') && cmds->is_quoted <= 1
 				&& !export)
 				dollar_functionality(&cmds, (char **)&cmds->content,
-						cmds->avoid_spaces);
+					cmds->avoid_spaces);
 			else if (ft_strchr((char *)cmds->content, '*') && cmds->wd_expand)
 				asterisk_functionality_2(&cmds, (char *)cmds->content);
 		}
@@ -77,7 +77,7 @@ void	expand_list(t_list *cmds)
 	}
 }
 
-void	execute_cmd(t_node *node, int *pfd)
+void	execute_cmd(t_node *node, int *pfd, int *fd_io)
 {
 	if (!node)
 		return ;
@@ -95,37 +95,38 @@ void	execute_cmd(t_node *node, int *pfd)
 		if (!g_minishell->last_child)
 		{
 			clean_fds(g_minishell->ast);
-			if (pfd)
-				fd_closer(pfd);
+			close_fds(pfd, fd_io);
 			signal(SIGQUIT, SIG_DFL);
 			do_cmd(node, 1);
 		}
 	}
 }
 
-void	execute_redires(t_list *red_list, int *pfd)
+void	execute_redires(t_list *red_list, int *pfd, int *fd_io)
 {
-	int	old_stdin;
-	int	old_stdout;
+	int	fd_ios[4];
 
-	old_stdin = dup(0);
-	if (old_stdin < 0)
-		return ;
-	old_stdout = dup(1);
-	if (old_stdout < 0)
+	if (fd_io)
 	{
-		close(old_stdin);
-		return ;
+		fd_ios[2] = fd_io[0];
+		fd_ios[3] = fd_io[1];
+		g_minishell->size = 4;
 	}
+	fd_ios[0] = dup(0);
+	if (fd_ios[0] < 0)
+		return ;
+	fd_ios[1] = dup(1);
+	if (fd_ios[1] < 0)
+		return (close(fd_ios[0]), (void)0);
 	if (!open_and_set(red_list))
 	{
-		close(old_stdin);
-		close(old_stdout);
+		close_fds(pfd, fd_io);
 		return ;
 	}
 	input_to_dup(red_list);
 	output_to_dup(red_list);
-	run_doc_cmd(red_list, pfd);
-	dup_2(old_stdin, 0);
-	dup_2(old_stdout, 1);
+	run_doc_cmd(red_list, pfd, fd_ios);
+	dup_2(fd_ios[0], 0);
+	dup_2(fd_ios[1], 1);
+	close_fds(pfd, fd_io);
 }

@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:15:09 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 16:45:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:12:10 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*get_filename(int id)
-{
-	t_list	*list;
-
-	list = g_minishell->files;
-	while (list)
-	{
-		if (list->id == id)
-			return ((char *)list->content);
-		list = list->next;
-	}
-	return (NULL);
-}
 
 int	re_open_hidden_file(int doc_num)
 {
@@ -33,6 +19,8 @@ int	re_open_hidden_file(int doc_num)
 	int		fd;
 
 	path = get_filename(doc_num);
+	if (!path)
+		return (-1);
 	name = ft_strjoin(PATH, path);
 	fd = open(name, O_RDONLY);
 	free(name);
@@ -107,13 +95,13 @@ void	get_lines_count(int *pipe)
 int	here_doc(char *limiter, int doc_num, int expand_flag)
 {
 	int	fd;
-	int	fd_hidden;
 
 	g_minishell->her_pfd = malloc(sizeof (int) * 2);
 	gc_add(g_minishell, g_minishell->her_pfd);
 	open_pipe(g_minishell->her_pfd);
 	fd = open_hidden_file(doc_num);
-	fd_hidden = -1;
+	if (fd < 0)
+		return (-1);
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
@@ -130,6 +118,5 @@ int	here_doc(char *limiter, int doc_num, int expand_flag)
 		if (!g_minishell->exit_s)
 			return (close(fd), re_open_hidden_file(doc_num));
 	}
-	close(fd);
-	return (-1);
+	return (close(fd), -1);
 }

@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 15:24:44 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:36:36 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@ void	execute_and_or(t_node *node)
 		return ;
 	if (node->data.pair.type == OR)
 	{
-		executer(node->data.pair.left, NULL);
+		executer(node->data.pair.left, NULL, NULL);
 		wait_last();
 		wait_all();
 		if (g_minishell->exit_s && g_minishell->exit_s != 130)
-			executer(node->data.pair.right, NULL);
+			executer(node->data.pair.right, NULL, NULL);
 	}
 	else if (node->data.pair.type == AND)
 	{
-		executer(node->data.pair.left, NULL);
+		executer(node->data.pair.left, NULL, NULL);
 		wait_last();
 		wait_all();
-		if (!g_minishell->exit_s)
-			executer(node->data.pair.right, NULL);
+		if (!g_minishell->exit_s && g_minishell->exit_s != 130)
+			executer(node->data.pair.right, NULL, NULL);
 	}
 }
 
-void	pipe_left(t_node *node, int *pfd)
+void	pipe_left(t_node *node, int *pfd, int *fd_io)
 {
 	if (!node)
 		return ;
@@ -46,9 +46,8 @@ void	pipe_left(t_node *node, int *pfd)
 			if (!g_minishell->last_child)
 			{
 				clean_fds(g_minishell->ast);
-				close(pfd[0]);
-				close(pfd[1]);
-				execute_pair(node, pfd);
+				close_fds(pfd, fd_io);
+				execute_pair(node, pfd, fd_io);
 				wait_last();
 				while (waitpid(-1, NULL, 0) != -1)
 					;
@@ -56,48 +55,40 @@ void	pipe_left(t_node *node, int *pfd)
 			}
 		}
 		else
-			execute_redires(node->data.redir, pfd);
+			execute_redires(node->data.redir, pfd, fd_io);
 	}
 	else
-		do_pipe(node, pfd);
+		do_pipe(node, pfd, fd_io);
 }
 
-void	pipe_right(t_node *node, int *pfd)
+void	pipe_right(t_node *node, int *pfd, int *fd_io)
 {
 	if (!node)
 		return ;
 	if (node->type != STRING_NODE)
 	{
 		if (node->data.pair.type == AND)
-			executer(node, pfd);
+			executer(node, pfd, fd_io);
 		else if (node->data.pair.type == OR)
-			executer(node, pfd);
+			executer(node, pfd, fd_io);
 		else if (node->type == REDIR_NODE)
-			execute_redires(node->data.redir, pfd);
+			execute_redires(node->data.redir, pfd, fd_io);
 		else
-			executer(node, pfd);
+			executer(node, pfd, fd_io);
 	}
 	else
-		do_pipe(node, pfd);
+		do_pipe(node, pfd, fd_io);
 }
 
-void	execute_pair(t_node *node, int *pfd_2) // pfd[2]
+void	execute_pair(t_node *node, int *pfd_2, int *fd_io_2)
 {
-	int	pfd[2];
-	int	fd_in;
-	int	fd_out;
-
-	fd_in = -1;
-	fd_out = -1;
-	pfd[0] = -1;
-	pfd[1] = -1;
-	if (pfd_2)
-		exe_old_pfd(node, pfd_2, fd_in, fd_out);
+	if (pfd_2 || fd_io_2)
+		exe_old_pfd(node, pfd_2, fd_io_2);
 	else
-		exe_non_opfd(node, fd_in, fd_out);
+		exe_non_opfd(node);
 }
 
-void	executer(t_node *node, int *pfd)
+void	executer(t_node *node, int *pfd, int *fd_io)
 {
 	if (!node)
 		return ;
@@ -105,17 +96,17 @@ void	executer(t_node *node, int *pfd)
 	{
 		if (node->data.cmd && node->data.cmd->is_block
 			&& ft_is_builtin((char *)node->data.cmd->content))
-			select_and_execute(node, STRING_NODE, pfd);
+			select_and_execute(node, STRING_NODE, pfd, fd_io);
 		else
-			execute_cmd(node, pfd);
+			execute_cmd(node, pfd, fd_io);
 	}
 	else if (node->type == PAIR_NODE)
 	{
 		if (node->data.pair.is_block)
-			select_and_execute(node, PAIR_NODE, pfd);
+			select_and_execute(node, PAIR_NODE, pfd, fd_io);
 		else
-			execute_pair(node, pfd);
+			execute_pair(node, pfd, fd_io);
 	}
 	else if (node->type == REDIR_NODE)
-		execute_redires(node->data.redir, pfd);
+		execute_redires(node->data.redir, pfd, fd_io);
 }

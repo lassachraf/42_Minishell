@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:17:38 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 15:24:26 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:22:36 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,19 @@ char	**list_to_argv(t_list *list)
 	return (argv);
 }
 
-void	select_and_execute(t_node *node, int type, int *pfd)
+void	select_and_execute(t_node *node, int type, int *pfd, int *fd_io)
 {
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
 		clean_fds(g_minishell->ast);
+		close_fds(pfd, fd_io);
 		if (type == STRING_NODE)
-			execute_cmd(node, pfd);
+			execute_cmd(node, pfd, fd_io);
 		else if (type == PAIR_NODE)
-			execute_pair(node, pfd);
+			execute_pair(node, pfd, fd_io);
 		else
-			execute_redires(node->data.redir, pfd);
+			execute_redires(node->data.redir, pfd, fd_io);
 		wait_last();
 		wait_all();
 		save_status_clean();

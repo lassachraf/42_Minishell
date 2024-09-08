@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:09:20 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/30 08:34:20 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 16:46:17 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,27 @@ int	dup_2(int old_fd, int new_fd)
 	if (dup2(old_fd, new_fd) < 0)
 	{
 		close(old_fd);
-		perror("dup2: ");
 		return (-1);
 	}
 	close(old_fd);
 	return (0);
 }
 
-void	fd_closer(int *pfd)
+void	fd_closer(int *fd, int size)
 {
-	close(pfd[1]);
-	close(pfd[0]);
+	int	i;
+
+	i = 0;
+	if (fd)
+	{
+		while (i < size)
+		{
+			if (fd[i] >= 0)
+				close(fd[i]);
+			i++;
+		}
+	}
+	fd = NULL;
 }
 
 char	*get_command(char *argv)

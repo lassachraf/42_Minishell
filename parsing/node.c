@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:02:16 by baouragh          #+#    #+#             */
-/*   Updated: 2024/08/14 13:11:36 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:38:47 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,16 @@ t_node	*pair_node_new(t_node *left, t_node *right, t_type type)
 	return (new);
 }
 
+void	remove_dollar(t_token **temp)
+{
+	t_token	*tmp;
+
+	tmp = (*temp)->next->next;
+	remove_token(&g_minishell->tokens, *temp);
+	remove_token(&g_minishell->tokens, (*temp)->next);
+	(*temp) = tmp;
+}
+
 void	join_for_asterisk(t_token **tokens)
 {
 	t_token	*temp;
@@ -65,6 +75,9 @@ void	join_for_asterisk(t_token **tokens)
 	temp = *tokens;
 	while (temp)
 	{
+		if (temp->type == WORD && temp->value && !ft_strcmp(temp->value, "$")
+			&& temp->next->value && !ft_strcmp(temp->next->value, ""))
+			remove_dollar(&temp);
 		if (temp->type == WORD && temp->value && ft_strchr(temp->value, '*')
 			&& temp->next_space == 0)
 		{

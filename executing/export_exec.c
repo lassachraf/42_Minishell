@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 17:20:19 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 17:28:49 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:36:18 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ t_list	*expand_a_dollar(char **s, int *n, char *value, int quote)
 	char	**split;
 	int		index;
 
-	if (n[0] && quote)
+	if (n && n[0] && quote)
 		*s = avoid_spaces(helper_expander(*s));
 	else
 		*s = helper_expander(*s);
-	if (n[1] == 2)
+	if (n && n[1] == 2)
 		return (NULL);
 	else
 	{

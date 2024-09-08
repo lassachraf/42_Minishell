@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 09:08:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/07 16:42:28 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:52:17 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,63 +73,6 @@ bool	check_name(t_redir *new)
 		return (print_err("No such file or directory", new->file), 1);
 }
 
-void	set_filename(char *filename, unsigned char buff[], int length)
-{
-	int	val;
-	int	i;
-
-	i = -1;
-	val = 0;
-	while (++i < length)
-	{
-		val = buff[i] % 62;
-		if (val < 26)
-			filename[i] = 'a' + val;
-		else if (val < 52)
-			filename[i] = 'A' + (val - 26);
-		else
-			filename[i] = '0' + (val - 52);
-	}
-	filename[length] = '\0';
-}
-
-void	generate_random_filename(char *filename, int length)
-{
-	unsigned char	buffer[length];
-	int				fd;
-
-	fd = open("/dev/random", O_RDONLY);
-	if (fd < 0)
-	{
-		perror("Failed to open /dev/random");
-		exit(EXIT_FAILURE);
-	}
-	if (read(fd, buffer, length) != length)
-	{
-		perror("Failed to read from /dev/random");
-		close(fd);
-		exit(EXIT_FAILURE);
-	}
-	close(fd);
-	set_filename(filename, buffer, length - 1);
-}
-
-char	*build_file_name(int id)
-{
-	t_list		*file;
-	char		*name;
-	char		nb[20];
-
-	generate_random_filename(nb, 20);
-	name = ft_strjoin("badashell_file_", nb);
-	gc_add(g_minishell, name);
-	file = ft_lstnew(name);
-	file->id = id;
-	gc_add(g_minishell, file);
-	ft_lstadd_back(&g_minishell->files, file);
-	return (name);
-}
-
 int	open_hidden_file(int doc_num)
 {
 	char	*path;
@@ -137,6 +80,8 @@ int	open_hidden_file(int doc_num)
 	int		fd;
 
 	path = build_file_name(doc_num);
+	if (!path)
+		return (-1);
 	name = ft_strjoin(PATH, path);
 	fd = open(name, O_CREAT | O_RDWR, 0777);
 	free(name);

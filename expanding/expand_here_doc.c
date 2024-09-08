@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 08:21:56 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 18:16:50 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:50:04 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	export_help(t_token **tokens, int flag)
 	char	*tmp;
 
 	tmp = NULL;
+	(*tokens) = (*tokens)->next;
 	if ((*tokens) && (*tokens)->value)
 	{
 		tmp = ft_strchr((*tokens)->value, '=');

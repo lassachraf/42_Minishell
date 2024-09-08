@@ -6,7 +6,7 @@
 #    By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/04 14:32:39 by alassiqu          #+#    #+#              #
-#    Updated: 2024/09/07 16:36:20 by alassiqu         ###   ########.fr        #
+#    Updated: 2024/09/08 17:51:42 by alassiqu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ EXECUTING		:=	executing/convert_env.c				\
 					executing/executer.c				\
 					executing/execve_tools.c			\
 					executing/export_exec.c				\
+					executing/hd_utils.c				\
 					executing/here_doc_tools.c			\
 					executing/here_doc_utils.c			\
 					executing/here_doc.c				\
@@ -83,7 +84,8 @@ TOKENIZING		:=	tokenizing/tokenizer_free.c			\
 					tokenizing/tokenizer.c				\
 					tokenizing/tokens_helpers.c
 
-MAIN			:=	main_utils.c						\
+MAIN			:=	main_helper.c						\
+					main_utils.c						\
 					minishell.c
 
 SRCS			:=	$(BUILTINS)							\

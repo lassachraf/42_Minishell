@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:09:59 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/07 16:45:15 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:39:33 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_minishell
 	int				*her_pfd;
 	int				lines;
 	int				docs;
+	int				size;
 	t_node			*ast;
 	t_gc			*gc;
 }					t_minishell;
@@ -165,7 +166,7 @@ t_env				*special_dup_env(void);
 /* Executing */
 
 // Main function that execute the user input.
-void				executer(t_node *node, int *pfd);
+void				executer(t_node *node, int *pfd, int *fd_io);
 
 // Main function that handle here_doc.
 int					here_doc(char *limiter, int doc_num, int expand_flag);
@@ -189,8 +190,8 @@ int					open_pipe(int *pfd);
 // Function that duplicate an old fd to the new one.
 int					dup_2(int old_fd, int new_fd);
 
-// Function that closes fds of pipe.
-void				fd_closer(int *pfd);
+// Function that closes 2 fds.
+void				fd_closer(int *fd, int size);
 
 // Function that get the command.
 char				*get_command(char *argv);
@@ -211,7 +212,7 @@ void				input_to_dup(t_list *red_list);
 void				output_to_dup(t_list *red_list);
 
 // Function that execute here-doc command.
-void				run_doc_cmd(t_list *red_list, int *pfd);
+void				run_doc_cmd(t_list *red_list, int *pfd, int *fd_io);
 
 // Function that open redirection after checking the ambiguous.
 int					open_redir(t_redir *redir);
@@ -253,10 +254,10 @@ int					wait_and_get(void);
 void				do_cmd(t_node *ast, bool print);
 
 // Function that do pipe process.
-void				do_pipe(t_node *cmd, int *pfd);
+void				do_pipe(t_node *cmd, int *pfd, int *fd_io);
 
 // Function that execute a command.
-void				execute_cmd(t_node *node, int *pfd);
+void				execute_cmd(t_node *node, int *pfd, int *fd_io);
 
 // Function that scan for here-doc and open them.
 int					scan_and_set(t_node *node);
@@ -286,22 +287,23 @@ bool				check_name(t_redir *new);
 int					open_hidden_file(int doc_num);
 
 // Function that excute redirections nodes .
-void				execute_redires(t_list *red_list, int *pfd);
+void				execute_redires(t_list *red_list, int *pfd, int *fd_io);
 
 // Function that go trough a way of exe based on its node's type.
-void				select_and_execute(t_node *node, int type, int *pfd);
+void				select_and_execute(t_node *node, int type,
+						int *pfd, int *fd_io);
 
 // Function that execute a pair node | , || , &&.
-void				execute_pair(t_node *node, int *pfd);
+void				execute_pair(t_node *node, int *pfd, int *fd_io);
 
 // Function that execute a pair nodes under types || , &&.
 void				execute_and_or(t_node *node);
 
 // Function that handle the left side of a pipe.
-void				pipe_left(t_node *node, int *pfd);
+void				pipe_left(t_node *node, int *pfd, int *fd_io);
 
 // Function that handle the right side of a pipe.
-void				pipe_right(t_node *node, int *pfd);
+void				pipe_right(t_node *node, int *pfd, int *fd_io);
 
 // Function that remove null nodes.
 void				remove_null(t_node **res);
@@ -334,17 +336,19 @@ int					check_for_export(t_list **s, bool *avoid, int *flag);
 t_list				*creat_list(char **split, bool avoid);
 
 // Function that execute a pipe and close an old pfds of pipe
-void				exe_old_pfd(t_node *node, int *pfd_2,
-						int fd_in, int fd_out);
+void				exe_old_pfd(t_node *node, int *pfd_2, int *fd_io);
 
 // Function that run left of exe of pipe
-void				left_pipe(t_node *node, int *pfd, int fd_in, int fd_out);
+void				left_pipe(t_node *node, int *pfd, int *fd_io);
 
 // Function that execute a pipe
-void				exe_non_opfd(t_node *node, int fd_in, int fd_out);
+void				exe_non_opfd(t_node *node);
 
 // Function that save exit status and clean_up minishell, exit with it.
 void				save_status_clean(void);
+
+// Function that close old fds (pipes, and that duped) in a child process.
+void				close_fds(int *pfd, int *fd_io);
 
 /* Expanding */
 

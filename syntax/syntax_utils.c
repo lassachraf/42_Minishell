@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:42 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 18:36:16 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:24:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ void	check_hd_expand(t_token *tokens)
 {
 	while (tokens)
 	{
+		if (tokens->type == WORD && tokens->value
+			&& tokens->next->value && !ft_strcmp(tokens->next->value, ""))
+			tokens->next->quoted_af = 1;
 		if (tokens->type == LL_REDIR)
 		{
 			tokens = tokens->next;
@@ -52,6 +55,3 @@ void	check_hd_expand(t_token *tokens)
 		tokens = tokens->next;
 	}
 }
-
-
-// $PWD "$PWD"        >> 1 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:01:30 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 18:42:35 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:20:52 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_token	*new_token(char *value, t_type type, int wd, int quoted)
 	new_token->avoid = 0;
 	new_token->hd_expand = 0;
 	new_token->quoted = quoted;
+	new_token->quoted_af = 0;
 	new_token->wd_expand = wd;
 	new_token->next_space = 0;
 	new_token->prev = NULL;

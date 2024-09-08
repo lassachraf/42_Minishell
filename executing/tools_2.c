@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 16:40:23 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/08 13:26:06 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	do_cmd(t_node *ast, bool print) //
 	exit(i);
 }
 
-void	do_pipe(t_node *cmd, int *pfd)
+void	do_pipe(t_node *cmd, int *pfd, int *fd_io)
 {
 	g_minishell->last_child = fork();
 	if (g_minishell->last_child < 0)
@@ -66,9 +66,9 @@ void	do_pipe(t_node *cmd, int *pfd)
 	}
 	if (!g_minishell->last_child)
 	{
-		clean_fds(g_minishell->ast);
 		signal(SIGQUIT, SIG_DFL);
-		fd_closer(pfd);
+		clean_fds(g_minishell->ast);
+		close_fds(pfd, fd_io);
 		expand_list(cmd->data.cmd);
 		remove_null(&cmd);
 		if (!cmd->data.cmd)

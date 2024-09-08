@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 14:04:32 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/06 18:10:58 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:18:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_token
 	t_type			type;
 	bool			avoid;
 	int				quoted;
+	int				quoted_af;
 	bool			hd_expand;
 	bool			wd_expand;
 	int				next_space;
