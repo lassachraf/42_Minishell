@@ -6,13 +6,13 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/09 11:06:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:37:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	skip_zeros(char **str)
+void	skip_zeros(char **str, int *len)
 {
 	if (**str && (**str == '+' || **str == '-'))
 		(*str)++;
@@ -23,17 +23,16 @@ void	skip_zeros(char **str)
 		if (!**str)
 			(*str)--;
 	}
+	*len = ft_strlen(*str);
 }
 
 int	is_out_of_range(char *str)
 {
 	const char	*pos_limit = "9223372036854775807";
 	const char	*neg_limit = "-9223372036854775808";
-	size_t		len;
+	int			len;
 
-	skip_zeros(&str);
-	printf(">> %s\n", str);
-	len = ft_strlen(str);
+	skip_zeros(&str, &len);
 	if (str[0] == '-')
 	{
 		if (len > 20)

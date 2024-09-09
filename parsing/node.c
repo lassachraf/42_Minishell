@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:02:16 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/09 11:29:08 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:35:46 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,29 @@ t_node	*pair_node_new(t_node *left, t_node *right, t_type type)
 	return (new);
 }
 
-void	remove_dollar(t_token **temp)
+int	remove_dollar(t_token **temp)
 {
 	t_token	*tmp;
 
-	tmp = (*temp)->next;
-	remove_token(&g_minishell->tokens, *temp);
-	(*temp) = tmp;
+	if ((*temp)->type == WORD && (*temp)->value && (*temp)->next->value
+		&& !ft_strcmp((*temp)->value, "$")
+		&& !ft_strcmp((*temp)->next->value, ""))
+	{
+		tmp = (*temp)->next;
+		remove_token(&g_minishell->tokens, *temp);
+		(*temp) = tmp;
+		return (1);
+	}
+	else if ((*temp)->value && !ft_strcmp((*temp)->value, "$")
+		&& !(*temp)->quoted && (*temp)->next->value
+		&& (*temp)->next->quoted > 0)
+	{
+		tmp = (*temp)->next;
+		remove_token(&g_minishell->tokens, *temp);
+		(*temp) = tmp;
+		return (1);
+	}
+	return (0);
 }
 
 void	join_for_asterisk(t_token **tokens)
@@ -74,18 +90,8 @@ void	join_for_asterisk(t_token **tokens)
 	temp = *tokens;
 	while (temp)
 	{
-		if (temp->type == WORD && temp->value && !ft_strcmp(temp->value, "$")
-			&& temp->next->value && !ft_strcmp(temp->next->value, ""))
-		{
-			remove_dollar(&temp);
-			continue ;	
-		}
-		else if (temp->value && !ft_strcmp(temp->value, "$") && !temp->quoted
-			&& temp->next->value && temp->next->quoted > 0)
-		{
-			remove_dollar(&temp);
+		if (remove_dollar(&temp))
 			continue ;
-		}
 		if (temp->type == WORD && temp->value && ft_strchr(temp->value, '*')
 			&& temp->next_space == 0)
 		{

@@ -1,4 +1,5 @@
 .vscode
 rdl.supp
 *.o
+txt.xt
 */*.o
