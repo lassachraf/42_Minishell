@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 14:02:16 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 18:38:47 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:29:08 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,8 @@ void	remove_dollar(t_token **temp)
 {
 	t_token	*tmp;
 
-	tmp = (*temp)->next->next;
+	tmp = (*temp)->next;
 	remove_token(&g_minishell->tokens, *temp);
-	remove_token(&g_minishell->tokens, (*temp)->next);
 	(*temp) = tmp;
 }
 
@@ -77,7 +76,16 @@ void	join_for_asterisk(t_token **tokens)
 	{
 		if (temp->type == WORD && temp->value && !ft_strcmp(temp->value, "$")
 			&& temp->next->value && !ft_strcmp(temp->next->value, ""))
+		{
 			remove_dollar(&temp);
+			continue ;	
+		}
+		else if (temp->value && !ft_strcmp(temp->value, "$") && !temp->quoted
+			&& temp->next->value && temp->next->quoted > 0)
+		{
+			remove_dollar(&temp);
+			continue ;
+		}
 		if (temp->type == WORD && temp->value && ft_strchr(temp->value, '*')
 			&& temp->next_space == 0)
 		{

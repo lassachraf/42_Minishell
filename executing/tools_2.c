@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 13:26:06 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:31 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	wait_and_get(void)
 	if (x != -1 && WIFEXITED(x))
 		g_minishell->exit_s = WEXITSTATUS(x);
 	exit = ft_itoa(g_minishell->exit_s);
-	set_env_var(g_minishell->our_env, "?", exit);
 	return (free(exit), fail);
 }
 

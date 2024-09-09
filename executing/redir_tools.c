@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:14:45 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 19:13:48 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:36 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ size_t	count_words(char *s)
 
 	if (!s)
 		return (0);
-	if (!*s)
-		return (1);
 	words = 0;
 	while (*s)
 	{
@@ -43,17 +41,12 @@ bool	check_expand(t_redir *new)
 	val = new->file;
 	if (new->quoted <= 1)
 		val = helper_expander(new->file);
-	if (!val)
-	{
-		val = ft_strdup("");
-		gc_add(g_minishell, val);
-	}
 	size = count_words(val);
-	if (!size && !new->quoted_af)
+	if (new->quoted > 0)
 		size = 1;
 	if (size == 1 || !size)
 	{
-		if ((size && new->quoted_af) || new->quoted == 1)
+		if (size)
 			new->file = val;
 		else
 			new->fd = -1;
@@ -100,13 +93,11 @@ int	open_redir(t_redir *redir)
 			ft_putstr_fd("badashell$: ", 2);
 			perror(redir->file);
 			g_minishell->exit_s = 1;
-			set_env_var(g_minishell->our_env, "?", "1");
 			return (0);
 		}
 		return (1);
 	}
 	g_minishell->exit_s = 1;
-	set_env_var(g_minishell->our_env, "?", "1");
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 20:58:27 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/08 18:39:24 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:56:41 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,6 @@ int	init_minishell(char **env)
 	}
 	else
 		g_minishell->our_env = special_dup_env();
-	add_env_var(g_minishell->our_env, "?", "0");
-	set_as_invisible(g_minishell->our_env, "?");
-	set_as_unexported(g_minishell->our_env, "?");
 	set_env_var(g_minishell->our_env, "_", "]");
 	set_as_unexported(g_minishell->our_env, "_");
 	signals();

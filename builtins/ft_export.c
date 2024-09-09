@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:17:11 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/03 19:20:38 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:51 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	process_joining(char **args, int i)
 			add_env_var(g_minishell->our_env, split[0], split[1]);
 		set_as_exported(g_minishell->our_env, split[0]);
 	}
-	set_env_var(g_minishell->our_env, "?", "0");
 	return (g_minishell->exit_s = 0, 0);
 }
 
@@ -92,7 +91,6 @@ int	process_each_arg(char **args, int i)
 		else if (process_equal(args, i) == -1)
 		{
 			g_minishell->exit_s = 1;
-			set_env_var(g_minishell->our_env, "?", "1");
 			return (1);
 		}
 	}
@@ -124,9 +122,6 @@ void	ft_export(char **args, int nb_args)
 		}
 	}
 	if (j == 0)
-	{
 		g_minishell->exit_s = 0;
-		set_env_var(g_minishell->our_env, "?", "0");
-	}
 	clear_env(sorted_env);
 }

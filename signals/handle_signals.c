@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 21:05:29 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/07 14:21:25 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:21 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_sigint_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		set_env_var(g_minishell->our_env, "?", "130");
 		g_minishell->exit_s = 130;
 	}
 	else if (sig == SIGQUIT)
@@ -28,7 +27,6 @@ void	ft_sigint_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		set_env_var(g_minishell->our_env, "?", "131");
 		g_minishell->exit_s = 131;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 10:38:26 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/10 18:33:37 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:43:00 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@ void	search_and_copy(char *expand, char *new, int *j, int *k)
 
 	i = 0;
 	var = ft_substr(expand, 0, (*k));
-	expanded = get_env_var(g_minishell->our_env, var);
+	if (!ft_strcmp(var, "?"))
+	{
+		expanded = ft_itoa(g_minishell->exit_s);
+		gc_add(g_minishell, expanded);
+	}
+	else
+		expanded = get_env_var(g_minishell->our_env, var);
 	free(var);
 	if (!expanded)
 		return ;
@@ -74,8 +80,7 @@ void	fill_dollar(char *s, int *i, char *new, int *j)
 	}
 	else if (double_copy_case(expand))
 	{
-		new[(*j)++] = s[(*i)++];
-		new[(*j)++] = s[(*i)++];
+		(*i) += 2;
 		return ;
 	}
 	else

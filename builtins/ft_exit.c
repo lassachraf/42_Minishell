@@ -3,21 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 19:18:18 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/07 11:11:24 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:06:37 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_out_of_range(const char *str)
+void	skip_zeros(char **str)
+{
+	if (**str && (**str == '+' || **str == '-'))
+		(*str)++;
+	if (**str == '0')
+	{
+		while (**str && **str == '0')
+			(*str)++;
+		if (!**str)
+			(*str)--;
+	}
+}
+
+int	is_out_of_range(char *str)
 {
 	const char	*pos_limit = "9223372036854775807";
 	const char	*neg_limit = "-9223372036854775808";
 	size_t		len;
 
+	skip_zeros(&str);
+	printf(">> %s\n", str);
 	len = ft_strlen(str);
 	if (str[0] == '-')
 	{

@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:09:11 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 18:39:14 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:33:17 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,31 @@ t_node	*parse_block(t_token **tokens)
 	return (left);
 }
 
+void	print_tokens(t_token *tokens)
+{
+	t_token	*token;
+
+	token = tokens;
+	while (token)
+	{
+		printf("value => '%s'\n", token->value);
+		printf("type => '%u'\n", token->type);
+		printf("quoted => '%u'\n", token->quoted);
+		// printf("quoted => '%u'\n", token->);
+		token = token->next;
+	}
+}
+
 t_node	*parsing(void)
 {
 	t_node	*left;
 
 	left = NULL;
 	expanding();
+	print_tokens(g_minishell->tokens);
 	expand_dollar();
 	join_for_asterisk(&g_minishell->tokens);
+	print_tokens(g_minishell->tokens);
 	join_words(&g_minishell->tokens);
 	left = parse_block(&g_minishell->tokens);
 	return (left);

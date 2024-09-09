@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:13:52 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/08/08 00:29:29 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:11 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	syntax(void)
 		if (syntax_first_phase(token) || syntax_second_phase(token)
 			|| syntax_third_phase(token))
 		{
-			set_env_var(g_minishell->our_env, "?", "2");
 			g_minishell->exit_s = 2;
 			gc_free_all(g_minishell);
 			return (-1);
@@ -74,7 +73,6 @@ int	syntax(void)
 	}
 	if (general_check() == -1)
 	{
-		set_env_var(g_minishell->our_env, "?", "2");
 		g_minishell->exit_s = 2;
 		gc_free_all(g_minishell);
 		return (-1);

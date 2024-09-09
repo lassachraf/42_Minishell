@@ -6,7 +6,7 @@
 /*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:42 by alassiqu          #+#    #+#             */
-/*   Updated: 2024/09/08 20:23:07 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/08 18:24:07 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,13 @@ t_token	*skip_whitespace_token(t_token *token)
 	return (token);
 }
 
-void	check_quoted_af(t_token **tokens)
-{
-	if ((*tokens)->type == WORD && (*tokens)->next
-		&& (*tokens)->next->value && !ft_strcmp((*tokens)->next->value, ""))
-		(*tokens)->next->quoted_af = 1;
-	else if ((*tokens)->type == WORD && (*tokens)->prev
-		&& (*tokens)->prev->value && !ft_strcmp((*tokens)->prev->value, ""))
-		(*tokens)->quoted_af = 1;
-}
-
 void	check_hd_expand(t_token *tokens)
 {
 	while (tokens)
 	{
-		check_quoted_af(&tokens);
+		if (tokens->type == WORD && tokens->value
+			&& tokens->next->value && !ft_strcmp(tokens->next->value, ""))
+			tokens->next->quoted_af = 1;
 		if (tokens->type == LL_REDIR)
 		{
 			tokens = tokens->next;

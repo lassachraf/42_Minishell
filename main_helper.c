@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 18:10:17 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 15:45:13 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 09:55:57 by alassiqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	clean_and_set(void)
 	clean_fds(g_minishell->ast);
 	unlink_docs(g_minishell->docs);
 	exit_stat = ft_itoa(g_minishell->exit_s);
-	set_env_var(g_minishell->our_env, "?", exit_stat);
 	free(exit_stat);
 }
 
@@ -34,7 +33,6 @@ void	exit_and_set(void)
 	char	*exit;
 
 	exit = ft_itoa(g_minishell->exit_s);
-	set_env_var(g_minishell->our_env, "?", exit);
 	free(exit);
 }
 
