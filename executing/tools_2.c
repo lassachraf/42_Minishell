@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:20:22 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/09 09:55:31 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:45:34 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,11 @@ int	wait_and_get(void)
 	return (free(exit), fail);
 }
 
-void	do_cmd(t_node *ast, bool print) // 
+void	do_cmd(t_node *ast, bool print)
 {
 	char	**cmd;
 	char	**env;
-	int		i;
 
-	i = 0;
 	if (!ast)
 		ft_exit(NULL, 0);
 	if (ft_is_builtin(ast->data.cmd->content))
@@ -46,13 +44,12 @@ void	do_cmd(t_node *ast, bool print) //
 		env = env_to_envp(g_minishell->our_env);
 		if (!env)
 			ft_exit(NULL, 0);
-		g_minishell->last_child = check_cmd(*cmd);
-		if (!g_minishell->last_child)
+		g_minishell->exit_s = check_cmd(*cmd);
+		if (!g_minishell->exit_s)
 			call_execev(env, *cmd, cmd);
 	}
-	i = g_minishell->last_child;
-	cleanup_minishell();
-	exit(i);
+	clean_fds(g_minishell->ast);
+	save_status_clean();
 }
 
 void	do_pipe(t_node *cmd, int *pfd, int *fd_io)

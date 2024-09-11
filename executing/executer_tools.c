@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:48:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 16:40:58 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:19:48 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ void	execute_cmd(t_node *node, int *pfd, int *fd_io)
 {
 	if (!node)
 		return ;
+	clean_fds(g_minishell->ast);
+	close_fds(pfd, fd_io);
 	expand_list(node->data.cmd);
 	remove_null(&node);
 	if (!node->data.cmd)
@@ -106,6 +108,11 @@ void	execute_redires(t_list *red_list, int *pfd, int *fd_io)
 {
 	int	fd_ios[4];
 
+	if (!open_and_set(red_list))
+	{
+		close_fds(pfd, fd_io);
+		return ;
+	}
 	if (fd_io)
 	{
 		fd_ios[2] = fd_io[0];
@@ -118,11 +125,6 @@ void	execute_redires(t_list *red_list, int *pfd, int *fd_io)
 	fd_ios[1] = dup(1);
 	if (fd_ios[1] < 0)
 		return (close(fd_ios[0]), (void)0);
-	if (!open_and_set(red_list))
-	{
-		close_fds(pfd, fd_io);
-		return ;
-	}
 	input_to_dup(red_list);
 	output_to_dup(red_list);
 	run_doc_cmd(red_list, pfd, fd_ios);

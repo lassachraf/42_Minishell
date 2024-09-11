@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 08:08:03 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 16:37:20 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:15:16 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ void	exe_old_pfd(t_node *node, int *pfd_2, int *fd_io_2)
 	int	pfd[2];
 	int	fd_io[2];
 
-	clean_fds(g_minishell->ast);
-	close_fds(pfd_2, fd_io_2);
 	g_minishell->last_child = fork();
 	if (!g_minishell->last_child)
 	{
+		clean_fds(g_minishell->ast);
+		close_fds(pfd_2, fd_io_2);
 		if (node->data.pair.type == PIPE)
 		{
 			if (init_pipes(pfd, fd_io))

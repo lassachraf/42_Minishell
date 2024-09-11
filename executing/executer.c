@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 15:33:43 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/08 16:36:36 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:46:10 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	pipe_left(t_node *node, int *pfd, int *fd_io)
 			}
 		}
 		else
-			execute_redires(node->data.redir, pfd, fd_io);
+			execute_redires(node->data.redir, NULL, NULL);
 	}
 	else
 		do_pipe(node, pfd, fd_io);
@@ -72,7 +72,7 @@ void	pipe_right(t_node *node, int *pfd, int *fd_io)
 		else if (node->data.pair.type == OR)
 			executer(node, pfd, fd_io);
 		else if (node->type == REDIR_NODE)
-			execute_redires(node->data.redir, pfd, fd_io);
+			execute_redires(node->data.redir, NULL, NULL);
 		else
 			executer(node, pfd, fd_io);
 	}

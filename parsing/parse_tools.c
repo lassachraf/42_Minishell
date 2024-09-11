@@ -6,7 +6,7 @@
 /*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:54:28 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/07 17:51:36 by baouragh         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:58:12 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ t_redir	*do_red(t_token **tokens)
 	if (new->type == L_REDIR)
 		new->mode = O_RDONLY;
 	else if (new->type == R_REDIR)
-		new->mode = O_CREAT | O_RDWR;
+		new->mode = O_CREAT | O_WRONLY | O_TRUNC;
 	else if (new->type == RR_REDIR)
-		new->mode = O_CREAT | O_RDWR | O_APPEND;
+		new->mode = O_CREAT | O_WRONLY | O_APPEND;
 	(*tokens) = (*tokens)->next;
 	new->file = (*tokens)->value;
 	new->quoted = (*tokens)->quoted;
