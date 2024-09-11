@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alassiqu <alassiqu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: baouragh <baouragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 18:10:17 by baouragh          #+#    #+#             */
-/*   Updated: 2024/09/09 09:55:57 by alassiqu         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:41:40 by baouragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	clean_and_set(void)
 		close(g_minishell->her_pfd[0]);
 		close(g_minishell->her_pfd[1]);
 	}
-	g_minishell->size = 2;
 	clean_fds(g_minishell->ast);
 	unlink_docs(g_minishell->docs);
 	exit_stat = ft_itoa(g_minishell->exit_s);
